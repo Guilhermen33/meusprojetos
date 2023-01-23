@@ -1,0 +1,29 @@
+@media (max-width: 1200px){
+    body{
+        background-color: black;
+    }
+    .fundo-video video{
+        display: none;
+    }
+
+    header{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    main{
+        display: flex;
+        flex-wrap: wrap
+    }
+
+    main .informacoes{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    main .informacoes .descricao{
+        text-align: center;
+    }
+
+}

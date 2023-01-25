@@ -36,6 +36,9 @@ header .menu li a:hover{
     background-color: #D5011D;
 }
 
+a{
+    color: wheat;
+}
 
 main{
     display: flex;
@@ -115,7 +118,7 @@ main .imagem-principal{
     top: 0;
     left: 0;
     background-color: rgba(20, 20, 20, 0.904); 
-    visibility: hidden ;
+    visibility: hidden;
 }
 
 .modal .conteudo-modal{
@@ -135,4 +138,8 @@ main .imagem-principal{
     font-weight: bold;
     font-size: 20px;
    
+}
+
+.modal.aberto{
+    visibility:visible;
 }

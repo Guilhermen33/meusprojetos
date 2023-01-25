@@ -1,0 +1,51 @@
+@media (max-width: 1149px) {
+    .saiba-mais #logo {
+        visibility: hidden;
+    }
+
+    .siaba-mais {
+        display: flex;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 983px) {
+    img {
+        width: 240px;
+    }
+
+    main .local .container img {
+        width: 100px;
+    }
+}
+
+@media (max-width: 850px) {
+    header {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    header .cortes{
+        display: flex;
+        margin-left: 10%;
+    }
+
+    main .local .container {
+        position: relative;
+        top: 500px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main .local .container #img-section-localizacao{
+        height: 50%;
+        padding-top:50px ;
+    }
+}
+
+@media (max-width: 400px) {
+    img{
+        visibility: hidden;
+    }
+}

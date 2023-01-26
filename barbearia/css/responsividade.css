@@ -44,11 +44,21 @@
 
      header .cortes{
         display: flex;
-        margin-left: 10%;
+        margin-left: -10px;
         
      }
 
+     header .cortes .um-e-dois{
+        width: 200px;
+        height: 180px;
+        margin-right: 20%;
 
+     }
+
+     header .cortes .treis-e-quatro{
+        width: 200px;
+        height: 180px;
+     }
 
      main .local .container #img-section-localizacao{
        height: 50%;
@@ -74,9 +84,18 @@
 }
 
     @media (max-width: 550px) {
-        p{
-            font-size: 16px;
-        }
+
+    p{
+         font-size: 18px;
+        color: rgb(59, 14, 221);
+        width: 400px;
+    }
+
+    header .cortes{
+        margin-left: 0px;
+       
+    }
+
     header .saiba-mais{
         display: flex;
         align-items: center;
@@ -84,16 +103,17 @@
     }
 
     header .cortes .um-e-dois img{
-       width: 70%;
-
+       width: 200px;
+       height: 180px;
+       margin-left: 3%;
+       
     }
 
     header .cortes .treis-e-quatro img{
-        width: 70%;
-       
+        width:200px;
+        height: 180px;
         
     }
-
 
     main .local{
         padding: 20%;
@@ -102,6 +122,13 @@
 
     main .local .container #img-section-localizacao img{
         width: 100vw; 
+        
+    }
+
+    main .local .container button{
+        height: 80px;
+        width: 200px;
+        font-size: 18px;
         
     }
 }
@@ -118,8 +145,6 @@
     img{
         width: 80%;
     }
-    
-
 
     main .local buton{
         height: 50%;

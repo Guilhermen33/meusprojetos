@@ -11,6 +11,7 @@
 body{
     background-image: linear-gradient(to right, #0a040a, rgb(0, 0, 0), #0a040a,#140714);
     height: 100vh;
+    width: 100%;
     overflow-x: hidden;
 }
 
@@ -132,14 +133,10 @@ main .local .texto-da-localizacao button{
     
 }
 
-main .local .texto-da-localizacao button span{
-    
-}
-
 #img-section-localizacao{
-    height: 500px;
+    height: 50vh;
     width: 450px;
     position: relative;
-    top: 100px;
+    margin-top: 8%;
     padding: 10px;
 }

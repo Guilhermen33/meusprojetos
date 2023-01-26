@@ -7,6 +7,10 @@
         display: flex;
         align-items: flex-start;
     }
+
+    main .local.container{
+        margin: 0 50px;
+    }
 }
 
 @media (max-width: 983px) {
@@ -16,36 +20,85 @@
 
     main .local .container img {
         width: 100px;
+        
     }
 }
 
+
 @media (max-width: 850px) {
-    header {
+     header .saiba-mais{
+        margin-right: 10%;
+     }
+
+     header {
+        width: 100%;
         display: flex;
         flex-direction: column;
 
-    }
+     }
 
-    header .cortes{
+     header .cortes{
         display: flex;
         margin-left: 10%;
-    }
+     }
 
-    main .local .container {
+     main .local .container #img-section-localizacao{
+       height: 50%;
+     }
+
+     main .local .container {
+        width: 100%;
         position: relative;
         top: 500px;
         display: flex;
         flex-direction: column;
+        
+     }
+
+  
+}
+
+    @media (max-width: 550px) {
+    header .saiba-mais{
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    main .local .container #img-section-localizacao{
-        height: 50%;
-        padding-top:50px ;
+    header .cortes{
+       margin:auto;
+    }
+
+    header .cortes .um-e-dois img{
+       width: 90%;
+
+    }
+
+    header .cortes .treis-e-quatro img{
+        width: 90%;
+    }
+
+    main .local .container #img-section-localizacao img{
+        width: 100vw; 
+        
     }
 }
 
-@media (max-width: 400px) {
+@media(max-width:450px) {
+    header .saiba-mais{
+      margin-right: 30px;
+    }
+
+    header,main{
+        width:100vw;
+    }
+
     img{
-        visibility: hidden;
+        width: 80%;
+    }
+    
+    main .local buton{
+        height: 50%;
+        padding: 0px;
     }
 }

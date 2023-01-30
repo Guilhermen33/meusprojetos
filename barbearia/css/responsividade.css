@@ -135,7 +135,12 @@
 
 @media(max-width:450px) {
     header .saiba-mais{
-      margin-right: 30px;
+      margin-right: 70px;
+    }
+
+    header .saiba-mais h2{
+        font-family: 16px;
+        width: 300px;
     }
 
     header,main{
@@ -143,12 +148,14 @@
     }
 
     img{
-        width: 80%;
+        width: 140px;
+        height:100px;
+        margin-right: 2px;
     }
 
     main .local buton{
         height: 50%;
-        padding: 0px;
+        padding: 2px;
         margin-top: 15%;
     }
 }

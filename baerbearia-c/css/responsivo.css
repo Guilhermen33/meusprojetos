@@ -68,7 +68,7 @@
 @media (max-width:420px) {
     header nav ul.menu li a{
         font-size: 16px;
-    
+        text-align: center;
     }
 
     main section.agenda-horario p {
@@ -83,7 +83,7 @@
     header nav ul.menu li a{
         font-size: 13.5px;
         text-align: center;
-        text-align: center;
+        
     }
 }
 

@@ -1,0 +1,40 @@
+﻿
+var pageManager = function(pageManagerInstance) {
+    var _this = this;
+    var _events = {
+        onPageManagerRenderCompleted: new Event(),
+    };
+    var _functions = {
+        initialize: function (pageManagerInstance) {
+            if (!$)
+                $ = jQuery;
+            $.extend(true, _this, pageManagerInstance || {});
+        },
+        events: {
+            attach: {
+                onRenderCompleted: function (callback) {
+                    _events.onPageManagerRenderCompleted['dettach'](callback);
+                    _events.onPageManagerRenderCompleted['attach'](callback);
+                }
+            },
+            notify: {
+                renderCompleted: function (origin, data) {
+                    _events.onPageManagerRenderCompleted.notify(origin, data);
+                },
+            },
+        }
+    }
+
+    _this.attachOnRenderCompleted = _functions.events.attach.onRenderCompleted;
+    _this.onRenderCompleted = _functions.events.notify.renderCompleted;
+
+    _functions.initialize(pageManagerInstance);
+    
+    return _this;
+};
+
+if (typeof (PageManager) === 'undefined') {
+    PageManager = new pageManager({});
+} else {
+    PageManager = new pageManager(PageManager);
+}

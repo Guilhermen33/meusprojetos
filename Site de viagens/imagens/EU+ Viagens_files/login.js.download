@@ -1,0 +1,29 @@
+jQuery( document ).ready(function() {
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    if(!jQuery('#mo_oauth_widget-2').children().hasClass('oauthloginbutton'))   
+    {
+        var rawMsg = getCookie('pointsData');
+        if(rawMsg != null)
+        {
+            if(!jQuery('#mo_oauth_widget-2').children().hasClass('oauthloginbutton'))
+            {
+                var msg = unescape(rawMsg.replace(/\+/g,  " "));
+                var link = '<a href="https://eumais.travelgo.com.br/customiza-site?action=logout&amp;redirect_to=https%3A%2F%2Feumais.travelgo.com.br" class="mo_oauth_widget-2_logout">Sair</a>';
+                //var link = '<a href="http://localhost:81/eumais/wp-login.php?action=logout&amp;redirect_to=http%3A%2F%2Flocalhost%3A81%2Feumais&amp;_wpnonce=14017d64dc" class="mo_oauth_widget-2_logout">Sair</a>';
+                jQuery('#mo_oauth_widget-2').text(msg);
+                jQuery('#mo_oauth_widget-2').append(link);
+            }
+        }
+    }
+});

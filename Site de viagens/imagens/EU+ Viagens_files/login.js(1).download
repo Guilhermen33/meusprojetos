@@ -1,0 +1,458 @@
+﻿/// <reference path="../Libraries/Util.js" />
+/// <reference path="../../Templates/Login/DatePickerOption.js" />
+/// <reference path="../Libraries/jquery-ui-1.8.13.custom.min.js" />
+/// <reference path="../Controllers/MessagesController.js" />
+
+(function ($) {
+
+    function Login() {
+        var component = undefined;
+        var _this = this;
+        var _myCode = Util.Guid();
+
+        var _settings = {
+            data: {},
+            needChangePassword: false,
+            errorMessageExhibitionType: undefined,
+            authenticationType: parseInt(EnumHelper.AuthenticationType.Normal, 10),
+            template: function (f) { return ""; },
+            controllers: {
+                messagesController: undefined,
+                WorkFlowController: undefined,
+                authenticateController: undefined
+            },
+            type: 1,
+            components: {
+                userName: '#userEmail',
+                userNameForgotPassword: '#userEmail',
+                password: '#userPassword',
+                loginButton: '#userLoginBtn',
+                loginStar: '#loginStar',
+                passwordStar: '#passwordStar',
+                errorDiv: '#messagesExhibitor',
+                addUserBtn: '#userAddBtn',
+                lbUSerExists: '#lbUSerExists',
+                selectUser: '#userSelectBtn',
+                myOrdersBtn: '#myOrders',
+                myRegisterBtn: '#myRegister',
+                forgotPassword: '#forgotPassword',
+                openContainerForgotPassword: '#openContainerForgotPassword',
+                closeContainerForgotPassword: '#closeContainerForgotPassword',
+                containerForgotPassword: '#containerForgotPassword',
+                containerLogin: '#Authenticate',
+                editUser: '#editUser',
+                logOut: '#logout',
+                form: '.login_form',
+                changePassword: {
+                    oldPassword: '#old_password',
+                    newPassword: '#password',
+                    retryPassword: '#password_again',
+                    change: '#change_password'
+                }
+            },
+            events: {
+                doLogin: undefined,
+                LoginCompleted: undefined,
+                afterLogin: undefined,
+                afterLoginRendered: undefined,
+                selectUser: undefined,
+                selectUserCompleted: undefined,
+                myOrders: undefined,
+                myRegister: undefined,
+                forgotPassword: undefined,
+                editUser: undefined
+            }
+        };
+
+        this.ClearData = function () {
+            _settings.components.userName.val('');
+            _settings.components.password.val('');
+        }
+
+        this.getData = function () {
+            var loginData = {};
+            loginData.userName = _settings.components.userName.val();
+            loginData.password = _settings.components.password.val();
+            loginData.authenticationType = _settings.authenticationType;
+            loginData.myPluginCode = _myCode;
+            return loginData;
+        }
+
+        this.LoadUser = function (user, target) {
+            if (target)
+                $(target).html(_settings.template({ type: 3, data: user }));
+            else
+                component.html(_settings.template({ type: 3, data: user }));
+
+            _functions.components.select();
+        }
+
+        this.initialize = function (target, user_settings) {
+            component = $(target);
+            $.extend(true, _settings, user_settings || {});
+
+            _functions.defineType();
+            _functions.render();
+            _functions.controllers.attachEvents();
+            _functions.components.select();
+            _functions.components.attachEvents();
+
+            if (!_settings.components.form.length && (_settings.components.form.jquery && !_settings.components.form.selector.length))
+                _settings.components.form = component;
+
+            if (!$.isEmptyObject(_settings.data))
+                _this.fillValues(_settings.data);
+        };
+
+        this.destroy = function () {
+            _functions.controllers.dettachEvents();
+            _functions.components.dettachEvents();
+            component.empty();
+        };
+
+        this.fillValues = function (loginData) {
+
+            if (loginData) {
+                _settings.components.password.val(loginData.password);
+                _settings.components.userName.val(loginData.userName);
+
+                if (typeof (loginData.authenticationType) !== 'undefined')
+                    _settings.authenticationType = loginData.authenticationType;
+            }
+        };
+
+        this.authenticate = function (data) {
+            _this.fillValues(data);
+
+            _events.components.userAuthenticate();
+        };
+
+        var _events = {
+            components: {
+                userAuthenticate: function (event) {
+
+                    if (event)
+                        event.preventDefault();
+
+                    _settings.components.errorDiv.empty();
+
+                    if (_this.validate()) {
+                        var data = _this.getData();
+
+                        if (data) {
+                            if (_settings.controllers.WorkFlowController)
+                                _settings.controllers.WorkFlowController.doLogin(data);
+                            else if (_settings.controllers.authenticateController)
+                                _settings.controllers.authenticateController.login(data);
+                        }
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                forgotPassword: function (event) {
+                    event.preventDefault();
+
+                    var em = _settings.components.userNameForgotPassword.val();
+                    if (!em.isEmail()) {
+                        var errors = [];
+                        //TODO: USAR INTERFACEMESSAGES
+                        errors.push({
+                            ErrorMessage: 'Preencha o Email corretamente',
+                            FriendlyMessage: 'Preencha o Email corretamente'
+                        });
+
+                        if (_settings.controllers.messagesController && errors.length > 0)
+                            _settings.controllers.messagesController.notifyMessages(errors, _settings.errorMessageExhibitionType || EnumHelper.MessagesExhibitor.ExhibitionType.Dialog);
+
+                        return;
+                    }
+
+                    if (_settings.events.forgotPassword) {
+                        _settings.events.forgotPassword(em);
+                    }
+                    else if (_settings.controllers.authenticateController) {
+                        _settings.controllers.authenticateController.forgottenPassword({
+                            Signature: em,
+                            AuthenticationType: _settings.authenticationType,
+                            myPluginCode: _myCode
+                        });
+                    }
+                },
+                myOrders: function (event) {
+                    event.preventDefault();
+                    if (_settings.events.myOrders)
+                        _settings.events.myOrders();
+                },
+                myRegister: function (event) {
+                    event.preventDefault();
+                    if (_settings.events.myRegister)
+                        _settings.events.myRegister();
+                },
+                selectUser: function (event) {
+                    event.preventDefault();
+
+                    if (!_settings.components.userName.val().isEmail())
+                        return;
+                    if (_settings.events.selectUser)
+                        _settings.events.selectUser(_settings.components.userName.val());
+                },
+                ediUser: function (event) {
+                    event.preventDefault();
+                    if (_settings.events.editUser)
+                        _settings.events.editUser();
+                },
+                openContainerForgotPassword: function (event) {
+                    event.preventDefault();
+                    if (_settings.components.containerForgotPassword) {
+                        _functions.components.select();
+
+                        _settings.type = EnumHelper.LoginFormType.forgotPassword;
+                        _settings.components.containerForgotPassword.html(_settings.template(_settings));
+
+                        _functions.components.select();
+                    }
+
+                    _settings.components.errorDiv.empty();
+
+                    _settings.components.containerLogin.hide();
+
+                    _settings.components.containerForgotPassword.show(600);
+                },
+                closeContainerForgotPassword: function (event) {
+                    event.preventDefault();
+                    _functions.closeContainerForgotPassword();
+                },
+                logoutClientArea: function (event) {
+                    event.preventDefault();
+                    if (_settings.controllers.authenticateController)
+                        _settings.controllers.authenticateController.logout();
+                    _functions.onLogOut();
+                },
+                changePassword: function (event) {
+                    event.preventDefault();
+
+                    if (_functions.validChangePassword()) {
+                        var oldPassword = _settings.components.changePassword.oldPassword.val();
+                        var newPassword = _settings.components.changePassword.newPassword.val();
+
+                        var chgPasswordObj = {
+                            NewPassword: newPassword,
+                            OldPassword: oldPassword,
+                            Culture: Global.Culture,
+                            myPluginCode: _myCode
+                        };
+
+                        if(_settings.needChangePasswordSignature)
+                            chgPasswordObj.Signature = _settings.needChangePasswordSignature;
+
+                        _settings.controllers.authenticateController.changePassword(chgPasswordObj);
+                    }
+                },
+                callFunctionOnPressEnter: function (event) {
+                    var code = (event.keyCode ? event.keyCode : event.which);
+                    if (code == 13) {
+                        event.data.function.call(this, event);
+                    }
+                }
+            },
+            controllers: {
+                loginCompleted: function (response) {
+                    if (!response.Request || response.Request.myPluginCode == _myCode) {
+                        if (response.SecurityContext && response.SecurityContext.User)
+                            response.User = response.SecurityContext.User;
+
+                        if (response.User && response.User.JuridicalPerson)
+                            response.User.Name = response.User.TradingName;
+
+                        if (response.Successful && _settings.events.afterLogin) {
+                            _settings.events.afterLogin(response);
+                        }
+                        else if (!response.Errors.length) {
+                            _settings.needChangePassword = response.NeedChangePassword;
+                            _settings.needChangePasswordSignature = (response.Request || {}).Signature;
+
+                            var type = response.NeedChangePassword ? 6 : 3;
+                            component.html(_settings.template({ type: type, data: response }));
+                            _functions.components.select();
+
+                            if (_settings.events.afterLoginRendered)
+                                _settings.events.afterLoginRendered(response);
+                        }
+                        else if (response.Errors.length && _settings.controllers.messagesController) {
+                            _settings.controllers.messagesController.notifyMessages(response.Errors, _settings.errorMessageExhibitionType || EnumHelper.MessagesExhibitor.ExhibitionType.Dialog);
+                        }
+                    }
+                },
+
+                selectUserCompleted: function (response) {
+                    if (_settings.events.selectUserCompleted)
+                        _settings.events.selectUserCompleted(response);
+                },
+                resetPasswordCompleted: function (response) {
+                    if (!response.Request || response.Request.myPluginCode == _myCode) {
+
+                        var errors = [];
+
+                        //TODO: USAR INTERFACEMESSAGES
+                        if (response.Errors && response.Errors.length > 0)
+                            errors.push({
+                                ErrorMessage: 'Email não cadastrado',
+                                FriendlyMessage: 'Email não cadastrado'
+                            });
+                        else {
+                            errors.push({
+                                ErrorMessage: 'Nova senha enviada por e-mail',
+                                FriendlyMessage: 'Nova senha enviada por e-mail'
+                            });
+                            _functions.closeContainerForgotPassword();
+                        }
+
+                        if (_settings.controllers.messagesController)
+                            _settings.controllers.messagesController.notifyMessages(errors, _settings.errorMessageExhibitionType || EnumHelper.MessagesExhibitor.ExhibitionType.Dialog);
+                    }
+                }
+            }
+        };
+
+        var _functions = {
+            onLogOut: function () {
+                Global.InterfaceEnvelope.User = undefined;
+                Global.InterfaceEnvelope.SelectedUser = undefined;
+
+                _settings.type = EnumHelper.LoginFormType.logOut;
+
+                if (EnumHelper.AuthenticationType[component.data("authenticationtype")] == EnumHelper.AuthenticationType.BusinessAccess)
+                    _settings.type = EnumHelper.LoginFormType.businessLogin;
+
+                component.html(_settings.template(_settings));
+                _functions.components.select();
+            },
+            validChangePassword: function () {
+                var messages = [];
+                var oldPassword = _settings.components.changePassword.oldPassword.val();
+                var newPassword = _settings.components.changePassword.newPassword.val();
+                var confirmPassword = _settings.components.changePassword.retryPassword.val();
+
+                if (newPassword != undefined && newPassword.length == 0)
+                    messages.push(['Login_NewPasswordRequired']);
+                if (confirmPassword != undefined && confirmPassword.length == 0)
+                    messages.push(['Login_ConfirmPasswordRequired']);
+                else if (confirmPassword != undefined && newPassword != undefined && confirmPassword != newPassword)
+                    messages.push(['Login_ConfirmPasswordAndPasswordDontMatch']);
+
+                if (_settings.controllers.messagesController)
+                    _settings.controllers.messagesController.notifyMessages(messages, EnumHelper.MessagesExhibitor.ExhibitionType.Dialog);
+
+                return !messages.length;
+            },
+            render: function () {
+                component.html(_settings.template(_settings));
+
+                _functions.components.select();
+            },
+            defineType: function () {
+                if (Global.InterfaceEnvelope.CorporateUser && _settings.type == EnumHelper.LoginFormType.login) {
+                    _settings.type = 4;
+                }
+
+                if (Global.InterfaceEnvelope.User && _settings.type == EnumHelper.LoginFormType.logOut) {
+                    _settings.type = EnumHelper.LoginFormType.loggedInUser;
+                    _settings.data = Global.InterfaceEnvelope.User;
+                }
+
+                if (_settings.authenticationType == EnumHelper.AuthenticationType.BusinessAccess)
+                    _settings.type = EnumHelper.LoginFormType.businessLogin;
+
+                if (_settings.data.User)
+                    _settings.type = EnumHelper.LoginFormType.loggedInUser;
+
+                if (_settings.needChangePassword)
+                    _settings.type = EnumHelper.LoginFormType.changePassword;
+            },
+            closeContainerForgotPassword: function () {
+                _settings.components.errorDiv.empty();
+
+                _settings.components.containerForgotPassword.hide();
+                _settings.components.containerLogin.show(600);
+                _settings.type = EnumHelper.LoginFormType.login;
+                _functions.defineType();
+                _functions.render();
+            },
+            components: {
+                select: function () {
+                    Util.SelectComponents(_settings.components, component, true);
+                },
+                setEvents: function (action) {
+                    _settings.components.userName[action]('keypress', { 'function': _events.components.userAuthenticate }, _events.components.callFunctionOnPressEnter);
+                    _settings.components.userNameForgotPassword[action]('keypress', { 'function': _events.components.forgotPassword }, _events.components.callFunctionOnPressEnter);
+                    _settings.components.password[action]('keypress', { 'function': _events.components.userAuthenticate }, _events.components.callFunctionOnPressEnter);
+                    _settings.components.loginButton[action]('click', _events.components.userAuthenticate);
+                    _settings.components.forgotPassword[action]('click', _events.components.forgotPassword);
+                    _settings.components.myRegisterBtn.off("click").on("click", _events.components.myRegister);
+                    _settings.components.myOrdersBtn[action]('click', _events.components.myOrders);
+                    _settings.components.selectUser[action]('click', _events.components.selectUser);
+                    _settings.components.editUser[action]('click', _events.components.ediUser);
+                    _settings.components.openContainerForgotPassword[action]('click', _events.components.openContainerForgotPassword);
+                    _settings.components.closeContainerForgotPassword[action]('click', _events.components.closeContainerForgotPassword);
+                    _settings.components.logOut[action]('click', _events.components.logoutClientArea);
+                    _settings.components.changePassword.change[action]('click', _events.components.changePassword);
+                },
+                dettachEvents: function () {
+                    _functions.components.setEvents('die');
+                },
+                attachEvents: function () {
+                    _functions.components.setEvents('live');
+                }
+            },
+            controllers: {
+                setEvents: function (action) {
+                    if (_settings.controllers.WorkFlowController) {
+                        _settings.controllers.WorkFlowController.loginCompleted[action](_events.controllers.loginCompleted);
+                        _settings.controllers.WorkFlowController.selectUserCompleted[action](_events.controllers.selectUserCompleted);
+                        _settings.controllers.WorkFlowController.forgottenPasswordCompleted[action](_events.controllers.resetPasswordCompleted);
+                    }
+
+                    if (_settings.controllers.authenticateController) {
+                        _settings.controllers.authenticateController.loginCompleted[action](_events.controllers.loginCompleted);
+                        _settings.controllers.authenticateController.getSecurityContextCompleted[action](_events.controllers.loginCompleted);
+                        _settings.controllers.authenticateController.changePasswordCompleted[action](_events.controllers.loginCompleted);
+                        _settings.controllers.authenticateController.forgottenPasswordCompleted[action](_events.controllers.resetPasswordCompleted);
+                        _settings.controllers.authenticateController.logoutCompleted[action](_functions.onLogOut);
+                    }
+                },
+                dettachEvents: function () {
+                    _functions.controllers.setEvents('dettach');
+                },
+                attachEvents: function () {
+                    _functions.controllers.setEvents('attach');
+                }
+            }
+        };
+
+        this.clear = function () {
+            component.html('');
+        }
+
+        this.validate = function () {
+            var errors = [];
+
+            //TODO: USAR INTERFACEMESSAGES
+            if (!_settings.components.userName.val().isEmail())
+                errors.push({ ErrorMessage: 'Preencha o Email corretamente', FriendlyMessage: 'Preencha o Email corretamente' });
+            if (_settings.components.password.val().length == 0)
+                errors.push({ ErrorMessage: 'Preencha a Senha corretamente', FriendlyMessage: 'Preencha a Senha corretamente' });
+
+            if (_settings.controllers.messagesController && errors.length)
+                _settings.controllers.messagesController.notifyMessages(errors, _settings.errorMessageExhibitionType);
+
+            return !errors.length;
+        }
+
+    }
+
+    $.fn.login = function () {
+        return Util.pluginDefaultBehavior(this, "login", arguments, function () { return new Login() });
+    }
+
+})(jQuery);

@@ -1,0 +1,79 @@
+﻿if (typeof (PageManager) === 'undefined') {
+    PageManager = typeof pageManager !== 'undefined' ? new pageManager() : {};
+}
+
+(function ($) {
+    PageManager.Loader = function (component) {
+        var _this = this;
+        var _component = component;
+        var _additionalClass = '';
+
+        this.destroy = function () {
+            _functions.controllers.dettachEVents();
+            _plugins.destroy();
+            _component.empty();
+        };
+
+        var _functions = {
+            controllers: {
+                initialize: function () {
+                    Global.LoaderController = new LoaderController();
+                },
+                setEvents: function (action) {
+                    Global.LoaderController.onInsertAdditionalClass[action](_functions.insertAdditionalClass);
+                    Global.LoaderController.onRemoveAdditionalClass[action](_functions.removeAdditionalClass);
+                },
+                attachEVents: function () {
+                    _functions.controllers.setEvents('attach');
+                },
+                dettachEVents: function () {
+                    _functions.controllers.setEvents('dettach');
+                }
+            },
+            insertAdditionalClass: function (additionalClass) {
+                setTimeout(function () {
+                    _additionalClass = additionalClass;
+                    _component.addClass(additionalClass);
+                }, 0);
+            },
+            removeAdditionalClass: function () {
+                _component.removeClass(_additionalClass);
+            },
+        };
+
+        var _plugins = {
+            loader: {
+                initialize: function () {
+                    _component.loader({
+                        controllers: {
+                            loaderController: Global.LoaderController,
+                            IntelligenceController: Global.IntelligenceController
+                        }
+                    });
+                },
+                destroy: function () {
+                    _component.loader('destroy');
+                }
+            },
+            initialize: function () {
+                _plugins.loader.initialize();
+            },
+            destroy: function () {
+                _plugins.loader.destroy();
+            }
+        };
+
+        _functions.controllers.initialize();
+        _functions.controllers.attachEVents();
+        _plugins.initialize();
+
+        return _this;
+    };
+
+    $(document).ready(function () {
+        if (!Global.PageManagers)
+            Global.PageManagers = {};
+
+        Global.PageManagers.Loader = new PageManager.Loader($('#loader'));
+    });
+})(jQuery);

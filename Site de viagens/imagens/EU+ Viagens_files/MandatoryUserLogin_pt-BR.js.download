@@ -1,0 +1,25 @@
+// This file was automatically generated from MandatoryUserLogin.soy.
+// Please don't edit this file by hand.
+
+if (typeof MandatoryUserLoginTemplate == 'undefined') { var MandatoryUserLoginTemplate = {}; }
+
+
+MandatoryUserLoginTemplate.login = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div id="login_form_container" class="loginDialog"><h3>Identifique-se</h3><p class="info">Identifique-se para prosseguir</p><label class="lblEmail"><input type="email" placeholder="E-mail:" id="login_email" class="email" /></label><label class="lblPassword"><input type="password" placeholder="Senha:" id="login_password" class="password" /></label><a id="login_openContainerForgotPassword" href="#" title="Esqueci minha senha" class="forgot">Esqueci minha senha</a><label class="continue"><a href="#" class="btn btn_send" id="login_send" title="Continuar">Continuar</a></label></div><div id="login_forgotPassword_container" class="loginDialog"></div><div id="login_changePassword_container" class="loginDialog"></div>');
+  if (!opt_sb) return output.toString();
+};
+
+
+MandatoryUserLoginTemplate.forgotPassword = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div id="login_form_container" class="loginDialog"></div><div id="login_forgotPassword_container" class="loginDialog"><h3>Trocar minha senha</h3><p class="info">Digite seu e-mail de cadastro e clique em enviar para receber um e-mail com instruções sobre como cadastrar uma nova senha.</p><label class="lblEmail"><input type="text" id="forgotPassword_email" name="userEmailForgot" class="email" placeholder="E-mail:"  /></label><a href="#" class="btn btn_send" id="forgotPassword_send" title="Enviar">Enviar</a><a href="#" class="btn btn_close" id="forgotPassword_close" title="Voltar">Voltar</a></div><div id="login_changePassword_container" class="loginDialog"></div>');
+  if (!opt_sb) return output.toString();
+};
+
+
+MandatoryUserLoginTemplate.changePassword = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div id="login_form_container" class="loginDialog"></div><div id="login_forgotPassword_container" class="loginDialog"></div><div id="login_changePassword_container" class="loginDialog"><h3>Trocar senha</h3><p class="info">Para prosseguir, é necessário trocar sua senha. Informe a senha atual e a nova senha nos campos abaixo e clique em enviar.</p><label class="lblPassword"><input type="password" id="changePassword_oldPassword" name="changePassword_oldPassword" class="password" placeholder="Senha antiga:"  /></label><label class="lblPassword"><input type="password" id="changePassword_newPassword" name="changePassword_newPassword" class="password" placeholder="Nova senha:"  /></label><label class="lblPassword"><input type="password" id="changePassword_newPasswordAgain" name="changePassword_newPasswordAgain" class="password" placeholder="Confirmação de senha:"  /></label><a href="#" class="btn btn_send" id="changePassword_send" title="Enviar">Enviar</a></div>');
+  if (!opt_sb) return output.toString();
+};

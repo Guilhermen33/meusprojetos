@@ -1,0 +1,46 @@
+﻿/// <reference path="event.js" />
+
+function LoaderController(params) {
+    var _this = this;
+
+    this.onShowLoader = new Event();
+    this.onHideLoader = new Event();
+    this.onInsertAdditionalClass = new Event();
+    this.onRemoveAdditionalClass = new Event();
+
+    this.showLoader = function () {
+        _this.onShowLoader.notify();
+    };
+
+    this.hideLoader = function () {
+        _this.onHideLoader.notify();
+    };
+
+    this.insertAdditionalClass = function (additionalClass) {
+        _this.onInsertAdditionalClass.notify(additionalClass);
+    };
+
+    this.removeAdditionalClass = function () {
+        _this.onRemoveAdditionalClass.notify();
+    };
+
+    var settings = { "Global": undefined };
+
+    if (!$)
+        $ = jQuery;
+
+    $.extend(true, settings, params || {});
+
+    if (!settings.Global) {
+        if (!Global) Global = {};
+
+        if (!Global.LoaderController)
+            Global.LoaderController = this;
+
+        return Global.LoaderController;
+    }
+    else {
+        params.Global.LoaderController = this;
+        return params.Global.LoaderController;
+    }
+};

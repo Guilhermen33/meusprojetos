@@ -1,0 +1,131 @@
+﻿/// <reference path="event.js" />
+
+function MessagesController(params) {
+
+    var thisMessageController = this;
+
+    this.onMessages = new Event();
+    this.onMessage = new Event();
+    this.onCloseExhibitor = new Event();
+    this.onHide = new Event();
+
+    this.notifyMessages = function (messages, exhibitionType, messageType, ignoreMessagesCodeList) {
+        var thisMessages = [];
+
+        if (ignoreMessagesCodeList && ignoreMessagesCodeList.length > 0) {
+            var condition = function (e) {
+                return ignoreMessagesCodeList.any(function (codeMessage) {
+                    return codeMessage != e.MessageCode;
+                });
+            }
+            messages = messages.where(function (message) { return condition(message); });
+        }
+
+        if (messages.length > 0) {
+            var serviceErros = messages.where(function (e) { return e.ErrorMessage || e.FriendlyMessage; });
+            var clientMessages = messages.where(function (e) { return !(e.ErrorMessage || e.FriendlyMessage); });
+
+            if (serviceErros.length) {
+                var auxMessages = serviceErros.where(function (e) {
+                    return e.FriendlyMessage
+                }).select(function (e) {
+                    var message = e.FriendlyMessage;
+                    if (!settings.ShowOnlyFriendlyMessage) {
+                        var errorMessage = Util.RemoveStackTraceFromErrorMessage(e.ErrorMessage);
+
+                        if (errorMessage && !errorMessage.normalizedContains(e.FriendlyMessage))
+                            message = Util.StringFormat("{0}: {1}", e.FriendlyMessage, errorMessage);
+                    }
+
+                    return message;
+                });
+
+                if (!auxMessages.length)
+                    auxMessages = serviceErros.where(function (e) { return e.ErrorMessage }).select(function (e) { return Util.RemoveStackTraceFromErrorMessage(e.ErrorMessage); });
+
+                serviceErros = auxMessages;
+
+                if (!exhibitionType)
+                    exhibitionType = EnumHelper.MessagesExhibitor.Type.Message;
+
+                thisMessages = thisMessages.concat(serviceErros);
+            }
+
+            if (cultureResource && clientMessages.length) {
+
+                if (exhibitionType) {
+                    var messageTypeToken = "MessageType_" + Util.MessagesExhibitionTypeResolver(exhibitionType);
+                    thisMessages = cultureResource[messageTypeToken] ? [messageTypeToken] : [];
+                }
+
+                thisMessages = thisMessages.concat(Util.Clone(clientMessages));
+
+                for (var i = 0, messagesLen = thisMessages.length; i < messagesLen; i++) {
+                    var token = thisMessages[i];
+
+                    var messageArguments = undefined;
+
+                    if ($.isArray(token)) {
+                        token = thisMessages[i][0];
+                        messageArguments = thisMessages[i].slice(1);
+                    }
+
+                    var message = cultureResource[token];
+
+                    if (message) {
+                        if (messageArguments)
+                            message = message.format(messageArguments);
+
+                        thisMessages[i] = message;
+                    }
+                    else {
+                        thisMessages[i] = token;
+
+                        if (typeof (console) != "undefined")
+                            console.log("\"" + token + "\" was not found!");
+                    }
+                }
+
+                thisMessages.clearUndefined();
+            }
+
+            thisMessageController.onMessages.notify(thisMessages, exhibitionType, messageType);
+        }
+        else {
+            thisMessageController.onHide.notify();
+        }
+
+        return thisMessages;
+    }
+
+    this.notifyMessage = function (message) {
+        thisMessageController.onMessage.notify(message);
+    }
+
+    this.closeExhibitor = function (data) {
+        thisMessageController.onCloseExhibitor.notify(data);
+    }
+
+    this.notifyHideMessages = function () {
+        thisMessageController.onHide.notify();
+    }
+
+    var settings = { "Global": undefined, ShowOnlyFriendlyMessage: false };
+
+    if (!$)
+        $ = jQuery;
+    $.extend(true, settings, params || {});
+
+    if (!settings.Global) {
+        if (!Global) Global = {};
+
+        if (!Global.MessagesController)
+            Global.MessagesController = this;
+
+        return Global.MessagesController;
+    }
+    else {
+        params.Global.MessagesController = this;
+        return params.Global.MessagesController;
+    }
+};

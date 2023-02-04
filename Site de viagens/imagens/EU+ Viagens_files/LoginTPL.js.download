@@ -1,0 +1,33 @@
+﻿function LoginTPL(options) {
+
+    var settings = {
+        'template': Login.login,
+        'data': {},
+        'type': 1
+    };
+
+    $.fn.extend(settings, options || {});
+
+    if (settings.data && settings.data.User && !settings.data.User.FullName) {
+        settings.data.User.FullName = settings.data.User.Name;
+    }
+
+    switch (settings.type) {
+        case EnumHelper.LoginFormType.login:
+        case EnumHelper.LoginFormType.logOut:
+            return Login.login();
+            break;
+        case EnumHelper.LoginFormType.loggedInUser:
+            return Login.loggedInUser({ User: settings.data.User, myOrdersUrl: Global.ShortCodeParameters.myordersurl });
+            break;
+        case EnumHelper.LoginFormType.forgotPassword:
+            return Login.forgotPassword();
+            break;
+        case EnumHelper.LoginFormType.changePassword:
+            return Login.changePassword();
+            break;
+        case EnumHelper.LoginFormType.businessLogin:
+            return Login.business();
+            break;
+    }
+};

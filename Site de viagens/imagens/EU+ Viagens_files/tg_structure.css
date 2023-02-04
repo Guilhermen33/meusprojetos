@@ -1,0 +1,117 @@
+@media only screen and (min-width:1024px) {
+    body .search_engine_v2.research.air .destinationContainer {
+        float: left;
+        text-align: left;
+    }
+
+    body .search_engine_v2.research.air .destinationDiv {
+        width: 55%;
+        float: left;
+    }
+
+    body .search_engine_v2.research.air .destinationContainer.roundTrip {
+        padding: 0 0 0 120px !important;
+        margin: 0 0 0 -120px !important;
+    }
+
+    body .search_engine_v2.research.air .destinationDiv {
+        width: 100% !important;
+        margin: 0 -454px 0 0;
+        padding: 0 449px 0 0px !important;
+        box-sizing: border-box;
+    }
+
+    body .search_engine_v2.research.air a.send {
+        margin: -40px 0 0 0 !important;
+        float: right;
+    }
+
+    .research.search_engine_v2 .destinationContainer {
+        margin: 0 0 0 -120px;
+        padding: 0 0 0 120px;
+    }
+
+    .search_engine_v2 .content.multiDestination div.addSegment {
+        bottom: 34px !important;
+    }
+
+    .checkout.hotels .list_options .hotel_block ul.room_type li.fare_rule {
+        min-width: 40%;
+    }
+    .list_options.tour .tour_block > .more_pics {
+        display: none;
+    }
+    .checkout .price_details > h1 span{
+        float: none !important;
+    }
+    .checkout .price_details .total_amount .price_for {
+        width: auto !important;
+        float: inherit !important;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .list_options.tour .tour_block > .content .tour_group .aside .more_pics {
+        display: none;
+    }
+}
+
+li.flight_block.complete p.flightclass {
+    display: none;
+}
+.checkout .baggage_options{
+    float:left;
+    margin-top:10px;
+}
+.checkout ul.choice-list li{
+    margin-top:10px;
+}
+
+.hotel_block .rooms_options .stay_overnight,
+.hotel_block .rooms_options .price_block.price p {
+    font-size: 11px;
+    font-weight:400;
+    font-family: Tahoma;
+}
+
+.hotel_block .rooms_options .price_block.price .totalAmount {
+    font-size: 16px;
+    font-weight: 600;
+}
+.hotel_block .rooms_options .stay_overnight {
+    margin: 5px 0;
+    padding: 5px;
+    border-top: 1px solid #ffffff;
+}
+
+.getFareInfo:before {
+    font-family: "travelgo";
+    speak: none;
+    font-style: normal;
+    font-weight: 200 !important;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    content: "k";
+    display: inline-block;
+    margin-top: 0px;
+    font-size: 18px;
+}
+
+.listRooms li label p {
+    width: 18%;
+}
+.listRooms li label input ~ div.roomFareInfo:before {
+    content:none;
+}
+
+.listRooms li label .services.description {
+    text-align: center;
+    font-size: 9px;
+}
+
+.search_engine_v2 .content.multiDestination div.addSegment a:after {
+    position: initial;
+}
+.cu-po{
+    cursor:pointer;
+}

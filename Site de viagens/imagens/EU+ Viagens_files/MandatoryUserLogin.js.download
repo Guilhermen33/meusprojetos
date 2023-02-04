@@ -1,0 +1,493 @@
+﻿/// <reference path="WebCommon/Scripts/Libraries/EnumHelper.js" />
+/// <reference path="WebCommon/Scripts/Libraries/Util.js" />
+/// <reference path="WebCommon/Scripts/Libraries/Libraries/Jquery.js" />
+
+if (TravelGo == undefined) {
+    TravelGo = {};
+}
+
+if (TravelGo.Plugin == undefined) {
+    TravelGo.Plugin = {};
+}
+
+if (typeof (PageManager) === 'undefined') {
+    PageManager = typeof pageManager !== 'undefined' ? new pageManager() : {};
+}
+
+TravelGo.Plugin.MandatoryUserLogin = function (baseSettings) {
+    var _this = this;
+    var _componentIds = {
+        login: {
+            modal: '#mandatoryLogin',
+            modalContent: '#mandatoryLoginContent',
+            container: {
+                login: '#login_Container',
+                forgotPassword: '#forgotPassword_Container'
+            },
+            inputs: {
+                login: {
+                    userName: '#login_email',
+                    password: '#login_password',
+                    loginButton: '#login_send'
+                },
+                forgotPassword: {
+                    forgotPassword: '#forgotPassword_send',
+                    closeContainer: '#forgotPassword_close',
+                    userName: '#forgotPassword_email'
+                }
+            },
+            errorMessages: '#messageExhibit'
+        }
+    }
+    var _settings = {
+        data: {
+            authentication : {
+                authenticationCookieName: "tg_client",
+            },
+            loginConfigs: {
+                errorMessageExhibitionType: EnumHelper.MessagesExhibitor.ExhibitionType.Inline,
+                needChangePassword: false,
+            },
+        },
+        templates: {
+            login: mandatoryLoginTPL
+        },
+        controllers: {
+            messagesController: undefined,
+            authenticateController: Global.AuthenticateController,
+            urlController: Global.UrlController,
+            searchController: Global.SearchController,
+            checkOutController: Global.CheckOutController,
+            params: {
+                messagesController: Global.Options.messagesController,
+            }
+        },
+        components: {
+            login_errorMessages: '#login_errorMessage',
+            login_modal: '#mandatoryLogin',
+            login_modalContent: '#mandatoryLoginContent',
+            login_modalLoginContent: '#login_Container',
+            login_container_forgotPassword: '#login_forgotPassword_container',
+            login_container: '#login_form_container',
+            login_input_userName: '#login_email',
+            login_input_password: '#login_password',
+            login_input_loginButton: '#login_send',
+            login_openContainerForgotPassword: '#login_openContainerForgotPassword',
+            login_forgotPassword_forgotPasswordSend: '#forgotPassword_send',
+            login_forgotPassword_closeContainer: '#forgotPassword_close',
+            login_forgotPassword_userName: '#forgotPassword_email',
+            login_changePassword_container: '#login_changePassword_container',
+            login_changePassword_oldPassword: '#changePassword_oldPassword',
+            login_changePassword_newPassword: '#changePassword_newPassword',
+            login_changePassword_newPasswordAgain: '#changePassword_newPasswordAgain',
+            login_changePassword_send: '#changePassword_send',
+            checkout: {
+                orderSimple: {
+                    container: '#simpleorder',
+                },
+                contacts: {
+                    name: '#contact-full-name_txt',
+                    email: '#contact-email_txt',
+                }
+            }
+        },
+    };
+    var _plugins = {
+        login: {
+            initialize: function () {
+                _settings.components.login_modalLoginContent.login({
+                    data: _functions.user.createLoginData(),
+                    template: _settings.templates.login,
+                    errorMessageExhibitionType: _settings.data.loginConfigs.errorMessageExhibitionType,
+                    needChangePassword: _settings.data.loginConfigs.needChangePassword,
+                    type: 1,
+                    controllers: {
+                        messagesController: _settings.controllers.messagesController,
+                        authenticateController: _settings.controllers.authenticateController,
+                    },
+                    components: {
+                        containerLogin: _settings.components.login_container,
+                        userName: _settings.components.login_input_userName,
+                        password: _settings.components.login_input_password,
+                        loginButton: _settings.components.login_input_loginButton,
+                        containerForgotPassword: _settings.components.login_container_forgotPassword,
+                        closeContainerForgotPassword: _settings.components.login_forgotPassword_closeContainer,
+                        openContainerForgotPassword: _settings.components.login_openContainerForgotPassword,
+                        forgotPassword: _settings.components.login_forgotPassword_forgotPasswordSend,
+                        userNameForgotPassword: _settings.components.login_forgotPassword_userName,
+                        errorDiv: _settings.components.login_errorMessages,
+                        changePassword: {
+                            oldPassword: _settings.components.login_changePassword_oldPassword,
+                            newPassword: _settings.components.login_changePassword_newPassword,
+                            retryPassword: _settings.components.login_changePassword_newPasswordAgain,
+                            change: _settings.components.login_changePassword_send
+                        },
+                    },
+                    events: {
+                        afterLogin: function(){ } //_functions.events.onLoginCompleted
+                    },
+                });
+            },
+            destroy: function () {
+                _settings.components.login_container.login('destroy');
+            },
+        },
+        loader: {
+            show: function () {
+                Global.LoaderController.showLoader();
+            },
+            hide: function () {
+                Global.LoaderController.hideLoader();
+            },
+        },
+        messages: {
+            initialize: function () {
+                _settings.components.login_errorMessages.messagesExhibitor({
+                    controllers: {
+                        messagesController: _settings.controllers.messagesController
+                    },
+                    exhibitionType: EnumHelper.MessagesExhibitor.ExhibitionType.Inline,
+                    type: EnumHelper.MessagesExhibitor.Type.Warning,
+                    addBold: false,
+                    hasTwoBehaviors: false,
+                    clickClear: false
+                });
+            },
+            destroy: function () {
+                _settings.components.login.elements.errorMessages.messagesExhibitor('destroy');
+            },
+        },
+        initialize: function () {
+            _plugins.login.initialize();
+
+            _functions.components.select();
+
+            _plugins.messages.initialize();
+        },
+        destroy: function () {
+            _plugins.login.destroy();
+            _plugins.messages.destroy();
+        }
+    };
+    var _functions = {
+        initialize: function (baseSettings) {
+            var userLoginMandatoryOnSearch = _functions.settings.getSettingUserLoginMandatoryOnSearch();
+            var userLoginMandatoryOnCheckout = _functions.settings.getSettingUserLoginMandatoryOnCheckout();
+
+            if (baseSettings != undefined) {
+                $.extend(_settings, baseSettings);
+            }
+
+            _functions.components.select();
+            _functions.controllers.initialize();
+            _functions.loginModal.hide();
+
+            if (userLoginMandatoryOnSearch || userLoginMandatoryOnCheckout) {
+
+                _functions.controllers.dettachEvents();
+                _functions.controllers.attachEvents();
+
+                if (userLoginMandatoryOnSearch && !_functions.user.isUserAuthenticated() && !Global.AuthenticateHelper) {
+                    _functions.showLoginDialog();
+                }
+            }
+
+            _functions.plugins.checkAndSetExternalEvents();
+        },
+        showLoginDialog: function () {
+            _plugins.initialize();
+            _functions.loginModal.show();
+        },
+        isUserLoginMandatoryOnCheckout: function (isUserAutenticated) {
+            var pageName = _functions.getUrlFileName();
+            var isPageCheckout = pageName != undefined && Util.isString(pageName) && pageName.toLowerCase().trim() === 'checkout';
+            var mustLoginOnCheckout = _functions.settings.getSettingUserLoginMandatoryOnCheckout();
+
+            if (!mustLoginOnCheckout) {
+                mustLoginOnCheckout = _functions.settings.getSettingUserLoginMandatoryOnSearch();
+            }
+
+            return isPageCheckout && mustLoginOnCheckout;
+        },
+        getUrlFileName: function () {
+            var url = (document.URL.split(/[?#]/)[0] + '////').replace(/[/]*$/, '');
+
+            return url.substr(url.lastIndexOf('/') + 1);
+        },
+        settings: {
+            getMandatoryRule: function () {
+                if (Global != undefined && Global.Settings != undefined && Global.Settings["Travelgo.Validation.MandatoryUserLogin"] != undefined) {
+                    return Global.Settings["Travelgo.Validation.MandatoryUserLogin"];
+                }
+
+                return EnumHelper.MandatoryUserLogin.No;
+            },
+            getSettingUserLoginMandatoryOnSearch: function () {
+                return _functions.settings.checkMandatoryUserLoginPropertyMatch(EnumHelper.MandatoryUserLogin.OnSearch);
+            },
+            getSettingUserLoginMandatoryOnCheckout: function () {
+                return _functions.settings.checkMandatoryUserLoginPropertyMatch(EnumHelper.MandatoryUserLogin.OnOrder);
+            },
+            checkMandatoryUserLoginPropertyMatch: function (valueToMatch) {
+                var keyToCheck = _functions.settings.getMandatoryRule();
+
+                if (EnumHelper.MandatoryUserLogin.hasOwnProperty(keyToCheck)) {
+                    return EnumHelper.MandatoryUserLogin[keyToCheck] == valueToMatch;
+                } else {
+                    var keys = Object.keys(EnumHelper.MandatoryUserLogin);
+
+                    for (var propertyIndex in keys) {
+                        if (keys[propertyIndex].toLowerCase() == keyToCheck) {
+                            return EnumHelper.MandatoryUserLogin[keys[propertyIndex]] == valueToMatch
+                        }
+                    }
+                }
+
+                return false;
+            },
+            mustLoginAtAll: function () {
+                return _functions.settings.getSettingUserLoginMandatoryOnCheckout() || _functions.settings.getSettingUserLoginMandatoryOnSearch();
+            }
+        },
+        user: {
+            getUser: function () {
+                var loginCookie = Util.getCookie(_settings.data.authentication.authenticationCookieName);
+
+                //loginCookie != undefined e != null
+                return loginCookie !== undefined ? JSON.parse(unescape(loginCookie)) : undefined;
+            },
+            isUserAuthenticated: function () {
+                var loginCookie = _functions.user.getUser();
+
+                if (loginCookie != undefined) {
+                    var isSecurityKeyValid = loginCookie.st != undefined && Util.isString(loginCookie.st) && loginCookie.st.length > 0;
+                    var isUserNameValid = loginCookie.un != undefined && Util.isString(loginCookie.un) && loginCookie.un.length > 0;
+
+                    return isSecurityKeyValid && isUserNameValid;
+                }
+
+                return false;
+            },
+            createLoginData: function () {
+                var loginCookie = _functions.user.getUser();
+
+                return loginCookie != undefined ? { User: { Name: JSON.parse(loginCookie).un } } : undefined;
+            }
+        },
+        loginModal: {
+            show: function () {
+                _settings.components.login_modal.css('display', 'block');
+            },
+            hide: function () {
+                _settings.components.login_modal.css('display', 'none');
+            }
+        },
+        components: {
+            select: function () {
+                Util.SelectComponents(_settings.components);
+            },
+        },
+        controllers: {
+            initialize: function () {
+                if (_settings.controllers.messagesController === undefined) {
+                    var options = Global.Options.messagesController;
+                    options.Global = {};
+                    _settings.controllers.messagesController = new MessagesController(options);
+                }
+
+                if (_settings.controllers.authenticateController === undefined) {
+                    _settings.controllers.authenticateController = new AuthenticateController();
+                }
+
+                if (!_settings.controllers.checkOutController && typeof (CheckOutController) != "undefined")
+                    _settings.controllers.checkOutController = Global.CheckOutController = Global.CheckOutController || new CheckOutController();
+
+            },
+            attachEvents: function () {
+                if (_settings.controllers.authenticateController != undefined && !Global.AuthenticateHelper)
+                    _settings.controllers.authenticateController.loginCompleted.attach(_functions.events.onLoginCompleted);
+
+                var starRouteAttached = false;
+                if (_settings.controllers.checkOutController != undefined) {
+                    _settings.controllers.checkOutController.preOrderStarting.attach(_functions.events.onStartRouteCompleted);
+                    starRouteAttached = true;
+                }
+                if (_settings.controllers.searchController != undefined) {
+                    _settings.controllers.searchController.searchStarting.attach(_functions.events.onStartRouteCompleted);
+                    starRouteAttached = true
+                }
+
+                if (!starRouteAttached && _settings.controllers.urlController != undefined) {
+                    _settings.controllers.urlController.startRouteCompleted.attach(_functions.events.onStartRouteCompleted);
+                }
+            },
+            dettachEvents: function () {
+                if (_settings.controllers.authenticateController != undefined)
+                    _settings.controllers.authenticateController.loginCompleted.dettach(_functions.events.onLoginCompleted);
+
+                if (_settings.controllers.checkOutController != undefined)
+                    _settings.controllers.checkOutController.preOrderStarting.dettach(_functions.events.onStartRouteCompleted);
+
+                if (_settings.controllers.searchController != undefined)
+                    _settings.controllers.searchController.searchStarting.dettach(_functions.events.onStartRouteCompleted);
+
+                if (_settings.controllers.urlController != undefined)
+                    _settings.controllers.urlController.startRouteCompleted.dettach(_functions.events.onStartRouteCompleted);
+            },
+            assignControllers: function () {
+                if (Global.CheckOutController)
+                    _settings.controllers.checkOutController = Global.CheckOutController;
+            },
+            reattachEvents: function () {
+                _functions.controllers.dettachEvents();
+                _functions.controllers.attachEvents();
+            },
+            destroy: function () {
+                functions.controllers.dettachEvents();
+            }
+        },
+        events: {
+            onLoginCompleted: function (loginRS) {
+                if (loginRS != undefined && loginRS.Successful) {
+                    Util.setCookie(_settings.data.authentication.authenticationCookieName, JSON.stringify({ st: loginRS.SecurityToken.Key, un: loginRS.User.FullName, uc: loginRS.User.Id }), 0, false);
+                    Global.Headers.st = loginRS.SecurityToken.Key;
+                    _functions.loginModal.hide();
+                    _functions.validations.reloadPageAfterLogin(loginRS);
+                }
+            },
+            onStartRouteCompleted: function () {
+                _functions.validations.showMessageWhenMorePassengerThenPermitted();
+            },
+            onAfterRenderCheckout: function (origin, data) {
+                if (origin && origin == 'OrderSimple') {
+                    if (_functions.settings.getSettingUserLoginMandatoryOnSearch() || _functions.isUserLoginMandatoryOnCheckout()) {
+                        _functions.components.select();
+
+                        if (_settings.components.checkout.contacts.name) {
+                            _settings.components.checkout.contacts.name.attr('readonly', '');
+                        }
+
+                        if (_settings.components.checkout.contacts.email) {
+                            _settings.components.checkout.contacts.email.attr('readonly', '');
+                        }
+
+                        if (!_functions.user.isUserAuthenticated() && !Global.AuthenticateHelper) {
+                            _functions.showLoginDialog();
+                        }
+                    }
+                }
+            },
+            onBeforeRenderPaymentAndChoosePasswordStarting: function (data) {
+                if (_functions.settings.getSettingUserLoginMandatoryOnSearch() || _functions.isUserLoginMandatoryOnCheckout()) {
+                    data.ContactInformations.isEmailFieldReadOnly = true;
+                    data.ContactInformations.isNameFieldReadOnly = true;
+                }
+            }
+        },
+        validations: {
+            showMessageWhenMorePassengerThenPermitted: function () {
+                if (_functions.validations.morePassengerThenPermitted()) {
+                    if (_settings.controllers.messagesController) {
+                        _settings.controllers.messagesController.notifyMessages([["Passenger_MoreThanPermitted", Global.URLSite]], EnumHelper.MessagesExhibitor.ExhibitionType.Inline);
+                    }
+                }
+            },
+            morePassengerThenPermitted: function () {
+                if (Global.InterfaceEnvelope && Global.Settings) {
+                    var passengerMustBeAuthenticatedUser = Global.Settings["Travelgo.Checkout.PassengerMustBeAuthenticatedUser"] && Global.Settings["Travelgo.Checkout.PassengerMustBeAuthenticatedUser"].toUpperCase().trim() === "TRUE";
+                    var maxPassengerQtd = passengerMustBeAuthenticatedUser
+                        ? 1
+                        : parseInt(Global.Settings["Travelgo.Validation.MaxPassengerQtd"]);
+
+                    if (maxPassengerQtd > 0) {
+                        var selectedPaxQuantity = _functions.validations.passengerSelection.air();
+                        if (selectedPaxQuantity > 0)
+                            return selectedPaxQuantity > maxPassengerQtd;
+
+                        selectedPaxQuantity = _functions.validations.passengerSelection.hotel();
+                        if (selectedPaxQuantity > 0)
+                            return selectedPaxQuantity > maxPassengerQtd;
+
+                    }
+                }
+            },
+            passengerSelection: {
+                air: function () {
+                    if (Global.InterfaceEnvelope &&
+                        Global.InterfaceEnvelope.SearchParameters &&
+                        Global.InterfaceEnvelope.SearchParameters.Air) {
+                        var searching = Global.InterfaceEnvelope.SearchParameters.Air.Adults +
+                            Global.InterfaceEnvelope.SearchParameters.Air.Babies +
+                            Global.InterfaceEnvelope.SearchParameters.Air.Children;
+
+                        return searching;
+                    }
+                    return 0;
+                },
+                hotel: function () {
+                    if (Global.InterfaceEnvelope &&
+                        Global.InterfaceEnvelope.SearchParameters &&
+                        Global.InterfaceEnvelope.SearchParameters.Hotel &&
+                        Global.InterfaceEnvelope.SearchParameters.Hotel.RoomsRequest) {
+                        var searching = Global.InterfaceEnvelope.SearchParameters.Hotel.RoomsRequest.sum(function (r) { return parseInt(r.Adults) + r.ChildAges.length; });
+                        return searching;
+                    }
+                    return 0;
+                }
+            },
+            reloadPageAfterLogin: function (responseSignIn) {
+                if (_functions.settings.mustLoginAtAll() && !responseSignIn.pageReloaded) {
+
+                    if (_settings.controllers.messagesController)
+                        _settings.controllers.messagesController.notifyMessages(['Please_Wait'], EnumHelper.MessagesExhibitor.ExhibitionType.Dialog);
+
+                    location.reload(false);
+                    responseSignIn.pageReloaded = true;
+                }
+            }
+        },
+        plugins: {
+            checkAndSetExternalEvents: function () {
+                if (PageManager && PageManager.attachOnRenderCompleted) {
+                    PageManager.attachOnRenderCompleted(_functions.events.onAfterRenderCheckout);
+                }
+            }
+        },
+    };
+
+    _this.reattachEvents = function () {
+        _functions.controllers.assignControllers();
+        _functions.controllers.reattachEvents();
+    }
+
+    _this.isUserLoginMandatoryOnCheckout = _functions.isUserLoginMandatoryOnCheckout;
+    _this.validationAfterLogin = function (responseSignIn) {
+        _functions.validations.reloadPageAfterLogin(responseSignIn);
+    }
+    _this.onBeforeRenderPaymentAndChoosePasswordStarting = _functions.events.onBeforeRenderPaymentAndChoosePasswordStarting;
+    _this.onAfterRenderCheckout = _functions.events.onAfterRenderCheckout;
+
+    _functions.initialize(baseSettings);
+
+    return _this;
+};
+
+(function () {
+    $(document).ready(function () {
+        if (Global == undefined) {
+            Global = {};
+        }
+
+        if (Global.UrlController) {
+            Global.UrlController.startRouteCompleted.attach(function () {
+                if (Global.MandatoryUserLogin == undefined)
+                    Global.MandatoryUserLogin = new TravelGo.Plugin.MandatoryUserLogin({});
+                else
+                    Global.MandatoryUserLogin.reattachEvents();
+            });
+        }
+        else {
+            Global.MandatoryUserLogin = new TravelGo.Plugin.MandatoryUserLogin({});
+        }
+    });
+}());

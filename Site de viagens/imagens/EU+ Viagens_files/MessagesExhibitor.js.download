@@ -1,0 +1,362 @@
+/// <reference path="../Libraries/Util.js" />
+
+(function ($) {
+
+    function MessagesExhibitor() {
+        var thisMessagesExhibitor = this;
+        var component = undefined;
+        var lastexhibitionType = undefined;
+
+        var settings = {
+            scrollTo: true,
+            template: function (x) { return ""; },
+            controllers: {
+                messagesController: undefined,
+                searchController: undefined,
+                checkOutController: undefined
+            },
+            components: {
+                timerDisplay: '.timerDisplay',
+            },
+            events: {
+                setAdditionalShowMessagesEvents: function () { },
+                afterClear: function () { }
+            },
+            exhibitionType: undefined,
+            type: undefined,
+            addBold: true,
+            addTag: undefined,
+            hasTwoBehaviors: true,
+            clickClear: true,
+            componentTargetToRender: undefined,
+            timerDisplay: 15000,
+            showTimerDisplayCountdown: true
+        }
+
+        var showMessagesTimeOut = undefined;
+        var timerDisplayCountdown = undefined;
+        var timerDisplayTimeOut = undefined;
+        var messagesToShow = [];
+
+        var _functions = {
+            events: {
+                setEvents : function(action){
+                    if (settings.controllers.messagesController) {
+                        settings.controllers.messagesController.onMessages[action](thisMessagesExhibitor.showMessage);
+                        settings.controllers.messagesController.onMessage[action](thisMessagesExhibitor.showMessage);
+                        settings.controllers.messagesController.onHide[action](thisMessagesExhibitor.hideMessage);
+                    }
+
+                    if (settings.controllers.searchController) {
+                        settings.controllers.searchController.searchStarting[action](thisMessagesExhibitor.clear);
+                        settings.controllers.searchController.filterStarting[action](thisMessagesExhibitor.clear);
+                        settings.controllers.searchController.changePackageStarting[action](thisMessagesExhibitor.clear);
+                    }
+                },
+                attach: function () {
+                    _functions.events.setEvents('attach');
+                },
+                dettach: function () {
+                    _functions.events.setEvents('dettach');
+                },
+                setComponentEvents: function () {
+                    if (settings.clickClear)
+                        component.click(function () { thisMessagesExhibitor.clear() });
+
+                    $(component).on('click', '.close', function () {
+                        component.hide();
+                        component.removeClass('opened');
+                        $('.more_info', component).show();
+                    });
+
+                    $(component).on('click', '.more_info', function (e) {
+                        component.addClass('opened');
+
+                        e.stopPropagation();
+                    });
+                }
+            }
+        }
+
+        this.changeSettings = function (opts) {
+            $.extend(true, settings, opts || {});
+        };
+
+        this.showMessage = function (messages, exhibitionType, messageType) {
+
+            if (!settings.hasTwoBehaviors && settings.exhibitionType != undefined && (exhibitionType != 0 && !exhibitionType))
+                exhibitionType = settings.exhibitionType;
+
+            if (exhibitionType == undefined)
+                exhibitionType = EnumHelper.MessagesExhibitor.ExhibitionType.Inline;
+
+            if (showMessagesTimeOut) {
+                clearTimeout(showMessagesTimeOut);
+            }
+            else {
+                thisMessagesExhibitor.clear();
+            }
+
+            messagesToShow = messagesToShow.concat(messages).distinct();
+
+            showMessagesTimeOut = setTimeout(function () {
+
+                var componentTarget = component;
+
+                if ($(settings.componentTargetToRender) && $(settings.componentTargetToRender).length) {
+                    componentTarget = $(settings.componentTargetToRender);
+                    componentTarget.empty();
+                }
+
+                if (messagesToShow.length) {
+                    lastexhibitionType = exhibitionType;
+
+                    var content = "<center>";
+
+                    if (settings.addTag) {
+                        for (var i = 0; i < messagesToShow.length; i++) {
+
+                            content += "<" + settings.addTag + ">";
+
+                            if (i == 0) {
+                                if (settings.addBold)
+                                    content += "<b>" + messagesToShow[i] + "</b>";
+                                else
+                                    content += messagesToShow[i];
+                            }
+                            else {
+                                content += messagesToShow[i];
+                            }
+
+                            content += "</" + settings.addTag + ">";
+                        }
+                    }
+                    else {
+                        content += "<p class='first errorLineMessage'>" + messagesToShow[0] + "</p>";
+
+                        for (var msgToShowIndex = 1; msgToShowIndex < messagesToShow.length; msgToShowIndex++) {
+                            content += "<p class='errorLineMessage'>" + messagesToShow[msgToShowIndex] + "</p>";
+                        }
+                    }
+
+                    content += "</center>";
+
+                    if (exhibitionType == EnumHelper.MessagesExhibitor.ExhibitionType.Dialog)
+                        _showDialog(content);
+                    else if (exhibitionType == EnumHelper.MessagesExhibitor.ExhibitionType.Slider)
+                        _showSlider(content);
+                    else if (exhibitionType == EnumHelper.MessagesExhibitor.ExhibitionType.Alert)
+                        if (typeof swal != "undefined") {
+                            if (!messageType)
+                                messageType = EnumHelper.MessagesExhibitor.Type.Info;
+
+                            for (var i = 0; i < messagesToShow.length; i++)
+                                messagesToShow[i] = messagesToShow[i].replaceAll('\n', '<br />');
+
+                            swal({
+                                html: messagesToShow.join('<br />'),
+                                type: EnumHelper.MessagesExhibitor.Type[messageType].toLowerCase(),
+                                confirmButtonColor: '#74b749',
+                                confirmButtonText: Resources.translate({ code: "Close" }),
+                                width: 700
+                            });
+                        }
+                        else
+                            alert(messagesToShow.join('\n'));
+                    else {
+                        componentTarget.append(content).show();
+                        if ($(".message_alert center").length != 0)
+                            component.show();
+                    }
+                }
+
+                showMessagesTimeOut = undefined;
+                messagesToShow = [];
+
+                if (settings.scrollTo && $.scrollTo) {
+                    var top = componentTarget.offset().top;
+
+                    if (exhibitionType == EnumHelper.MessagesExhibitor.ExhibitionType.Dialog) {
+                        var parent = componentTarget.parent('.ui-dialog');
+                        if (parent && parent.length)
+                            top = componentTarget.parent('.ui-dialog').offset().top;
+                    }
+
+                    if (top > 35) top -= 35;
+
+                    $.scrollTo({ top: top, left: 0 }, 100);
+                }
+
+                _VerifyMoreInfoVisibility();
+
+                if (settings.events.setAdditionalShowMessagesEvents)
+                    settings.events.setAdditionalShowMessagesEvents();
+
+                _timerDisplaySettings(exhibitionType);
+
+            }, 500);
+        }
+
+        function _VerifyMoreInfoVisibility() {
+            var paragraphsHeight = 0;
+
+            component.find('.messagesExhibitor p').each(function (i) {
+                var ctrl = $(this);
+                paragraphsHeight += ctrl.height();
+            });
+
+            if (paragraphsHeight < 40)
+                $('.more_info', component).hide();
+            else
+                $('.more_info', component).show();
+
+            component.removeClass('opened');
+        }
+
+        var _timerDisplaySettings = function (exhibitionType) {
+
+            if (exhibitionType != EnumHelper.MessagesExhibitor.ExhibitionType.Fixed) {
+
+                var timerDisplay = _getTimerDisplay();
+
+                if (timerDisplay > 0) {
+                    timerDisplayTimeOut && clearTimeout(timerDisplayTimeOut);
+
+                    timerDisplayTimeOut = setTimeout(function _timeDisplayFunc() {
+                        thisMessagesExhibitor.clear();
+                        timerDisplayCountdown && clearInterval(timerDisplayCountdown);
+                    }, timerDisplay);
+
+                    if (settings.showTimerDisplayCountdown) {
+                        var timerDisplayer = $(settings.components.timerDisplay, component);
+
+                        var seconds = parseInt(timerDisplay / 1000, 10);
+
+                        timerDisplayer.html(seconds--).show();
+
+                        timerDisplayCountdown && clearInterval(timerDisplayCountdown);
+
+                        timerDisplayCountdown = setInterval(function _countDown() {
+                            timerDisplayer.html(seconds--);
+                        }, 1000);
+                    }
+                }
+            }
+        };
+
+        this.hideMessage = function () {
+            component.hide();
+
+            if ($(settings.componentTargetToRender) && $(settings.componentTargetToRender).length)
+                $(settings.componentTargetToRender).hide();
+        }
+
+        this.clear = function () {
+            if (lastexhibitionType == EnumHelper.MessagesExhibitor.ExhibitionType.Slider) {
+                if ($(settings.componentTargetToRender) && $(settings.componentTargetToRender).length)
+                    $(settings.componentTargetToRender).html('').slideUp();
+                else
+                    component.html('').slideUp();
+            }
+            else if (lastexhibitionType == EnumHelper.MessagesExhibitor.ExhibitionType.Dialog) {
+                component.html('');
+            }
+            else {
+                if ($(settings.componentTargetToRender) && $(settings.componentTargetToRender).length) {
+                    $(settings.componentTargetToRender).empty();
+                    component.hide(50);
+                }
+                else
+                    component.hide(50).empty();
+            }
+
+            settings.events.afterClear && settings.events.afterClear();
+        }
+
+        this.destroy = function () {
+            _functions.events.dettach();
+        };
+
+        this.setComponentTargetToRender = function (jQueryComp) {
+            settings.componentTargetToRender = jQueryComp;
+        };
+
+        this.initialize = function (comp, opts) {
+
+            component = $(comp);
+
+            $.extend(true, settings, opts || {});
+
+            _functions.events.dettach();
+            _functions.events.attach();
+
+            _functions.events.setComponentEvents();
+        }
+
+        function _showSlider(content) {
+            component.append(content).slideDown();
+        }
+
+        function _setSliderEvents() {
+            component.unbind('click').click(function () {
+                $(this).html('').slideUp();
+            });
+        }
+
+        function _showDialog(content) {
+            if ($("." + component.attr("class")).is(':visible'))
+                $("." + component.attr("class")).destroyDialog();
+
+            component.html(content);
+
+            var jDialog = component.clone();
+            try {
+                jDialog.destroyDialog();
+            } catch (e) { }
+            jDialog.attr("title", _getTitle());
+
+            jDialog.dialog({
+                modal: true,
+                closeText: "show",
+                draggable: false,
+                dialogClass: 'messages-exhibitor',
+                position: { my: "center top+10px", at: "center top", of: window },
+                buttons: {
+                    Ok: function () {
+                        $(this).dialog("close");
+                        settings.controllers.messagesController.closeExhibitor({});
+                    }
+                }
+            });
+
+            jDialog.on('dialogclose', function (event) {
+                settings.controllers.messagesController.closeExhibitor({});
+            });
+        }
+
+        function _getTitle() {
+            return Util.MessagesExhibitionTypeResolver(settings.exhibitionType);
+        }
+
+        function _getTimerDisplay() {
+
+            if (Util && Util.GetSetting) {
+                var timerDisplaySetting = Util.GetSetting("MessagesExhibitorTimerDisplay");
+
+                if (timerDisplaySetting) {
+
+                    var timerDisplayValue = parseInt(timerDisplaySetting);
+
+                    if (!isNaN(timerDisplayValue))
+                        return timerDisplayValue;
+                }
+            }
+
+            return settings.timerDisplay;
+        }
+    };
+
+    $.fn.messagesExhibitor = function () {
+        return Util.pluginDefaultBehavior(this, "messagesExhibitor", arguments, function () { return new MessagesExhibitor() });
+    };
+})(jQuery);

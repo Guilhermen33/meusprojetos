@@ -1,0 +1,2317 @@
+﻿if (typeof EnumHelper == 'undefined') { var EnumHelper = {}; }
+if (typeof EnumHelper.AirSearch == 'undefined') { EnumHelper.AirSearch = {}; }
+if (typeof EnumHelper.BusSearch == 'undefined') { EnumHelper.BusSearch = {}; }
+if (typeof EnumHelper.Book == 'undefined') { EnumHelper.Book = {}; }
+if (typeof EnumHelper.Passenger == 'undefined') { EnumHelper.Passenger = {}; }
+if (typeof EnumHelper.Connection == 'undefined') { EnumHelper.Connection = {}; }
+if (typeof EnumHelper.Ticket == 'undefined') { EnumHelper.Ticket = {}; }
+if (typeof EnumHelper.PageManager == 'undefined') { EnumHelper.PageManager = {}; }
+if (typeof EnumHelper.Template == 'undefined') { EnumHelper.Template = {}; }
+if (typeof EnumHelper.ServiceItem == 'undefined') { EnumHelper.ServiceItem = {}; }
+if (typeof EnumHelper.ServiceDefinition == 'undefined') { EnumHelper.ServiceDefinition = {}; }
+if (typeof EnumHelper.ActionRequired == 'undefined') { EnumHelper.ActionRequired = {}; }
+if (typeof EnumHelper.ResultType == 'undefined') { EnumHelper.ResultType = {}; }
+if (typeof EnumHelper.Foid == 'undefined') { EnumHelper.Foid = {}; }
+if (typeof EnumHelper.SearchType == 'undefined') { EnumHelper.SearchType = {}; }
+if (typeof EnumHelper.TimeLineType == 'undefined') { EnumHelper.TimeLineType = {}; }
+if (typeof EnumHelper.Pricing == 'undefined') { EnumHelper.Pricing = {}; }
+if (typeof EnumHelper.MessagesExhibitor == 'undefined') { EnumHelper.MessagesExhibitor = {}; }
+if (typeof EnumHelper.ProcessFileStatus == 'undefined') { EnumHelper.ProcessFileStatus = {}; }
+if (typeof EnumHelper.CRUD == 'undefined') { EnumHelper.CRUD = {}; }
+if (typeof EnumHelper.Phone == 'undefined') { EnumHelper.Phone = {}; }
+if (typeof EnumHelper.GuaranteeType == 'undefined') { EnumHelper.GuaranteeType = {}; }
+if (typeof EnumHelper.GMap == 'undefined') { EnumHelper.GMap = {}; }
+if (typeof EnumHelper.Filter == 'undefined') { EnumHelper.Filter = {}; }
+if (typeof EnumHelper.PassengerTitle == 'undefined') { EnumHelper.PassengerTitle = {}; }
+if (typeof EnumHelper.ServiceType == 'undefined') { EnumHelper.ServiceType = {}; }
+if (typeof EnumHelper.FieldType == 'undefined') { EnumHelper.FieldType = {}; }
+if (typeof EnumHelper.StatusExportation == 'undefined') { EnumHelper.StatusExportation = {}; }
+if (typeof EnumHelper.ExportationFlow == 'undefined') { EnumHelper.ExportationFlow = {}; }
+if (typeof EnumHelper.PnrStatus == 'undefined') { EnumHelper.PnrStatus = {}; }
+if (typeof EnumHelper.CarCategory == 'undefined') { EnumHelper.CarCategory = {}; }
+if (typeof EnumHelper.ContentLoadType == 'undefined') { EnumHelper.ContentLoadType = {}; }
+if (typeof EnumHelper.CarTransmission == 'undefined') { EnumHelper.CarTransmission = {}; }
+if (typeof EnumHelper.ServiceFareType == 'undefined') { EnumHelper.ServiceFareType = {}; }
+if (typeof EnumHelper.ServiceSaleType == 'undefined') { EnumHelper.ServiceSaleType = {}; }
+if (typeof EnumHelper.TemplateMode == 'undefined') { EnumHelper.TemplateMode = {}; }
+if (typeof EnumHelper.SearchStatus == 'undefined') { EnumHelper.SearchStatus = {}; }
+if (typeof EnumHelper.ManagementFields == 'undefined') { EnumHelper.ManagementFields = {}; }
+if (typeof EnumHelper.ExternalFieldType == 'undefined') { EnumHelper.ExternalFieldType = {}; }
+if (typeof EnumHelper.MappedTypeExternalFieldType == 'undefined') { EnumHelper.MappedTypeExternalFieldType = {}; }
+if (typeof EnumHelper.ContactDataTo == 'undefined') { EnumHelper.ContactDataTo = {}; }
+if (typeof EnumHelper.Wizard == 'undefined') { EnumHelper.Wizard = {}; }
+if (typeof EnumHelper.BatchAction == 'undefined') { EnumHelper.BatchAction = {}; }
+if (typeof EnumHelper.BatchRecordContentStatusMessage == 'undefined') { EnumHelper.BatchRecordContentStatusMessage = {}; }
+if (typeof EnumHelper.InterfaceBuilder == 'undefined') { EnumHelper.InterfaceBuilder = {}; }
+if (typeof EnumHelper.InterfaceBuilder.TextBoxEditorType == 'undefined') { EnumHelper.InterfaceBuilder.TextBoxEditorType = {}; }
+if (typeof EnumHelper.MaskTypeExternalField == 'undefined') { EnumHelper.MaskTypeExternalField = {}; }
+if (typeof EnumHelper.BookingType == 'undefined') { EnumHelper.BookingType = {}; }
+if (typeof EnumHelper.Service == 'undefined') { EnumHelper.Service = {}; }
+if (typeof EnumHelper.StatusFlowItemType == 'undefined') { EnumHelper.StatusFlowItemType = {}; }
+if (typeof EnumHelper.WaitType == 'undefined') { EnumHelper.WaitType = {}; }
+if (typeof EnumHelper.ConditionType == 'undefined') { EnumHelper.ConditionType = {}; }
+if (typeof EnumHelper.PaymentTypeActions == 'undefined') { EnumHelper.PaymentTypeActions = {}; }
+if (typeof EnumHelper.CruisePnrLiveEditActions == 'undefined') { EnumHelper.CruisePnrLiveEditActions = {}; }
+if (typeof EnumHelper.OfflineItemActions == 'undefined') { EnumHelper.OfflineItemActions = {}; }
+if (typeof EnumHelper.DiscountType == 'undefined') { EnumHelper.DiscountType = {}; }
+if (typeof EnumHelper.DataSourceType == 'undefined') { EnumHelper.DataSourceType = {}; }
+if (typeof EnumHelper.ActionMode == 'undefined') { EnumHelper.ActionMode = {}; }
+if (typeof EnumHelper.PACLineModifyCommandType == 'undefined') { EnumHelper.PACLineModifyCommandType = {}; }
+if (typeof EnumHelper.TrayItemType == 'undefined') { EnumHelper.TrayItemType = {}; }
+if (typeof EnumHelper.ProposalType == 'undefined') { EnumHelper.ProposalType = {}; }
+if (typeof EnumHelper.Services == 'undefined' || EnumHelper.Services.ServiceType == 'undefined') { EnumHelper.Services = {}; EnumHelper.Services.ServiceType = {}; }
+if (typeof EnumHelper.Itinerary == 'undefined' || EnumHelper.Itinerary.ProductType == 'undefined') { EnumHelper.Itinerary = {}; EnumHelper.Itinerary.ProductType = {}; }
+if (typeof EnumHelper.ProductTypeName === 'undefined') { EnumHelper.ProductTypeName = {}; }
+if (typeof EnumHelper.DataGridColumnVisibility === 'undefined') { EnumHelper.DataGridColumnVisibility = {}; }
+if (typeof EnumHelper.DiscountCouponStatus === 'undefined') { EnumHelper.DiscountCouponStatus = {}; }
+if (typeof EnumHelper.ToolBarExtensionOpenMode === 'undefined') { EnumHelper.ToolBarExtensionOpenMode = {}; }
+if (typeof EnumHelper.PaymentFormAdditionalFields === 'undefined') { EnumHelper.PaymentFormAdditionalFields = {}; }
+if (typeof EnumHelper.PaymentFormAdditionalFieldsSettings === 'undefined') { EnumHelper.PaymentFormAdditionalFieldsSettings = {}; }
+if (typeof EnumHelper.Fee === 'undefined') { EnumHelper.Fee = {}; }
+if (typeof EnumHelper.MandatoryUserLogin === 'undefined') { EnumHelper.MandatoryUserLogin = {}; }
+if (typeof EnumHelper.SaleItemType === 'undefined') { EnumHelper.SaleItemType = {}; }
+if (typeof EnumHelper.SortBy === 'undefined') { EnumHelper.SortBy = { Hotel: {} }; }
+if (typeof EnumHelper.DefinitionCategory === 'undefined') { EnumHelper.DefinitionCategory = {}; }
+if (typeof EnumHelper.UserResolution === 'undefined') { EnumHelper.UserResolution = {}; }
+if (typeof EnumHelper.Warning === 'undefined') { EnumHelper.Warning = {}; }
+
+EnumHelper.SearchName = EnumHelper.SearchName || {}
+
+EnumHelper.InputType = EnumHelper.InputType || {
+    Text: 0,
+    TextArea: 1,
+    Select: 2,
+    SelectOption: 3,
+    Radio: 4,
+    Hidden: 5
+};
+
+
+EnumHelper.ValueType = EnumHelper.ValueType || {
+    String: 0,
+    Number: 1,
+    DateTime: 2,
+    Currency: 3,
+    Boolean: 4,
+    Complex: 5
+    //baseado no EntityFieldType do IB, utilizado no SettingsEditor
+};
+
+EnumHelper.GuaranteeType = {
+    CreditCard: 0,
+    Deposit: 1,
+    ImmediateDeposit: 2,
+    UntilXPM: 3,
+    AgencyIata: 4,
+    AgencyName: 5,
+    DirectBill: 6,
+    DailyBilled: 7,
+    DailyBilledExtras: 8,
+    0: 'CreditCard',
+    1: 'Deposit',
+    2: 'ImmediateDeposit',
+    3: 'UntilXPM',
+    4: 'AgencyIata',
+    5: 'AgencyName',
+    6: 'DirectBill',
+    7: 'DailyBilled',
+    8: 'DailyBilledExtras'
+};
+
+EnumHelper.PhoneTypeOP = {
+    Business: "Business",
+    Home: "Home",
+    Mobile: "Mobile",
+    Agency: "Agency"
+};
+
+EnumHelper.UserPhoneType = {
+    Fixed: 0,
+    Cellular: 1,
+    Undefined: 2,
+    Home: 3,
+    Business: 4,
+    ForMessages: 5,
+    Billing: 6,
+    Temporary: 7,
+    Mobile: 8,
+    0: "Fixed",
+    1: "Cellular",
+    2: "Undefined",
+    3: "Home",
+    4: "Business",
+    5: "ForMessages",
+    6: "Billing",
+    7: "Temporary",
+    8: "Mobile"
+};
+
+EnumHelper.ExchangeRateSource = {
+    IATA: 0,
+    Registered: 1,
+    0: "IATA",
+    1: "Registered"
+}
+
+EnumHelper.ContactPhoneType = {
+    Business: 0,
+    Home: 1,
+    Mobile: 2,
+    Agency: 3,
+    0: "Business",
+    1: "Home",
+    2: "Mobile",
+    3: "Agency"
+};
+
+EnumHelper.FeeGroupType = {
+    Consolidator: 0,
+    Agency: 1,
+    0: "Consolidator",
+    1: "Agency"
+};
+
+EnumHelper.CompanyType = {
+    Agency: 0,
+    Corporate: 1,
+    Consolidator: 2,
+    Operator: 3,
+    Any: "",
+    0: "Agency",
+    1: "Corporate",
+    2: "Consolidator",
+    3: "Operator",
+    "": "Any"
+};
+
+EnumHelper.AirSearch.TypeTrip = {
+    OneWay: 1,
+    RoundTrip: 2,
+    MultiDestination: 3,
+    1: "OneWay",
+    2: "RoundTrip",
+    3: 'MultiDestination'
+};
+
+EnumHelper.BusSearch.TypeTrip = {
+    OneWay: 1,
+    RoundTrip: 2,
+    MultiDestination: 3,
+    1: "OneWay",
+    2: "RoundTrip",
+    3: 'MultiDestination'
+};
+
+EnumHelper.TranslateTripType = function (param, opt_sb) {
+    var output = opt_sb || "";
+    if (param.tripType) {
+        output.append(Resources.translate({ code: "stretch" + EnumHelper.AirSearch.TypeTrip[param.tripType] }));
+    }
+}
+
+EnumHelper.GetAirSearchTripType = function (param, opt_sb) {
+    var output = opt_sb || "";
+    if (param.tripType) {
+        output.append(EnumHelper.AirSearch.TypeTrip[param.tripType]);
+    }
+}
+
+
+EnumHelper.SearchMethodType = {
+    SearchPricedFlights: 0,
+    SearchJourney: 1,
+    SearchBySchedule: 2,
+    SearchByRecommendation: 3,
+    0: 'SearchPricedFlights',
+    1: 'SearchJourney',
+    2: 'SearchBySchedule',
+    3: 'SearchByRecommendation'
+};
+
+EnumHelper.Book.Action = {
+    BookPNR: 0,
+    CancelPNR: 1,
+    Retrieve: 2,
+    Render: 3,
+    0: "BookPNR",
+    1: "CancelPNR",
+    2: "Retrieve",
+    3: 'Render'
+};
+
+EnumHelper.Connection.Mode = {
+    None: 0,
+    AddElements: 1,
+    Close: 2,
+    CloseAndRetrieve: 3,
+    Ignore: 4,
+    IgnoreAndRetrieve: 5,
+    0: "None",
+    1: "AddElements",
+    2: "Close",
+    3: "CloseAndRetrieve",
+    4: "IgnoreAndRetrieve",
+    5: "Ignore"
+};
+
+EnumHelper.Book.LoadTicketType = {
+    AddElements: 0,
+    Close: 1,
+    LoadAndInferTickets: 2,
+    0: "NoTickets",
+    1: "LoadTickets",
+    2: "LoadAndInferTickets"
+};
+
+EnumHelper.Gender = {
+    Male: 0,
+    Female: 1,
+    0: "Male",
+    1: "Female"
+};
+
+EnumHelper.BaggageAllowance = {
+    Indifferent: 0,
+    WithBaggage: 1,
+    WithoutBaggage: 2,
+    0: 'Indifferent',
+    1: 'WithBaggage',
+    2: 'WithoutBaggage'
+};
+
+EnumHelper.CabinType = {
+    FirstClass: 0,
+    Executive: 1,
+    Economic: 2,
+    PremiumEconomy: 3,
+    0: 'FirstClass',
+    1: 'Executive',
+    2: 'Economic',
+    3: 'PremiumEconomy'
+};
+
+EnumHelper.CruiseItineraryActivity = {
+    Embark: 0,
+    Docked: 1,
+    Tendered: 2,
+    Cruising: 3,
+    Debark: 4,
+    0: 'Embark',
+    1: 'Docked',
+    2: 'Tendered',
+    3: 'Cruising',
+    4: 'Debark'
+};
+
+EnumHelper.CruiseDiningTableSizes = {
+    Small: 0,
+    Large: 1,
+    0: 'Small',
+    1: 'Large'
+}
+
+EnumHelper.CruiseDiningSittingType = {
+    Traditional: 0,
+    Open: 1,
+    Undecided: 2,
+    0: 'Traditional',
+    1: 'Open',
+    2: 'Undecided'
+}
+
+EnumHelper.CruiseRoomConfiguration = {
+    ApartBoth: 0,
+    BothTogether: 1,
+    Unknown: 2,
+    0: 'ApartBoth',
+    1: 'BothTogether',
+    2: 'Unknown'
+}
+
+EnumHelper.CruiseReservationStatusCode = {
+    OF: 42,
+    BK: 49,
+    CX: 16,
+    WL: 46,
+    Offer: 'OF',
+    Booked: 'BK',
+    Cancelled: 'CX',
+    Waitlist: 'WL',
+    0: 'OF',
+    1: 'BK',
+    2: 'CX',
+    3: 'WL',
+    42: 'OF',
+    49: 'BK',
+    16: 'CX',
+    46: 'WL'
+}
+
+EnumHelper.MeasureTypes = {
+    0: 'Feet',
+    1: 'Knots',
+    2: 'SquareFeet',
+    3: 'Inches',
+    4: 'Unit',
+    5: 'Tons',
+    6: 'Meters',
+    7: 'KilometersPerHour',
+    Feet: 0,
+    Knots: 1,
+    SquareFeet: 2,
+    Inches: 3,
+    Unit: 4,
+    Tons: 5,
+    Meters: 6,
+    KilometersPerHour: 7
+}
+
+EnumHelper.UserType =
+{
+    Agency: 0,
+    Corporate: 1,
+    B2C: 2,
+    Any: '',
+    0: 'Agency',
+    1: 'Corporate',
+    2: 'B2C'
+};
+
+EnumHelper.ContactInformation = {
+    BusinessPhone: 3,
+    HomePhoneNumber: 4,
+    MobilePhone: 5,
+    TravelAgentPhoneNumber: 6,
+    EmailAddress: 2, //P02 no amadeus
+    ContactName: 7,
+    NameAgency: 8,
+    AddressName: 9,
+    BillingAddress: 10,
+    City: 11,
+    State: 12,
+    Zip: 13,
+    Country: 14,
+    3: "BusinessPhone",
+    4: "HomePhoneNumber",
+    5: "MobilePhone",
+    6: "TravelAgentPhoneNumber",
+    2: "EmailAddress", //P02 no amadeus
+    7: "ContactName",
+    8: "NameAgency",
+    9: "AddressName",
+    10: "BillingAddress",
+    11: "City",
+    12: "State",
+    13: "Zip",
+    14: "Country"
+};
+
+EnumHelper.ActionType = {
+    ToInsert: 0,
+    ToUpdate: 1,
+    ToDelete: 2,
+    Unknown: 3,
+    0: "ToInsert",
+    1: "ToUpdate",
+    2: "ToDelete",
+    3: "Unknown"
+};
+
+EnumHelper.Passenger.PassengerType = {
+    Adult: 0,
+    Child: 1,
+    Baby: 2,
+    Senior: 3,
+    "0": "Adult",
+    "1": "Child",
+    "2": "Baby",
+    "3": "Senior"
+};
+
+EnumHelper.Passenger.PassengerTypeTranslate = {
+    Adulto: 0,
+    Criança: 1,
+    Bebê: 2,
+    Sênior: 3,
+    "0": "Adulto",
+    "1": "Criança",
+    "2": "Bebê",
+    "3": "Sênior"
+};
+
+EnumHelper.Passenger.PassengerTypeShort = {
+    ADT: 0,
+    CHD: 1,
+    INF: 2,
+    SRC: 3,
+    "0": "ADT",
+    "1": "CHD",
+    "2": "INF",
+    "3": "SRC"
+};
+
+EnumHelper.Ticket.TicketStatus = {
+    NotIssued: 0,
+    Issued: 1,
+    Pending: 2,
+    WaitingForNumber: 3,
+    Cancelled: 4,
+    Replaced: 5,
+    Refunded: 6,
+    Flown: 7,
+    0: "NotIssued",
+    1: "Issued",
+    2: "Pending",
+    3: "WaitingForNumber",
+    4: "Cancelled",
+    5: "Replaced",
+    6: "Refunded",
+    7: "Flown"
+};
+
+EnumHelper.PageManager.Type = {
+    Book: 0,
+    Dashboard: 1,
+    Query: 2,
+    Search: 3,
+    Workflow: 4,
+    Admin: 5,
+    ExternalPnr: 6,
+    Proposal: 7,
+    CruiseDetails: 8,
+    0: "Book",
+    1: "Dashboard",
+    2: "Query",
+    3: "Search",
+    4: "Workflow",
+    5: "Admin",
+    6: "ExternalPnr",
+    7: "Proposal",
+    8: "CruiseDetails"
+};
+
+EnumHelper.Template.Budget = {
+    PesquisaHorario: "PesquisaHorario",
+    PesquisaPrecoHorario: "PesquisaPrecoHorario",
+    PesquisaPreco: "PesquisaPreco",
+    PesquisaHotel: "PesquisaHotel"
+};
+
+EnumHelper.Template.MediaType = {
+    Html: 0,
+    Text: 1,
+    0: "Html",
+    1: "Text"
+};
+
+EnumHelper.ServiceItem.RoleType = {
+    ServiceOrder: 0,
+    ServiceItem: 1,
+    0: "ServiceOrder",
+    1: "ServiceItem",
+};
+
+EnumHelper.ApprovalFlow = {
+    Type: {
+        Sequential: '0',
+        Parallel: '1',
+        Unique: '2',
+        SequentialUnique: '3',
+        0: 'Sequential',
+        1: 'Parallel',
+        2: 'Unique',
+        3: 'SequentialUnique'
+    }
+};
+
+EnumHelper.ActionRequired.Type = {
+    SelectApprover: '0',
+    Justify: '1',
+    0: 'SelectApprover',
+    1: 'Justify'
+};
+
+//Enum carregado com as informações do banco.
+EnumHelper.ServiceDefinition.Identifier = undefined;
+
+EnumHelper.ActionRequired.Type = {
+    SelectApprover: '0',
+    Policy: '1',
+    ChangeStatus: '2',
+    ActionTips: '3',
+    0: 'SelectApprover',
+    1: 'Policy',
+    2: 'ChangeStatus',
+    3: 'ActionTips'
+};
+
+EnumHelper.Foid.Type = {
+    CC: '0',
+    FF: '1',
+    PP: '2',
+    DL: '3',
+    TN: '4',
+    ID: '5',
+    CN: '6',
+    0: 'CC',
+    1: 'FF',
+    2: 'PP',
+    3: 'DL',
+    4: 'TN',
+    5: 'ID',
+    6: 'CN'
+};
+
+EnumHelper.ResultType.Type = {
+    Justify: '0',
+    Notifies: '1',
+    NoAction: '2',
+    Block: '3',
+    0: 'Justify',
+    1: 'Notifies',
+    2: 'NoAction',
+    3: 'Block'
+};
+
+EnumHelper.CreditCardType = {
+    'None': '0',
+    'EBTA': '1',
+    'CTA': '2',
+    'VIRCC': '3',
+    'CFC': '4',
+    '0': 'None',
+    '1': 'EBTA',
+    '2': 'CTA',
+    '3': 'VIRCC',
+    '4': 'CFC'
+};
+
+EnumHelper.CreditCardProvider = {
+    "VI": 0,
+    "MC": 1,
+    "AX": 2,
+    "DC": 3,
+    "DI": 3,
+    "AURA": 4,
+    "HP": 5,
+    "HI": 6,
+    "EL": 7,
+    "TP": 8,
+    "GE": 9,
+    "0": "VI",
+    "1": "MC",
+    "2": "AX",
+    "3": "DI",
+    "4": "AURA",
+    "5": "HP",
+    "6": "HI",
+    "7": "EL",
+    "8": "TP",
+    "9": "GE"
+};
+
+EnumHelper.CreditCardCodeName = {
+    "VI": "Visa",
+    "MC": "MasterCard",
+    "AX": "American Express",
+    "DI": "Diners",
+    "DC": "Diners",
+    "AURA": "Aura",
+    "HP": "HyperCard",
+    "HI": "HiperCard",
+    "GE": "HiperCard",
+    "EL": "Elo",
+    "TP": "UATP",
+    "GE": "GE"
+};
+
+EnumHelper.ProductType = {
+    "Air": 0,
+    "Hotel": 1,
+    "AirHotel": 2,
+    "Car": 3,
+    "Service": 4,
+    "Advance": 5,
+    "Cruise": 6,
+    "Insurance": 7,
+    "PackageCustom": 8,
+    0: "Air",
+    1: "Hotel",
+    2: "AirHotel",
+    3: "Car",
+    4: "Service",
+    5: "Advance",
+    6: "Cruise",
+    7: "Insurance",
+    8: "PackageCustom"
+};
+
+EnumHelper.ProductTypeName = {
+    Air: "Air",
+    Hotel: "Hotel",
+    Car: "Car",
+    Service: "Service",
+    DynamicPackage: "DynamicPackage",
+    HybridPackage: "HybridPackage",
+    Tour: "Tour",
+    Cruise: "Cruise",
+    Insurance: "Insurance",
+    PackageCustom: "PackageCustom",
+    Itinerary: "Itinerary",
+    Bus: "Bus",
+};
+
+EnumHelper.FrameworkProductType = {
+    "Any": 0,
+    "Air": 1,
+    "Hotel": 2,
+    "AirHotel": 3,
+    "Car": 4,
+    "Services": 5,
+    "Insurance": 6,
+    "Cruise": 8,
+    "Itinerary": 9,
+    0: "Any",
+    1: "Air",
+    2: "Hotel",
+    3: "AirHotel",
+    4: "Car",
+    5: "Services",
+    6: "Insurance",
+    8: "Cruise",
+    9: "Itinerary"
+};
+
+EnumHelper.SearchType = {
+    Air: 'Air',
+    Hotel: 'Hotel',
+    Car: 'Car',
+    Package: 'Package',
+    Service: 'Service',
+    Tour: 'Tour',
+    DynamicPackage: 'DynamicPackage',
+    Traces: 'Traces',
+    Logs: 'Logs',
+    Itinerary: 'Itinerary',
+};
+
+EnumHelper.TimeLineType = {
+    "ChageFieldValue": 0,
+    "SendEmail": 1,
+    "Messages": 2,
+    "ApprovalFlow": 3,
+    "SubChangeFieldValue": 4,
+    0: "ChageFieldValue",
+    1: "SendEmail",
+    2: "Messages",
+    3: "ApprovalFlow",
+    4: "SubChangeFieldValue"
+};
+
+EnumHelper.Pricing.Status = {
+    "NotCharged": 0,
+    "Charged": 1,
+    "Exempted": 2,
+    "ChargedBack": 3,
+    0: "NotCharged",
+    1: "Charged",
+    2: "Exempted",
+    3: "ChargedBack"
+};
+
+EnumHelper.StatusPriority = {
+    'Low': 0,
+    'Medium': 1,
+    'High': 2,
+    0: 'Low',
+    1: 'Medium',
+    2: 'High'
+};
+
+EnumHelper.MessagesExhibitor.ExhibitionType = {
+    Dialog: 0,
+    Slider: 1,
+    Alert: 2,
+    Inline: 3,
+    Fixed: 4,
+    0: "Dialog",
+    1: "Slider",
+    2: "Alert",
+    3: "Inline",
+    4: "Fixed"
+};
+
+EnumHelper.MessagesExhibitor.Type = {
+    Message: 0,
+    Error: 1,
+    Warning: 2,
+    Success: 3,
+    Info: 4,
+    Question: 5,
+    0: "Message",
+    1: "Error",
+    2: "Warning",
+    3: "Success",
+    4: "Info",
+    5: "Question"
+};
+
+EnumHelper.CRUD.Type = {
+    Create: 0,
+    Retrieve: 1,
+    Update: 2,
+    Delete: 3,
+    0: "Create",
+    1: "Retrieve",
+    2: "Update",
+    3: "Delete"
+};
+
+EnumHelper.PaymentType = {
+    'CreditCard': 0,
+    'Invoice': 1,
+    'CreditCardInvoice': 2,
+    'GovernmentAgency': 3,
+    'Points': 5,
+    'Replacement': 6,
+    'CreditCardRegistered': 7,
+    'Cash': 8,
+    'Billet': 9,
+    'Check': 10,
+    'Stelo': 11,
+    'DirectPayment': 12,
+    'BankTransfer': 13,
+    'PointOfSale': 14,
+    'Financial': 15,
+    'DiscountCoupon': 16,
+    'MercantilBank': 17,
+    'Credit': 18,
+    'PayAndGo': 19,
+    'DebitNote': 20,
+    'GuaranteeReservation': 21,
+    'ValueTransfer': 22,
+    'Exchange': 23,
+    'RetainedCommission': 24,
+    'FranchiseDiscount': 25,
+    'PayPal': 26,
+    'PaymentLink': 27,
+    'LetterOfCredit': 28,
+    '0': 'CreditCard',
+    '1': 'Invoice',
+    '2': 'CreditCardInvoice',
+    '3': 'GovernmentAgency',
+    '5': 'Points',
+    '6': 'Replacement',
+    '7': 'CreditCardRegistered',
+    '8': 'Cash',
+    '9': 'Billet',
+    '10': 'Check',
+    '11': 'Stelo',
+    '12': 'DirectPayment',
+    '13': 'BankTransfer',
+    '14': 'PointOfSale',
+    '15': 'Financial',
+    '16': 'DiscountCoupon',
+    '17': 'MercantilBank',
+    '18': 'Credit',
+    '19': 'PayAndGo',
+    '20': 'DebitNote',
+    '21': 'GuaranteeReservation',
+    '22': 'ValueTransfer',
+    '23': 'Exchange',
+    '24': 'RetainedCommission',
+    '25': 'FranchiseDiscount',
+    '26': 'PayPal',
+    '27': 'PaymentLink',
+    '28': 'LetterOfCredit'
+};
+
+EnumHelper.ProcessFileStatus = {
+    Processing: 0,
+    Completed: 1,
+    CompletedWithError: 2,
+    Canceled: 3,
+    0: "Processing",
+    1: "Completed",
+    2: "CompletedWithError",
+    3: "Canceled"
+};
+
+EnumHelper.Phone.Type = {
+    'Fixed': 0,
+    'Cellular': 1,
+    0: 'Fixed',
+    1: 'Cellular'
+};
+
+EnumHelper.Filter.Type = {
+    Recommendation: 0,
+    CityPair: 1,
+    PriceGroup: 2,
+    Hotel: 3,
+    Service: 4,
+    Package: 5,
+    Detail: 6,
+    Cruise: 7,
+    Insurance: 8,
+    0: 'Recommendation',
+    1: 'CityPair',
+    2: 'PriceGroup',
+    3: 'Hotel',
+    4: 'Service',
+    5: 'Package',
+    6: 'Detail',
+    7: 'Cruise',
+    8: 'Insurance',
+};
+
+EnumHelper.GMap.Type = {
+    HYBRID: 'HYBRID',
+    ROADMAP: 'ROADMAP',
+    SATELLITE: 'SATELLITE',
+    TERRAIN: 'TERRAIN'
+};
+
+EnumHelper.SearchDataType = {
+    'Air': 'Recommendations',
+    'Hotel': 'Hotels',
+    'Service': 'Services'
+};
+
+EnumHelper.OrderType = {
+    Descendent: 0,
+    Ascendent: 1,
+    0: 'Descendent',
+    1: 'Ascendent'
+};
+
+EnumHelper.PassengerTitle = {
+    MR: 0,
+    MRS: 1,
+    MSTR: 2,
+    MISS: 3,
+    INF: 4,
+    0: 'MR',
+    1: 'MRS',
+    2: 'MSTR',
+    3: 'MISS',
+    4: 'INF'
+};
+
+EnumHelper.ServiceType = {
+    Recommendation: 3,
+    CityPair: 1,
+    PriceGroup: 2,
+    Hotel: 4,
+    Package: 5,
+    Service: 6,
+    Car: 7,
+    Insurance: 8,
+    Tour: 9,
+    Cruise: 10,
+    3: 'Recommendation',
+    1: 'CityPair',
+    2: 'PriceGroup',
+    4: 'Hotel',
+    5: 'Package',
+    6: 'Service',
+    7: 'Car',
+    8: 'Insurance',
+    9: 'Tour',
+    10: 'Cruise'
+};
+
+EnumHelper.ServiceType.Plural = {
+    'Recommendation': 'Recommendations',
+    'CityPair': 'CityPairs',
+    'Hotel': 'Hotels',
+    'Package': 'Packages',
+    'Service': 'Services'
+};
+
+EnumHelper.DocumentType = {
+    'Identity': 0,
+    'Passport': 1,
+    'CPF': 2,
+    'DriverLicense': 3,
+    'CNPJ': 4,
+    'RNE': 5,
+    0: 'Identity',
+    1: 'Passport',
+    2: 'CPF',
+    3: 'DriverLicense',
+    4: 'CNPJ',
+    5: 'RNE'
+};
+
+EnumHelper.MCOType = {
+    'Credit': 0,
+    'Penalty': 1,
+    0: 'Credit',
+    1: 'Penalty'
+};
+
+EnumHelper.MCOStatus = {
+    'Pending': 0,
+    'Active': 1,
+    'Canceled': 2,
+    0: 'Pending',
+    1: 'Active',
+    2: 'Canceled'
+};
+
+EnumHelper.CrossSellingType = {
+    0: 'Air',
+    1: 'Hotel',
+    'Air': 0,
+    'Hotel': 1
+};
+
+EnumHelper.FieldType = {
+    String: 0,
+    Int: 1,
+    Decimal: 2,
+    Boolean: 3,
+    DateTime: 4,
+    Timestamp: 5,
+    GlobalList: 6,
+    Grid: 7,
+    SubServiceTypeList: 8,
+    LinkedField: 9,
+    Passengers: 10,
+    Services: 11,
+    Messages: 12,
+    Char: 13,
+    PassengerList: 14,
+    Money: 15,
+
+    0: 'String',
+    1: 'Int',
+    2: 'Decimal',
+    3: 'Boolean',
+    4: 'DateTime',
+    5: 'Timestamp',
+    6: 'GlobalList',
+    7: 'Grid',
+    8: 'SubServiceTypeList',
+    9: 'LinkedField',
+    10: 'Passengers',
+    11: 'Services',
+    12: 'Messages',
+    13: 'Char',
+    14: 'PassengerList',
+    15: 'Money'
+};
+
+//utilizado para configurar conteudo inicial do ServiceOrder.js
+EnumHelper.ServiceOrderContent = {
+    Summary: 'Summary',
+    Passenger: 'Passenger',
+    Air: 'Air',
+    Hotel: 'Hotel',
+    Billing: 'Billing',
+    Message: 'Message'
+};
+
+EnumHelper.ServiceItemTemplate = {
+    PaxGrid: 'PaxGrid',
+    Summary: 'Summary',
+    SummaryPax: 'SummaryPax',
+    SummaryBilling: 'SummaryBilling',
+    BillingDesc: 'BillingDesc'
+};
+
+EnumHelper.TypeProcessAction = {
+    InsertUpdate: 0,
+    Delete: 1,
+    0: "InsertUpdate",
+    1: "Delete"
+}
+
+EnumHelper.StatusExportation = {
+    'Exporting': 0,
+    'Exported': 1,
+    'Canceling': 2,
+    'Canceled': 3,
+    'None': 4,
+    0: 'Exporting',
+    1: 'Exported',
+    2: 'Canceling',
+    3: 'Canceled',
+    4: 'None'
+};
+
+EnumHelper.ExportationFlow = {
+    'ExportationAll': 0,
+    'AgencyForConsolidator': 1,
+    'ClientCorpForAgency': 2,
+    'AgencyForConsolidatorRAV': 3,
+    'ClientCorpForAgencyRAV': 4,
+    'AgencyForConsolidatorMCO': 5,
+    'ClientCorpForAgencyMCO': 6,
+    0: 'ExportationAll',
+    1: 'AgencyForConsolidator',
+    2: 'ClientCorpForAgency',
+    3: 'AgencyForConsolidatorRAV',
+    4: 'ClientCorpForAgencyRAV',
+    5: 'AgencyForConsolidatorMCO',
+    6: 'ClientCorpForAgencyMCO'
+}
+
+EnumHelper.NumberDirection = {
+    Left: 0,
+    Right: 1,
+    0: "Left",
+    1: "Right"
+}
+
+EnumHelper.ContactDataTo = {
+    'BookPnr': 0,
+    'ProcessOrder': 1,
+    0: 'BookPnr',
+    1: 'ProcessOrder'
+};
+
+EnumHelper.PnrAsServiceType = EnumHelper.PnrAsServiceType || {
+    0: 'Book',
+    1: 'Quotation',
+    2: 'Proposal',
+    'Book': 0,
+    'Quotation': 1,
+    'Proposal': 2
+};
+
+EnumHelper.ServiceItemCategory = {
+    Advanced: "Advanced",
+    Air: "Air",
+    Car: "Car",
+    Services: "Services",
+    Service: "Service",
+    Hotel: "Hotel",
+    Other: "Other",
+    Person: "Person",
+    Refund: "Refund",
+    Reimbursement: "Reimbursement",
+    Workflow: "Workflow",
+    Tour: "Tour",
+    Cruise: "Cruise",
+    Insurance: "Insurance"
+};
+
+EnumHelper.ServiceItemSubCategory = {
+    Book: "Book",
+    GiftList: "GiftList",
+    Group: "Group",
+    Insurance: "Insurance",
+    Issue: "Issue",
+    Item: "Item",
+    MCO: "MCO",
+    Order: "Order",
+    OrderItem: "OrderItem",
+    Payment: "Payment",
+    Quotation: "Quotation",
+    Request: "Request",
+    RoomItem: "RoomItem",
+    Solicitation: "Solicitation",
+    TravelCard: "TravelCard",
+    Proposal: "Proposal",
+    ProposalOption: "ProposalOption",
+    Commission: "Commission",
+    PnrPayment: "PnrPayment"
+};
+
+EnumHelper.ServiceItemTools = {
+    History: "History",
+    Mail: "Mail",
+    Print: "Print",
+    Refresh: "Refresh",
+    Edit: "Edit",
+    OnlineOn: "OnlineOn",
+    OnlineOff: "OnlineOff",
+    Cancel: "Cancel",
+    DownloadPDF: "DownloadPDF",
+    PayMiscellaneousDocument: "PayMiscellaneousDocument",
+    SendToTray: "SendToTray",
+    DownloadTraces: "DownloadTraces",
+    Inactivate: "Inactivate",
+    Activate: "Activate",
+    UploadFile: "UploadFile",
+    MailHistory: "MailHistory",
+    AssignResponsible: "AssignResponsible",
+    SetResponsible: "SetResponsible",
+    RemoveResponsible: "RemoveResponsible",
+    AssignRequestingUser: "AssignRequestingUser",
+    SetRequestingUser: "SetRequestingUser",
+    RemoveRequestingUser: "RemoveRequestingUser",
+    GenerateTickets: "GenerateTickets",
+    IntegrateWithApp: "IntegrateWithApp",
+};
+
+EnumHelper.PnrStatus = {
+    Booked: 0,
+    Canceled: 1,
+    BookPending: 2,
+    Queued: 3,
+    PendingCancellation: 4,
+    Rejected: 5,
+    TechnicalProblem: 6,
+    0: 'Booked',
+    1: 'Canceled',
+    2: 'BookPending',
+    3: 'Queued',
+    4: 'PendingCancellation',
+    5: 'Rejected',
+    6: 'TechnicalProblem'
+};
+
+EnumHelper.ServiceItem.LinkType = {
+    Parent: 0,
+    Child: 1,
+    Association: 2,
+    GeneratedParent: 3,
+    GeneratedChild: 4
+};
+
+EnumHelper.ServiceItem.PersonLinkType = {
+    Parent: 0,
+    Child: 1,
+    Friend: 2,
+    Partner: 3,
+    StepChild: 4,
+    StepParent: 5,
+    Brother: 6,
+    GrandChild: 7,
+    GrandParent: 8,
+    Uncle: 9,
+    Nephew: 10,
+    Employer: 11,
+    Employee: 12,
+    Nanny: 13,
+    Charge: 14,
+    Other: 15,
+    0: 'Parent',
+    1: 'Child',
+    2: 'Friend',
+    3: 'Partner',
+    4: 'StepChild',
+    5: 'StepParent',
+    6: 'Brother',
+    7: 'GrandChild',
+    8: 'GrandParent',
+    9: 'Uncle',
+    10: 'Nephew',
+    11: 'Employer',
+    12: 'Employee',
+    13: 'Nanny',
+    14: 'Charge',
+    15: 'Other'
+};
+
+EnumHelper.Pricing.FeeGroupType = {
+    Consolidator: 0,
+    Agency: 1
+};
+
+EnumHelper.PersonType = {
+    Corporate: 0,
+    Individual: 1,
+    0: "Corporate",
+    1: "Individual"
+};
+
+EnumHelper.LoadPersonRequiredFieldsFrom = {
+    Template: 0,
+    User: 1,
+    0: "Template",
+    1: "User"
+};
+
+EnumHelper.PnrStatus = EnumHelper.PnrStatus || {
+    0: 'Booked',
+    1: 'Canceled',
+    2: 'BookPending',
+    'Booked': 0,
+    'Canceled': 1,
+    'BookPending': 2
+};
+
+EnumHelper.BatchAction = {
+    Search: 0,
+    AnonymousSearch: 1,
+    SearchNBook: 2,
+    Issue: 3,
+    Book: 4,
+    BookNIssue: 5,
+    Retrieve: 6,
+    RevalidatePNR: 8,
+    0: "Search",
+    1: "AnonymousSearch",
+    2: "SearchNBook",
+    3: "Issue",
+    4: "Book",
+    5: "BookNIssue",
+    6: "Retrieve",
+    8: "RevalidatePNR"
+};
+
+EnumHelper.BatchRecordContentStatusMessage = {
+    Error: 0,
+    Warning: 1,
+    Success: 2,
+    0: "Error",
+    1: "Warning",
+    2: "Success"
+};
+
+EnumHelper.BatchStatus = {
+    InWorking: 0,
+    Error: 1,
+    Complete: 2,
+    CompleteWithError: 3,
+    0: "InWorking",
+    1: "Error",
+    2: "Complete",
+    3: "CompleteWithError"
+};
+
+EnumHelper.SortProperty = {
+    FlightDuration: 0,
+    Schedule: 1,
+    Price: 2,
+    0: "FlightDuration",
+    1: "Schedule",
+    2: "Price"
+};
+
+EnumHelper.VisualizationType = {
+    Horizontal: 'horizontal',
+    Vertical: 'vertical',
+    Single: 'single',
+    Price: 'price'
+};
+
+EnumHelper.EventPriority = EnumHelper.EventPriority || {
+    0: "High",
+    1: "Medium",
+    2: "Low",
+    "High": 0,
+    "Medium": 1,
+    "Low": 2
+};
+
+EnumHelper.WorkflowPaymentStatus = {
+    None: 0,
+    Pending: 1,
+    Confirmed: 2,
+    NotConfirmed: 3,
+    Canceled: 4,
+    PreAuthorized: 5,
+    Reimbursed: 6,
+    ReimbursementRequested: 7,
+    0: "None",
+    1: "Pending",
+    2: "Confirmed",
+    3: "NotConfirmed",
+    4: "Canceled",
+    5: "PreAuthorized",
+    6: 'Reimbursed',
+    7: 'ReimbursementRequested'
+};
+
+EnumHelper.BillingHistoryType = {
+    None: 0,
+    PaymentAdded: 1,
+    PaymentCanceled: 2,
+    PaymentAuthorized: 3,
+    PaymentUnauthorized: 4,
+    PaymentPending: 5,
+    PaymentDisassociated: 6,
+    BuyerAdded: 7,
+    BuyerRemoved: 8,
+    0: "None",
+    1: "PaymentAdded",
+    2: "PaymentCanceled",
+    3: "PaymentAuthorized",
+    4: "PaymentUnauthorized",
+    5: "PaymentPending",
+    6: "PaymentDisassociated",
+    7: "BuyerAdded",
+    8: "BuyerRemoved"
+};
+
+
+EnumHelper.WorkflowPaymentHolderType = {
+    None: 0,
+    Client: 1,
+    Supplier: 2,
+    ClientSupplier: 3,
+    0: "None",
+    1: "Client",
+    2: "Supplier",
+    3: "ClientSupplier"
+};
+
+EnumHelper.CarCategory = {
+    0: "Unspecified",
+    1: "Economy",
+    2: "Compact",
+    3: "CompactElite",
+    4: "Fullsize",
+    5: "FullsizeElite",
+    6: "EconomyElite",
+    7: "Intermediate",
+    8: "IntermediateElite",
+    9: "Luxury",
+    10: "Mini",
+    11: "MiniElite",
+    12: "Oversize",
+    13: "Premium",
+    14: "StandardElite",
+    15: "Standard",
+    16: "PremiumElite",
+    17: "LuxuryElite",
+    18: "Special",
+    19: "Minivan",
+    "Unspecified": 0,
+    "Economy": 1,
+    "Compact": 2,
+    "CompactElite": 3,
+    "Fullsize": 4,
+    "FullsizeElite": 5,
+    "EconomyElite": 6,
+    "Intermediate": 7,
+    "IntermediateElite": 8,
+    "Luxury": 9,
+    "Mini": 10,
+    "MiniElite": 11,
+    "Oversize": 12,
+    "Premium": 13,
+    "StandardElite": 14,
+    "Standard": 15,
+    "PremiumElite": 16,
+    "LuxuryElite": 17,
+    "Special": 18,
+    "Minivan": 19
+};
+
+EnumHelper.ContentLoadType = {
+    Cars: 0,
+    Groups: 1,
+    Companies: 2,
+    RentalLocations: 3,
+    SpecialEquipments: 4
+};
+
+EnumHelper.CarTransmission = {
+    0: "Unspecified",
+    1: "Manual",
+    2: "Automatic"
+};
+
+EnumHelper.CarRateType = {
+    0: "Undefined",
+    1: "Hourly",
+    2: "Total",
+    3: "Daily",
+    4: "Monthly",
+    5: "Weekend",
+    6: "Weekly"
+};
+
+EnumHelper.CarType = {
+    0: "Unspecified",
+    1: "TwoOrThreeDoors",
+    2: "TwoOrFourDoors",
+    3: "FourOrFiveDoors",
+    4: "Coupe",
+    5: "Suv",
+    6: "Crossover",
+    7: "Motorhome",
+    8: "OpenairAllTerrain",
+    9: "CommercialVanOrTruck",
+    10: "Limousine",
+    11: "Monospace",
+    12: "Roadster",
+    13: "PickupRegularCab",
+    14: "PickupExtendedCab",
+    15: "RecreationalVehicle",
+    16: "Sport",
+    17: "Convertible",
+    18: "PassengerVan",
+    19: "WagonOrEstate",
+    20: "Special",
+    21: "TwoWheelVehicle",
+    22: "SpecialOfferCar"
+};
+
+EnumHelper.CarAirConditioning = {
+    'true': "WithAirConditioning",
+    'false': "WithoutAirConditioning"
+};
+
+EnumHelper.CarRateQualifier = {
+    1: "FullyQualified",
+    2: "PartlyQualified",
+    3: "OtherRates"
+};
+
+EnumHelper.ServiceSaleType = {
+    0: "FreeSale",
+    1: "OnRequest",
+    2: "Inventory",
+    "FreeSale": 0,
+    "OnRequest": 1,
+    "Inventory": 2
+};
+
+EnumHelper.HotelSaleType = {
+    0: "Allotment",
+    1: "FreeSale",
+    2: "OnRequest",
+    3: "Online",
+    "Allotment": 0,
+    "FreeSale": 1,
+    "OnRequest": 2,
+    "Online": 3
+};
+
+EnumHelper.TemplateMode = {
+    Complete: "Complete",
+    Summary: "Summary",
+    ETicket: "E-Ticket",
+    PaymentReceipt: "PaymentReceipt",
+    PaymentLink: "PaymentLink"
+};
+
+EnumHelper.FileExtensionIcon = {
+    "doc": "doc - icon.png",
+    "docx": "docx-icon.png",
+    "gif": "gif-icon.png",
+    "htm": "htm-icon.png",
+    "html": "html-icon.png",
+    "jpeg": "jpeg-icon.png",
+    "jpg": "jpg-icon.png",
+    "pdf": "pdf-icon.png",
+    "png": "png-icon.png",
+    "pps": "pps-icon.png",
+    "pst": "pst-icon.png",
+    "rar": "rar-icon.png",
+    "txt": "txt-icon.png",
+    "unknown": "unknown-icon.png",
+    "xsl": "xls-icon.png",
+    "xslx": "xlsx-icon.png",
+    "zip": "zip-icon.png",
+    "confidential": "confidential-icon.png"
+};
+
+EnumHelper.SearchStatus = {
+    Searching: 0,
+    Completed: 1
+};
+
+EnumHelper.ManagementFields.SearchType = {
+    0: 'Customer',
+    1: 'Agency',
+    'Customer': 0,
+    'Agency': 1
+};
+
+EnumHelper.ExternalFieldType = {
+    TextField: 0,
+    DropDownField: 1,
+    0: "TextField",
+    1: "DropDownField"
+};
+
+EnumHelper.MappedTypeExternalFieldType = {
+    NotMapped: 0,
+    RequesterUser: 1,
+    CostCenter: 2,
+    0: "NotMapped",
+    1: "RequesterUser",
+    2: "CostCenter"
+};
+
+if (typeof Util == 'undefined')
+    Util = {};
+
+EnumHelper.SourceType = Util && Util.Sources;
+
+EnumHelper.FareType = {
+    0: 'Public',
+    1: 'Operator',
+    "Public": 0,
+    "Operator": 1
+};
+
+if (typeof EnumHelper.Hotel == 'undefined')
+    EnumHelper.Hotel = {};
+
+EnumHelper.Hotel.FareType = {
+    0: "Full",
+    1: "Agreement",
+    2: "Net",
+    3: "Balcony",
+    4: "Comissioned",
+    5: "Package",
+    "Full": 0,
+    "Agreement": 1,
+    "Net": 2,
+    "Balcony": 3,
+    "Comissioned": 4,
+    "Package": 5
+
+};
+
+EnumHelper.Wizard.Step = {
+    1: "AggregateStepOne",
+    2: "AggregateStepTwo",
+    3: "managementExternalFields",
+    "AggregateStepOne": 1,
+    "AggregateStepTwo": 2,
+    "managementExternalFields": 3
+};
+
+EnumHelper.TrayBarItemType = {
+    Air: 'Air',
+    Hotel: 'Hotel',
+    Service: 'Service',
+    Insurance: 'Insurance',
+    PreOrder: 'PreOrder',
+    Cruise: 'Cruise'
+};
+
+EnumHelper.ServiceDefinition.FieldType = {
+    String: 0,
+    Int: 1,
+    Decimal: 2,
+    Boolean: 3,
+    DateTime: 4,
+    Timestamp: 5,
+    GlobalList: 6,
+    Grid: 7,
+    SubServiceTypeList: 8,
+    LinkedField: 9,
+    Passengers: 10,
+    Services: 11,
+    Messages: 12,
+    Char: 13,
+    PassengerList: 14,
+    Money: 15,
+    0: 'String',
+    1: 'Int',
+    2: 'Decimal',
+    3: 'Boolean',
+    4: 'DateTime',
+    5: 'Timestamp',
+    6: 'GlobalList',
+    7: 'Grid',
+    8: 'SubServiceTypeList',
+    9: 'LinkedField',
+    10: 'Passengers',
+    11: 'Services',
+    12: 'Messages',
+    13: 'Char',
+    14: 'PassengerList',
+    15: 'Money'
+};
+
+EnumHelper.ReturnMode = {
+    0: 'Synchronous',
+    1: 'Asynchronous',
+    'Synchronous': 0,
+    'Asynchronous': 1
+};
+
+EnumHelper.SegmentsChange = {
+    'Alter': 'Alter',
+    'Include': 'Include'
+};
+
+EnumHelper.InterfaceBuilder.TextBoxEditorType = {
+    0: "Normal",
+    1: "Xml",
+    2: "Number",
+    3: "Currency",
+    4: "Phone",
+    5: "Javascript",
+    6: "RichText",
+    7: "Color",
+    "Normal": 0,
+    "Xml": 1,
+    "Number": 2,
+    "Currency": 3,
+    "Phone": 4,
+    "Javascript": 5,
+    "RichText": 6,
+    "Color": 7
+};
+
+EnumHelper.MaskTypeExternalField = {
+    0: "None",
+    1: "FullDateYear",
+    2: "OnlyNumber",
+    3: "Alphanumeric",
+    "None": 0,
+    "FullDateYear": 1,
+    "OnlyNumber": 2,
+    "Alphanumeric": 3
+};
+
+EnumHelper.AcceptanceTermsDisplayMode = EnumHelper.AcceptanceTermsDisplayMode || {
+    0: 'Full',
+    1: 'Summary',
+    'Summary': 1,
+    'Full': 0
+};
+
+EnumHelper.AcceptanceTermsType = EnumHelper.AcceptanceTermsType || {
+    0: 'Template',
+    1: 'Link',
+    'Link': 1,
+    'Template': 0
+};
+
+EnumHelper.BookingType = {
+    0: 'PriceBeforeBook',
+    1: 'TryToPriceAfterBook',
+    2: 'BookWithoutFare',
+    'PriceBeforeBook': 0,
+    'TryToPriceAfterBook': 1,
+    'BookWithoutFare': 2
+};
+
+EnumHelper.AlaturWSTipoProcesso = {
+    0: 'C'
+    , 1: 'E'
+    , 'C': 0
+    , 'E': 1
+}
+
+EnumHelper.ExternalFieldType = {
+    'TextField': 0
+    , 'DropDownField': 1
+    , 0: 'TextField'
+    , 1: 'DropDownField'
+}
+
+EnumHelper.MappedTypeExternalFieldType = {
+    'NotMapped': 0
+    , 'RequesterUser': 1
+    , 'CostCenter': 2
+    , 'UserBackOfficeID': 3
+    , 'DateField': 4
+    , 'CityDropBox': 5
+    , 0: 'NotMapped'
+    , 1: 'RequesterUser'
+    , 2: 'CostCenter'
+    , 3: 'UserBackOfficeID'
+    , 4: 'DateField'
+    , 5: 'CityDropBox'
+}
+
+EnumHelper.Service.SaleMode = {
+    0: 'Free',
+    1: 'ByPerson',
+    'Free': 0,
+    'ByPerson': 1,
+};
+
+EnumHelper.StatusFlowItemType = {
+    Action: 'Action',
+    Condition: 'Condition',
+    ActionTip: 'ActionTip'
+};
+
+EnumHelper.WaitType = {
+    0: 'Approver',
+    1: 'Requester',
+    2: 'Consultant',
+    'Approver': 0,
+    'Requester': 1,
+    'Consultant': 2
+};
+
+EnumHelper.ConditionType = {
+    0: 'BeforeDisplay',
+    1: 'AfterAction',
+    2: 'None',
+    'BeforeDisplay': 0,
+    'AfterAction': 1,
+    'None': 2
+};
+
+EnumHelper.PaymentTypeActions = {
+    "1": "Edit",
+    "2": "Confirm",
+    "3": "Cancel",
+    "View": "0",
+    "Edit": "1",
+    "Confirm": "2",
+    "Cancel": "3"
+};
+
+EnumHelper.PaymentTypeActions.DefaultValues = {
+    "1": "true",
+    "2": "false",
+    "3": "false"
+};
+
+EnumHelper.CruisePnrLiveEditItems = {
+    "1": "FullPnrEdit",
+    "2": "Passengers",
+    "3": "CabinType",
+    "4": "Cabin",
+    "5": "DiningOption",
+    "6": "CancelBook",
+    "FullPnrEdit": "1",
+    "Passengers": "2",
+    "CabinType": "3",
+    "Cabin": "4",
+    "DiningOption": "5",
+    "CancelBook": "6"
+};
+
+EnumHelper.CruisePnrLiveEditActions = {
+    "1": "Show",
+    "2": "DisableOnBooked",
+    "Show": "1",
+    "DisableOnBooked": "2"
+};
+
+EnumHelper.CruisePnrLiveEditActions.DefaultValues = {
+    "1": "false",
+    "2": "false"
+};
+
+EnumHelper.OfflineItemActions = {
+    "1": "BlockView",
+    "2": "BlockEdit",
+    "3": "BlockCreate",
+    "4": "BlockOnlineView",
+    "5": "BlockAllActionsWhenClosedOS",
+    "BlockView": "1",
+    "BlockEdit": "2",
+    "BlockCreate": "3",
+    "BlockOnlineView": "4",
+    "BlockAllActionsWhenClosedOS": "5"
+};
+
+EnumHelper.DiscountType = {
+    "0": "Percentual",
+    "1": "Absolute",
+    "Percentual": "0",
+    "Absolute": "1"
+};
+
+EnumHelper.DataSourceType = {
+    GlobalList: "0",
+    DataSource: "1"
+};
+
+EnumHelper.SearchResultStatus = {
+    NoSuccess: 0
+    , NoSucessWithExceptionOrFatalError: 1
+    , SearchSuccessApplyingOutOfRangeFilter: 2
+    , SearchSuccessNotApplyingOutOfRangeFilter: 3
+    , SearchSuccessChangeOriginApplyingOutOfRangeFilter: 4
+    , SearchSuccessChangeOriginNotApplyingOutOfRangeFilter: 5
+    , SearchSuccessDifferentDateApplyingOutOfRangeFilter: 6
+    , SearchSuccessDifferentDateNotApplyingOutOfRangeFilter: 7
+    , SearchSuccessDifferentDateAndOriginApplyingOutOfRangeFilter: 8
+    , SearchSuccessDifferentDateAndOriginNotApplyingOutOfRangeFilter: 9
+    , SearchSuccessRemovingPartiallyRangeFilter: 10
+    , SearchSuccessRemovingPartiallyAndNotApplyingOutOfRangeFilter: 11
+    , 0: 'NoSuccess'
+    , 1: 'NoSucessWithExceptionOrFatalError'
+    , 2: 'SearchSuccessApplyingOutOfRangeFilter'
+    , 3: 'SearchSuccessNotApplyingOutOfRangeFilter'
+    , 4: 'SearchSuccessChangeOriginApplyingOutOfRangeFilter'
+    , 5: 'SearchSuccessChangeOriginNotApplyingOutOfRangeFilter'
+    , 6: 'SearchSuccessDifferentDateApplyingOutOfRangeFilter'
+    , 7: 'SearchSuccessDifferentDateNotApplyingOutOfRangeFilter'
+    , 8: 'SearchSuccessDifferentDateAndOriginApplyingOutOfRangeFilter'
+    , 9: 'SearchSuccessDifferentDateAndOriginNotApplyingOutOfRangeFilter'
+    , 10: 'SearchSuccessRemovingPartiallyRangeFilter'
+    , 11: 'SearchSuccessRemovingPartiallyAndNotApplyingOutOfRangeFilter'
+};
+
+EnumHelper.HotelDetailsMode = EnumHelper.HotelDetailsMode ||
+{
+    0: "Normal",
+    1: "IFrame",
+    2: "ExternalPage",
+    3: "TransactionPage",
+    "Normal": 0,
+    "IFrame": 1,
+    "ExternalPage": 2,
+    "TransactionPage": 3
+};
+
+EnumHelper.ActionMode = {
+    "None": 0,
+    "AddElements": 1,
+    "Close": 2,
+    "CloseAndRetrieve": 3,
+    "Ignore": 4,
+    "IgnoreAndRetrieve": 5,
+    0: "None",
+    1: "AddElements",
+    2: "Close",
+    3: "CloseAndRetrieve",
+    4: "Ignore",
+    5: "IgnoreAndRetrieve"
+};
+
+EnumHelper.SearchName = {
+    Recommendation: 0,
+    CityPairSchedule: 1,
+    CityPairPriceSchedule: 2,
+    Hotel: 3,
+    Car: 4,
+    Service: 5,
+    Package: 6,
+    Tour: 7,
+    Cruise: 10,
+    Insurance: 11,
+    Itinerary: 12,
+    0: "Recommendation",
+    1: "CityPairSchedule",
+    2: "CityPairPriceSchedule",
+    3: "Hotel",
+    4: "Car",
+    5: "Service",
+    6: "Package",
+    7: "Tour",
+    10: "Cruise",
+    11: 'Insurance',
+    12: 'Itinerary',
+};
+
+EnumHelper.TrayItemType = {
+    Recommendation: 0,
+    CityPairSchedule: 1,
+    CityPairPriceSchedule: 2,
+    Hotel: 3,
+    Car: 4,
+    Service: 5,
+    Package: 6,
+    Tour: 7,
+    ServiceItem: 8,
+    ServiceOrder: 9,
+    Cruise: 10,
+    Insurance: 11,
+    Itinerary: 12,
+    CruiseGroup: 13,
+    0: "Recommendation",
+    1: "CityPairSchedule",
+    2: "CityPairPriceSchedule",
+    3: "Hotel",
+    4: "Car",
+    5: "Service",
+    6: "Package",
+    7: "Tour",
+    8: "ServiceItem",
+    9: "ServiceOrder",
+    10: "Cruise",
+    11: "Insurance",
+    12: "Itinerary",
+    13: "CruiseGroup"
+};
+
+EnumHelper.HotelSummaryValuesType = {
+    'Normal': 0,
+    'ComparingWithSelected': 1,
+    0: 'Normal',
+    1: 'ComparingWithSelected'
+};
+
+EnumHelper.PACLineModifyCommandType = {
+    0: 'AirLineCodeCommission',
+    1: 'Commission',
+    2: 'OptionalInformation',
+    3: 'TicketNumberFreeText',
+};
+
+EnumHelper.PersonTypeMercantil = {
+    0: 'Natural',
+    1: 'Legal',
+    2: 'CTA'
+};
+
+EnumHelper.ProposalType = {
+    Analytical: 'Analytical',
+    Synthetic: 'Synthetic'
+};
+
+EnumHelper.Services.ServiceType = {
+    Other: 0,
+    Tour: 1,
+    Cruise: 2,
+    Insurance: 3,
+    0: "Other",
+    1: "Tour",
+    2: "Cruise",
+    3: 'Insurance'
+};
+
+EnumHelper.Itinerary.ProductType = {
+    Other: 0,
+    Service: 1,
+    Hotel: 2,
+    Air: 3,
+    0: "Other",
+    1: "Service",
+    2: "Hotel",
+    3: 'Air'
+};
+
+EnumHelper.ReferenceIntervalType = {
+    DayOfMonth: 0,
+    Month: 1,
+    WeekOfTheYear: 2,
+    Date: 3,
+    0: "DayOfMonth",
+    1: "Month",
+    2: "WeekOfTheYear",
+    3: "Date"
+};
+
+EnumHelper.DatabaseModifier = {
+    After: 0,
+    Before: 1,
+    FixedDateFromLastMonth: 2,
+    FixedDate: 3,
+    FixedDateFromNextMonth: 4,
+    0: "After",
+    1: "Before",
+    2: "FixedDateFromLastMonth",
+    3: "FixedDate",
+    4: "FixedDateFromNextMonth"
+};
+
+EnumHelper.ReferencePeriodType = {
+    Days: 0,
+    Weeks: 1,
+    Months: 2,
+    DecendioCopet: 3,
+    Fortnight: 4,
+    IATAWeek: 5,
+    0: "Days",
+    1: "Weeks",
+    2: "Months",
+    3: "DecendioCopet",
+    4: "Fortnight",
+    5: "IATAWeek",
+};
+
+EnumHelper.CommissionRoles = {
+    Manager: 0,
+    Responsible: 1,
+    Issuer: 2,
+    CorporateClient: 3,
+    Agency: 4,
+    ConsolidatorOperator: 5,
+    0: 'Manager',
+    1: 'Responsible',
+    2: 'Issuer',
+    3: 'CorporateClient',
+    4: 'Agency',
+    5: 'ConsolidatorOperator'
+};
+
+EnumHelper.HybridPackageSalesFlowVersion = {
+    'One': '1',
+    'Two': '2',
+    '1': 'One',
+    '2': 'Two'
+};
+
+EnumHelper.PriceBlockMode = {
+    Total: '1',
+    ByPerson: '2',
+    '1': 'Total',
+    '2': 'ByPerson'
+};
+
+EnumHelper.DataGridColumnVisibility = {
+    All: 0,
+    GridOnly: 1,
+    EditorOnly: 2
+};
+
+EnumHelper.DiscountCouponStatus = {
+    none: 0,
+    valid: 1,
+    invalid: 2,
+    '0': 'none',
+    '1': 'valid',
+    '2': 'invalid',
+};
+
+EnumHelper.ToolBarExtensionOpenMode = {
+    IFrame: 0,
+    NewWindow: 1
+};
+
+EnumHelper.PaymentFormAdditionalFields = {
+    "PayerAddress": 0,
+    "PayerData": 1,
+    0: "PayerAddress",
+    1: "PayerData",
+};
+
+EnumHelper.PaymentFormAdditionalFieldsSettings = {
+    "Enabled": 0,
+    "Required": 1,
+    0: "Enabled",
+    1: "Required"
+};
+
+EnumHelper.Fee.State = {
+    "Original": 0,
+    "Changed": 1,
+    0: "Original",
+    1: "Changed"
+};
+
+EnumHelper.TranslateCabinType = function (param, opt_sb) {
+    var output = opt_sb || "";
+    //Importante: vai falhar com o CabinType FirstClass se for somente if (param.cabinType)
+    if (param.cabinType != undefined) {
+        output.append(Resources.translateAirCabinType({ cabintype: EnumHelper.CabinType[param.cabinType] }));
+    }
+}
+
+EnumHelper.TranslateCruiseItineraryActivity = function (param, opt_sb) {
+    var output = opt_sb;
+    if (param.itineraryActivity != null) {
+        output.append(Resources.translate({ code: EnumHelper.CruiseItineraryActivity[param.itineraryActivity] }));
+    }
+}
+
+EnumHelper.TranslateCruiseDiningTableSizes = function (param, opt_sb) {
+    var output = opt_sb;
+    if (param.tableSize != null) {
+        var translated = Resources.translate({ code: EnumHelper.CruiseDiningTableSizes[param.tableSize] });
+        if (translated == "Pequeno")
+            translated = "Pequena";
+
+        output.append(translated);
+    }
+}
+
+EnumHelper.TranslateCruiseDiningSittingType = function (param, opt_sb) {
+    var output = opt_sb;
+    if (param.sittingType != null) {
+        output.append(Resources.translate({ code: EnumHelper.CruiseDiningSittingType[param.sittingType] }));
+    }
+}
+
+EnumHelper.TranslateCruiseRoomConfiguration = function (param, opt_sb) {
+    var output = opt_sb;
+    if (param.roomConfiguration != null) {
+        output.append(Resources.translate({ code: EnumHelper.CruiseRoomConfiguration[param.roomConfiguration] }));
+    }
+}
+
+EnumHelper.TranslateMeasureTypes = function (param, opt_sb) {
+    var output = opt_sb;
+    if (param.measureType != null) {
+        output.append(Resources.translate({ code: EnumHelper.MeasureTypes[param.measureType] }));
+    }
+}
+
+EnumHelper.InvoicePaymentType = {
+    "Exchange": 0,
+    "RetainedCommission": 1,
+    "FranchiseDiscount": 2,
+    0: "Exchange",
+    1: "RetainedCommission",
+    2: "FranchiseDiscount"
+};
+
+EnumHelper.ParseTravelAceBrokerCode = {
+    BR: "Território Nacional",
+    X2: "América Central e Caribe",
+    X4: "América do Norte",
+    X3: "América do Sul (menos Brasil)",
+    X6: "Europa",
+    X8: "Oceania",
+    X7: "Ásia",
+    X5: "África"
+};
+
+EnumHelper.MandatoryUserLogin = {
+    No: 0,
+    OnSearch: 1,
+    OnOrder: 2,
+    0: "No",
+    1: "OnSearch",
+    2: "OnOrder",
+    "No": 0,
+    "OnSearch": 1,
+    "OnOrder": 2,
+};
+
+EnumHelper.DefinitionCategory = {
+    Both: 0,
+    ServiceOrder: 1,
+    ServiceItem: 2,
+    0: 'Both',
+    1: 'ServiceOrder',
+    2: 'ServiceItem'
+};
+
+EnumHelper.SaleItemType = {
+    ServiceItem: 0,
+    Fee: 1,
+    0: "ServiceItem",
+    1: "Fee"
+};
+
+EnumHelper.SortBy = {
+    Hotel: {
+        Price: 0,
+        HotelName: 1,
+        HotelStars: 2,
+        PreferedHotel: 3,
+        Custom: 4
+    }
+};
+
+EnumHelper.LoginFormType = {
+    1: 'login',
+    2: 'logOut',
+    3: 'loggedInUser',
+    5: 'forgotPassword',
+    6: 'changePassword',
+    7: 'businessLogin',
+    'login': 1,
+    'logOut': 2,
+    'loggedInUser': 3,
+    'forgotPassword': 5,
+    'changePassword': 6,
+    'businessLogin': 7
+};
+
+EnumHelper.AuthenticationType = {
+    0: 'Normal',
+    1: 'BusinessAccess',
+    'Normal': 0,
+    'BusinessAccess': 1
+};
+
+EnumHelper.WizardFlowType = EnumHelper.WizardFlowType ||
+{
+    0: 'CheckoutWizard',
+    1: 'ProposalWizard',
+    'ProposalWizard': 0,
+    'CheckoutWizard': 1
+};
+
+EnumHelper.ServiceOrder = EnumHelper.ServiceOrder || {};
+
+EnumHelper.ServiceOrder.BehaviorMode = {
+    "0": "Sale",
+    "1": "Proposal",
+    "Sale": "0",
+    "Proposal": "1"
+};
+
+EnumHelper.UserResolution = {
+    "0": "Mobile",
+    "1": "Tablet",
+    "2": "Desktop",
+    "Mobile": "0",
+    "Tablet": "1",
+    "Desktop": "2"
+};
+
+EnumHelper.BaggagesIncluded = {
+    0: 'Unknown',
+    1: 'NoneAreIncluded',
+    2: 'OneBaggage',
+    3: 'TwoBaggages',
+    4: 'ThreeBaggages',
+    'Unknown': 0,
+    'NoneAreIncluded': 1,
+    'OneBaggage': 2,
+    'TwoBaggages': 3,
+    'ThreeBaggages': 4
+};
+
+EnumHelper.Warning.WarningSeverity = {
+    0: 'Low',
+    1: 'Medium',
+    2: 'High',
+    3: 'Critical',
+    'Low': 0,
+    'Medium': 1,
+    'High': 2,
+    'Critical': 3
+};
+
+EnumHelper.TranslateBaggagesIncluded = function (param, opt_sb) {
+    if (typeof (param.baggagesIncluded) != undefined) {
+        if (opt_sb != undefined
+            && opt_sb.append != undefined)
+            opt_sb.append(Resources.translate({ code: "BaggagesIncluded_" + EnumHelper.BaggagesIncluded[param.baggagesIncluded] }));
+        else
+            return Resources.translate({ code: "BaggagesIncluded_" + EnumHelper.BaggagesIncluded[param.baggagesIncluded] });
+    }
+};
+
+EnumHelper.TranslateAddRemoveBaggages = function (param, opt_sb) {
+    if (typeof (param.baggagesIncluded) != undefined) {
+        if (opt_sb != undefined
+            && opt_sb.append != undefined)
+            opt_sb.append(Resources.translate({ code: "AddRemoveBaggages_" + EnumHelper.BaggagesIncluded[param.baggagesIncluded] }));
+        else
+            return Resources.translate({ code: "AddRemoveBaggages_" + EnumHelper.BaggagesIncluded[param.baggagesIncluded] });
+    }
+};
+
+EnumHelper.CheckoutTranslateBaggagesOptions = function (param, opt_sb) {
+    if (typeof (param.baggagesIncluded) != undefined) {
+        if (opt_sb != undefined
+            && opt_sb.append != undefined)
+            opt_sb.append(Resources.translate({ code: "CheckoutBaggagesOption_" + EnumHelper.BaggagesIncluded[param.baggagesIncluded] }));
+        else
+            return Resources.translate({ code: "CheckoutBaggagesOption_" + EnumHelper.BaggagesIncluded[param.baggagesIncluded] });
+    }
+};
+
+EnumHelper.PaymentStatus = {
+    'None': 0,
+    'InvoicePaid': 1,
+    'CreditCardPaid': 2,
+    0: 'None',
+    1: 'InvoicePaid',
+    2: 'CreditCardPaid'
+}
+
+EnumHelper.LocationType = {
+    'World': 0,
+    'Continent': 1,
+    'Country': 2,
+    'State': 3,
+    'City': 4,
+    'Airport': 5,
+    'Region': 6,
+    'Spot': 7,
+    'Port': 8,
+    'BusStation': 9,
+    'Hotel': 10,
+    0: 'World',
+    1: 'Continent',
+    2: 'Country',
+    3: 'State',
+    4: 'City',
+    5: 'Airport',
+    6: 'Region',
+    7: 'Spot',
+    8: 'Port',
+    9: 'BusStation',
+    10: 'Hotel',
+}

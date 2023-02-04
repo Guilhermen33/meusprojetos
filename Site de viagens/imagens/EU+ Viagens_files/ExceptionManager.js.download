@@ -1,0 +1,69 @@
+﻿if (typeof (Global) == 'undefined')
+    Global = {};
+
+Global.exceptionManager = new (function ExceptionManager(autoInit) {
+
+    var _thisExceptionManager = this;
+
+    this.Init = function () {
+        return _thisExceptionManager.Manager.init();
+    };
+
+    this.Manager = {
+        errors: [],
+        init: function () {
+            if (!window.onerror) {
+                window.onerror = _thisExceptionManager.Manager.onError;
+                setInterval(_thisExceptionManager.Manager.purgeErrors, 10000);
+            }
+        },
+        getAllErrorsSoFar: function () {
+            return _thisExceptionManager.Manager.errors;
+        },
+        onError: function (msg, url, lineNo, columnNo, error) {
+            try {
+                var username = "";
+
+                if (typeof (Ide) != 'undefined') {
+                    username = Ide.user.Username;
+                } else if (typeof (Global) != 'undefined' && Global.Headers) {
+                    username = Global.Headers.b2c_u;
+                }
+
+                _thisExceptionManager.Manager.errors.push(
+                {
+                    Message: msg,
+                    Url: url,
+                    Stack: "Linha: " + lineNo + ", Coluna: " + columnNo + ", Stack: " + (error && error.stack || ""),
+                    Username: username || ""
+                });
+            }
+            catch (e) {
+                //Nao fazer nada, para nao impactar o fluxo
+            }
+        },
+        isPurging: false,
+        purgeErrors: function () {
+            if (!_thisExceptionManager.Manager.isPurging && _thisExceptionManager.Manager.errors.length > 0) {
+                _thisExceptionManager.Manager.isPurging = true;
+                var errorsToSend = _thisExceptionManager.Manager.errors;
+                _thisExceptionManager.Manager.errors = [];
+                _thisExceptionManager.Manager.sendErrors(errorsToSend);
+                _thisExceptionManager.Manager.isPurging = false;
+            }
+        },
+        sendErrors: function (errorsToSend) {
+
+            var timeout = (Global && Global.TimeOutServiceParameter) || 10000;
+
+            var _clientWS = new ServiceCaller(Global.PathWebService);
+            var rq = { req: { JSErrors: errorsToSend } };
+            _clientWS.invoke("ProcessJSErrors", rq, null, null, null, timeout);
+        }
+    };
+
+    if (autoInit) {
+        _thisExceptionManager.Init();
+    }
+
+})(true);

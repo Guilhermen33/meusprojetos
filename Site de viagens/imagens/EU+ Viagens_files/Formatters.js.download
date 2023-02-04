@@ -1,0 +1,1025 @@
+﻿var formatter = new (function () {
+    if (typeof Global == 'undefined')
+        Global = {};
+
+    this.culture = Global.Culture && Global.Culture.length ? Global.Culture.toLowerCase() : "pt-br";
+    this.language = this.culture.substr(0, 2);
+
+    this.daysOfWeekMin = {
+        'en-us': ['S', 'M', 'T', 'W', 'Th', 'F', 'Sa', 'S'],
+        'pt-br': ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+        'es-ar': ['D', 'L', 'M', 'Mi', 'J', 'V', 'S', 'D'],
+        'es-mx': ['D', 'L', 'M', 'Mi', 'J', 'V', 'S', 'D'],
+        'es-ve': ['D', 'L', 'M', 'Mi', 'J', 'V', 'S', 'D']
+    };
+
+    this.daysOfWeekShort = {
+        'en-us': ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        'pt-br': ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        'es-ar': ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        'es-mx': ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        'es-ve': ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+    };
+
+    this.monthNamesShort = {
+        'en-us': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        'pt-br': ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        'es-ar': ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        'es-mx': ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        'es-ve': ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+    };
+
+    this.daysOfWeek = {
+        'en-us': ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 'Saturday', "Sunday"],
+        'pt-br': ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
+        'es-ar': ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+        'es-mx': ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+        'es-ve': ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    };
+
+    this.dayOfWeekShort = function (d) {
+        return formatter.daysOfWeekShort[formatter.culture][d];
+    }
+
+    this.dayOfWeek = function (d) {
+        return formatter.daysOfWeek[formatter.culture][d];
+    };
+
+    this.monthNames = {
+        'en-us': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        'pt-br': ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        'es-ar': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo ', 'Junio​​', 'Julio', 'Agosto', 'Septiembre ', 'Octubre ', 'Noviembre', 'Diciembre'],
+        'es-mx': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo ', 'Junio​​', 'Julio', 'Agosto', 'Septiembre ', 'Octubre ', 'Noviembre', 'Diciembre'],
+        'es-ve': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo ', 'Junio​​', 'Julio', 'Agosto', 'Septiembre ', 'Octubre ', 'Noviembre', 'Diciembre']
+    };
+
+    this.timeText = {
+        'en-us': "Time",
+        'pt-br': "Horário",
+        'es-ar': "Horario",
+        'es-mx': "Horario",
+        'es-ve': "Horario"
+    };
+
+    this.hourText = {
+        'en-us': "Hour",
+        'pt-br': "Hora",
+        'es-ar': "Hora",
+        'es-mx': "Hora",
+        'es-ve': "Hora"
+    };
+
+    this.minuteText = {
+        'en-us': "Minute",
+        'pt-br': "Minuto",
+        'es-ar': "Minuto",
+        'es-mx': "Minuto",
+        'es-ve': "Minuto"
+    };
+
+    this.monthName = function (m) {
+        return formatter.monthNames[formatter.culture][m - 1];
+    };
+
+    this.toTwoDigits = function (number) {
+        var parsed = parseInt(number, 10);
+        return (parsed < 10 ? "0" : "") + parsed;
+    };
+
+    this.monthNameShort = function (m) {
+        return formatter.monthNamesShort[formatter.culture][m - 1];
+    };
+
+    var dateValuesShortFunctions = {
+        "pt-br": function (dt) { return formatter.toTwoDigits(dt.Day) + "/" + formatter.toTwoDigits(dt.Month) + "/" + dt.Year; },
+        "en-us": function (dt) { return formatter.toTwoDigits(dt.Month) + "/" + formatter.toTwoDigits(dt.Day) + "/" + dt.Year; },
+        "es-ar": function (dt) { return formatter.toTwoDigits(dt.Day) + "/" + formatter.toTwoDigits(dt.Month) + "/" + dt.Year; },
+        "es-mx": function (dt) { return formatter.toTwoDigits(dt.Day) + "/" + formatter.toTwoDigits(dt.Month) + "/" + dt.Year; },
+        "es-ve": function (dt) { return formatter.toTwoDigits(dt.Day) + "/" + formatter.toTwoDigits(dt.Month) + "/" + dt.Year; }
+    };
+
+    /* returns specific day/month/year type */
+    this.dateValuesShort = function (dt) {
+        return !dt ? "" : dateValuesShortFunctions[formatter.culture](dt);
+    };
+
+    this.dateValuesShortWithCulture = function (dt, culture) {
+        return !dt ? "" : dateValuesShortFunctions[culture](dt);
+    };
+
+    var dateFormatFunctions = {
+        "pt-br": function () { return 'DD-MM-YYYY'; },
+        "en-us": function () { return 'MM-DD-YYYY'; },
+        "es-ar": function () { return 'DD-MM-YYYY'; },
+        "es-mx": function () { return 'DD-MM-YYYY'; },
+        "es-ve": function () { return 'DD-MM-YYYY'; }
+    };
+    var slashDateFormatAbreviatedYearFunctions = {
+        "pt-br": function () { return 'dd/mm/yy'; },
+        "en-us": function () { return 'mm/dd/yy'; },
+        "es-ar": function () { return 'dd/mm/yy'; },
+        "es-mx": function () { return 'dd/mm/yy'; },
+        "es-ve": function () { return 'dd/mm/yy'; }
+    };
+    var slashDateFormatYearFunctions = {
+        "pt-br": function () { return 'dd/mm/yyyy'; },
+        "en-us": function () { return 'mm/dd/yyyy'; },
+        "es-ar": function () { return 'dd/mm/yyyy'; },
+        "es-mx": function () { return 'dd/mm/yyyy'; },
+        "es-ve": function () { return 'dd/mm/yyyy'; }
+    };
+    var dateFormatRegularExpressions = {
+        "pt-br": function () { return /^((0[1-9]|[12]\d)\/(0[1-9]|1[0-2])|30\/(0[13-9]|1[0-2])|31\/(0[13578]|1[02]))\/\d{4}$/;/*29/02/2010*/ },
+        "en-us": function () { return /(0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])[- \/.](19|20)\d\d/; /*08/17/2015*/ },
+        "es-ar": function () { return /^((0[1-9]|[12]\d)\/(0[1-9]|1[0-2])|30\/(0[13-9]|1[0-2])|31\/(0[13578]|1[02]))\/\d{4}$/;/*29/02/2010*/ },
+        "es-mx": function () { return /^((0[1-9]|[12]\d)\/(0[1-9]|1[0-2])|30\/(0[13-9]|1[0-2])|31\/(0[13578]|1[02]))\/\d{4}$/;/*29/02/2010*/ },
+        "es-ve": function () { return /^((0[1-9]|[12]\d)\/(0[1-9]|1[0-2])|30\/(0[13-9]|1[0-2])|31\/(0[13578]|1[02]))\/\d{4}$/;/*29/02/2010*/ }
+    };
+
+    this.dateFormatWithCulture = function () {
+        return dateFormatFunctions[formatter.culture]();
+    }
+    this.slashDateFormatAbreviatedYearWithCulture = function () {
+        return slashDateFormatAbreviatedYearFunctions[formatter.culture]();
+    }
+    this.slashDateFormatYearWithCulture = function () {
+        return slashDateFormatYearFunctions[formatter.culture]();
+    }
+    this.dateFormatRegularExpression = function (argCulture) {
+        var cult = (argCulture) ? argCulture : this.culture;
+        return dateFormatRegularExpressions[cult]();
+    }
+
+    /* returns specific customize formatter date */
+    this.dateValuesCustomizedShort = function (dt, customize) {
+        switch (customize) {
+            case 'dd/mm':
+                return dateValuesShortFunctions[formatter.culture](dt).replace(/\/\d{4}/, '');
+            case 'mm/yyyy':
+                return dateValuesShortFunctions[formatter.culture](dt).replace(/\/\d{2}/, '');
+        }
+
+        return dateValuesShortFunctions[formatter.culture](dt);
+    };
+
+    /* returns specific day/month/year type */
+    this.dateValuesShortWithCulture = function (dt, culture) {
+        return dateValuesShortFunctions[culture](dt);
+    };
+
+    var dateValuesLongFunctions = {
+        "pt-br": function (dt) { return formatter.dayOfWeek(dt.DayOfWeek) + ", " + dt.Day + " de " + formatter.monthName(dt.Month) + " de " + dt.Year; },
+        "en-us": function (dt) { return formatter.dayOfWeek(dt.DayOfWeek) + ", " + formatter.monthName(dt.Month) + " " + dt.Day + ", " + dt.Year; },
+        "es-ar": function (dt) { return formatter.dayOfWeek(dt.DayOfWeek) + ", " + dt.Day + " de " + formatter.monthName(dt.Month) + " de " + dt.Year; },
+        "es-mx": function (dt) { return formatter.dayOfWeek(dt.DayOfWeek) + ", " + dt.Day + " de " + formatter.monthName(dt.Month) + " de " + dt.Year; },
+        "es-ve": function (dt) { return formatter.dayOfWeek(dt.DayOfWeek) + ", " + dt.Day + " de " + formatter.monthName(dt.Month) + " de " + dt.Year; }
+    };
+
+    this.dateValuesLong = function (dt) {
+        return dateValuesLongFunctions[formatter.culture](dt);
+    };
+
+    var dateValuesLongAbbreviatedFunctions = {
+        "pt-br": function (dt) { return formatter.dayOfWeekShort(dt.DayOfWeek) + ", " + dt.Day + " " + formatter.monthName(dt.Month) + " " + dt.Year; },
+        "en-us": function (dt) { return formatter.dayOfWeekShort(dt.DayOfWeek) + ", " + formatter.monthName(dt.Month) + " " + dt.Day + ", " + dt.Year; },
+        "es-ar": function (dt) { return formatter.dayOfWeekShort(dt.DayOfWeek) + ", " + dt.Day + " " + formatter.monthName(dt.Month) + " " + dt.Year; },
+        "es-mx": function (dt) { return formatter.dayOfWeekShort(dt.DayOfWeek) + ", " + dt.Day + " " + formatter.monthName(dt.Month) + " " + dt.Year; },
+        "es-ve": function (dt) { return formatter.dayOfWeekShort(dt.DayOfWeek) + ", " + dt.Day + " " + formatter.monthName(dt.Month) + " " + dt.Year; }
+    };
+
+    this.dateValuesLongAbbreviated = function (dt) {
+        return dateValuesLongAbbreviatedFunctions[formatter.culture](dt);
+    };
+
+    this.dateValuesToDate = function (dt) {
+        if (dt.Year != undefined && dt.Month != undefined && dt.Day != undefined)
+            return new Date(dt.Year, dt.Month - 1, dt.Day);
+
+        return null;
+    };
+
+    this.timeValueCompleteShort = function (dt) {
+        return this.timeValuesShort(dt) + ":" + (dt.Seconds < 10 ? "0" : "") + dt.Seconds;
+    };
+
+    var timeValuesShortFunctions = {
+        "pt-br": function (dt) { return (dt.Hour.toString().length == 1 ? "0" : "") + dt.Hour + ":" + (dt.Minutes.toString().length == 1 ? "0" : "") + dt.Minutes; },
+        "en-us": function (dt) { return ((dt.Hour > 12) ? (dt.Hour - 12).toString() : dt.Hour.toString()) + ':' + ((dt.Minutes < 10) ? '0' : '') + dt.Minutes.toString() + ' ' + ((dt.Hour > 11) ? 'pm' : 'am'); },
+        "es-ar": function (dt) { return (dt.Hour.toString().length == 1 ? "0" : "") + dt.Hour + ":" + (dt.Minutes.toString().length == 1 ? "0" : "") + dt.Minutes; },
+        "es-mx": function (dt) { return (dt.Hour.toString().length == 1 ? "0" : "") + dt.Hour + ":" + (dt.Minutes.toString().length == 1 ? "0" : "") + dt.Minutes; },
+        "es-ve": function (dt) { return (dt.Hour.toString().length == 1 ? "0" : "") + dt.Hour + ":" + (dt.Minutes.toString().length == 1 ? "0" : "") + dt.Minutes; }
+    };
+
+    /* return 13:00 mode */
+    this.timeValuesShort = function (dt) {
+        if (dt)
+            return timeValuesShortFunctions[formatter.culture](dt);
+        else
+            return null;
+    };
+
+    /* return 13:00 mode */
+    this.intTimeValuesShort = function (dt) {
+
+        if (dt >= 0) {
+            var res = Util.IntTimeToDateTime(dt);
+            if (res) {
+                var hours = String(res.getHours());
+                var minutes = String(res.getMinutes());
+                return (hours.length == 1 ? "0" : "") + hours + ":" + (minutes.length == 1 ? "0" : "") + minutes;
+            }
+        }
+
+        else
+            return null;
+    };
+
+    this.timeValuesShortSimple = function (dt) {
+
+        if (!isNaN(dt)) {
+            var rest = dt % 60;
+            var hours = (dt - rest) / 60;
+            dt = { Hour: hours, Minutes: rest };
+        }
+
+        return (dt.Hour < 10 ? "0" : "") + dt.Hour + ":" + (dt.Minutes < 10 ? "0" : "") + dt.Minutes;
+    };
+
+    var timeValuesLongFunctions = {
+        "pt-br": function (dt) { return (dt.Hour < 10 ? "0" : "") + dt.Hour + (dt.Hour > 1 ? " horas e " : " hora e ") + (dt.Minutes < 10 ? "0" : "") + dt.Minutes + (dt.Minutes > 1 ? " minutos" : " minuto"); },
+        "en-us": function (dt) { return (dt.Hour < 10 ? "0" : "") + dt.Hour + (dt.Hour > 1 ? " hours and " : " hour and ") + (dt.Minutes < 10 ? "0" : "") + dt.Minutes + (dt.Minutes > 1 ? " minutes" : " minute"); },
+        "es-ar": function (dt) { return (dt.Hour < 10 ? "0" : "") + dt.Hour + (dt.Hour > 1 ? " horas y " : " hora y ") + (dt.Minutes < 10 ? "0" : "") + dt.Minutes + (dt.Minutes > 1 ? " minutos" : " minuto"); },
+        "es-mx": function (dt) { return (dt.Hour < 10 ? "0" : "") + dt.Hour + (dt.Hour > 1 ? " horas y " : " hora y ") + (dt.Minutes < 10 ? "0" : "") + dt.Minutes + (dt.Minutes > 1 ? " minutos" : " minuto"); },
+        "es-ve": function (dt) { return (dt.Hour < 10 ? "0" : "") + dt.Hour + (dt.Hour > 1 ? " horas y " : " hora y ") + (dt.Minutes < 10 ? "0" : "") + dt.Minutes + (dt.Minutes > 1 ? " minutos" : " minuto"); }
+    };
+
+    this.dateMonthYearLong = function (dt) {
+        return formatter.dayOfWeekShort[dt.DayOfWeek] + ", " + dt.Day + " " + formatter.monthName[dt.Month] + " " + dt.Year;
+    };
+
+    this.timeValuesLong = function (dt) {
+
+        if (!isNaN(dt)) {
+            var rest = dt % 60;
+            var hours = (dt - rest) / 60;
+            dt = { Hour: hours, Minutes: rest };
+        }
+
+        return timeValuesLongFunctions[formatter.culture](dt);
+    };
+
+    this.dateTimeValuesComplete = function (dt, full) {
+        if (full)
+            return dateValuesShortFunctions[formatter.culture](dt) + " " + formatter.timeValueCompleteShort(dt);
+        else
+            return dateValuesShortFunctions[formatter.culture](dt) + " " + formatter.timeValuesShort(dt);
+    };
+
+    this.currencyDefaults = {
+        "BRL": { thousandSeparator: ".", decimalSeparator: ",", symbol: "R$" },
+        "USD": { thousandSeparator: ",", decimalSeparator: ".", symbol: "US$" },
+        "ARS": { thousandSeparator: ".", decimalSeparator: ",", symbol: "$" },
+        "ENV": { thousandSeparator: ".", decimalSeparator: ",", symbol: "$" },
+        "EUR": { thousandSeparator: ".", decimalSeparator: ",", symbol: "€" },
+        "GBP": { thousandSeparator: ".", decimalSeparator: ",", symbol: "£" },
+        "VEF": { thousandSeparator: ".", decimalSeparator: ",", symbol: "Bs." },
+        "VES": { thousandSeparator: ".", decimalSeparator: ",", symbol: "Bs.S" },
+    };
+
+    this.currencyType = function () {
+        if (Global && typeof (Global.CurrencyCode) !== "undefined" && Global.CurrencyCode.length === 3)
+            return Global.CurrencyCode.toUpperCase();
+
+        if (!formatter.culture)
+            return "BRL";
+
+        switch (formatter.culture.toLowerCase()) {
+            case "pt-br":
+                return "BRL"; break;
+            case "en-us":
+                return "USD"; break;
+            case "es-ar":
+                return "ARS"; break;
+            case "es-ve":
+                return "VEF"; break;
+            default:
+                return "BRL";
+        }
+    };
+
+    this.currentCurrency = function () {
+        return formatter.currencyDefaults[formatter.currencyType()];
+    }
+
+    /**
+    * Decimal adjustment of a number. Source: Mozilla
+    *
+    * @param   {String}    type    The type of adjustment.
+    * @param   {Number}    value   The number.
+    * @param   {Integer}   exp     The exponent (the 10 logarithm of the adjustment base).
+    * @returns {Number}            The adjusted value.
+    */
+    function decimalAdjust(type, value, exp) {
+        // If the exp is undefined or zero...
+        if (typeof exp === 'undefined' || +exp === 0) {
+            return Math[type](value);
+        }
+        value = +value;
+        exp = +exp;
+        // If the value is not a number or the exp is not an integer...
+        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+            return NaN;
+        }
+        exp *= -1;
+
+        // Shift
+        value = value.toString().split('e');
+        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+        // Shift back
+        value = value.toString().split('e');
+        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+    }
+
+    // Decimal round
+    if (!Math.round10) {
+        Math.round10 = function (value, exp) {
+            return decimalAdjust('round', value, exp);
+        };
+    }
+    // Decimal floor
+    if (!Math.floor10) {
+        Math.floor10 = function (value, exp) {
+            return decimalAdjust('floor', value, exp);
+        };
+    }
+    // Decimal ceil
+    if (!Math.ceil10) {
+        Math.ceil10 = function (value, exp) {
+            return decimalAdjust('ceil', value, exp);
+        };
+    }
+
+    this.currency = function (number, useCurrencySymbol, precision, currency, onlyDecimalSeparator) {
+
+        try {
+            if (isNaN(precision))
+                precision = 0;
+        } catch (e) {
+            precision = 0;
+        }
+
+        number = Math.round10(number, precision);
+        if (isNaN(number))
+            return "NaN";
+
+        var isNegativeValue = number < 0;
+
+        if (isNegativeValue)
+            number *= -1;
+
+        var integerpart = '' + Math.floor(number);
+        var decimalpart = (number - integerpart).toFixed(precision);
+
+        if (precision == 0)
+            integerpart = parseInt(integerpart) + parseInt(decimalpart) + '';
+
+        for (var i = 0; i < precision; i++)
+            decimalpart = decimalpart * 10;
+
+        if (precision)
+            decimalpart = parseInt(decimalpart.toFixed(0));
+
+        var buff = [];
+
+        if (!currency) {
+            if (Global.UseCurrencyCode) {
+                currency = Global.CurrencyCode;
+            }
+            else if (Global.UseSymbolsFromThisCulture) {
+                var culture = formatter.culture;
+                formatter.culture = Global.UseSymbolsFromThisCulture;
+                currency = formatter.currencyType();
+                formatter.culture = culture;
+            } else {
+                currency = formatter.currencyType();
+            }
+        }
+
+        var buffFormater = formatter.currencyDefaults[currency] || formatter.currencyDefaults["ENV"];
+
+        if (onlyDecimalSeparator) {
+            buff.push(integerpart);
+        } else {
+            for (var j = -1, i = integerpart.length; i >= 0; i--, j++) {
+
+                if ((j % 3) == 0 && j > 1)
+                    buff.push(buffFormater.thousandSeparator);
+
+                buff.push(integerpart.charAt(i));
+            }
+        }
+
+        buff = buff.reverse();
+
+        if (precision > 0) {
+
+            buff.push(buffFormater.decimalSeparator);
+            buff.push(formatter.padLeft(decimalpart, precision, "0"));
+        }
+
+        buff = buff.reverse();
+
+        if (isNegativeValue)
+            buff.push("-");
+
+        if (useCurrencySymbol == undefined || useCurrencySymbol) {
+            buff.push(" ");
+            buff.push(Global.UseCurrencyCode ? currency : buffFormater.symbol);
+        }
+
+        return buff.reverse().join('');
+    };
+
+    this.toCurrencyUSD = function (number, useCurrencySymbol, precision) {
+        if (number.trim().length == 0)
+            number = "0";
+
+        var currencyCode = Global.UseCurrencyCode ? Global.CurrencyCode : formatter.currencyType();
+
+        if (currencyCode != "USD") {
+            var buffFormater = formatter.currencyDefaults[currencyCode] || formatter.currencyDefaults["ENV"];
+
+            var USDFormater = formatter.currencyDefaults["USD"];
+
+            var regexThousandSeparator = new RegExp("[" + buffFormater.thousandSeparator + "]", "gi");
+
+            var regexDecimalSeparator = new RegExp("[" + buffFormater.decimalSeparator + "]", "gi");
+
+            number = number.replace(regexThousandSeparator, '');
+
+            number = number.replace(regexDecimalSeparator, USDFormater.decimalSeparator);
+        }
+
+        return formatter.currency(number, useCurrencySymbol, precision, "USD");
+    };
+
+    this.currencyToDecimal = function (currency) {
+        var reg = new RegExp("[^0-9" + formatter.currentCurrency().decimalSeparator + "]", "gi");
+
+        var dec = currency.replace(reg, "");
+        dec = dec.replace(formatter.currentCurrency().decimalSeparator, ".");
+
+        return parseFloat(dec);
+    }
+
+    this.padLeft = function (value, length, charPad) {
+
+        if (!charPad)
+            charPad = "0";
+        if (!value)
+            value = "";
+        if (!length)
+            return value;
+        if (length == 0)
+            return value;
+
+        var strValue = String(value);
+        if (strValue.length >= length)
+            return strValue;
+
+        var valueWithPad = strValue;
+        for (var i = 0; i < length && valueWithPad.length < length; i++) {
+            valueWithPad = charPad + valueWithPad;
+        }
+        return valueWithPad;
+    }
+
+    /* DISTANCES */
+    var kilometersToMiles = function (value) {
+        return (value / 1.609).toFixed(2);
+    };
+
+    var formattedDistances = {
+        "pt-br": function (distance) { return distance + " km"; },
+        "en-us": function (distance) { return kilometersToMiles(distance) + " mi"; },
+        "es-ar": function (distance) { return distance + " km"; },
+        "es-mx": function (distance) { return distance + " km"; },
+        "es-ve": function (distance) { return distance + " km"; }
+    };
+
+    this.distance = function (value) {
+        value = parseFloat(parseFloat(value).toFixed(2));
+        return formattedDistances[formatter.culture](value);
+    };
+
+    /* TIMES */
+    this.numericTime = function (dt) {
+        return parseFloat(dt.Hour + (dt.Minutes < 10 ? "0" : "") + dt.Minutes);
+    };
+
+    var zipCodeMasks = {
+        "pt-br": "99999-999",
+        "en-us": "",
+        "es-ar": "",
+        "es-mx": "",
+        "es-ve": ""
+    };
+
+    this.zipCodeMask = function () {
+        return zipCodeMasks[formatter.culture];
+    };
+
+    this.zipCode = function (zipCode) {
+        var cultureMask = zipCodeMasks[formatter.culture];
+        zipCode = zipCode.toString();
+        var zipCodeFormatted = zipCode;
+
+        if (cultureMask.length) {
+            zipCodeFormatted = '';
+            var zipCodePosition = zipCode.length - 1;
+            var zipCodeMaskLength = cultureMask.length - 1;
+
+            for (var i = 0; i < cultureMask.length; i++)
+                if (!isNaN(cultureMask[i]))
+                    zipCodeFormatted += '?';
+                else
+                    zipCodeFormatted += cultureMask[i];
+
+            zipCodeFormatted = zipCodeFormatted.split('');
+
+            for (var i = zipCodeMaskLength; i >= 0; i--) {
+                if (zipCode[zipCodePosition] && zipCodeFormatted[i] == '?') {
+                    zipCodeFormatted[i] = zipCode[zipCodePosition];
+                    zipCodePosition--;
+                }
+            }
+
+            var aux = '';
+            for (var i = 0; i <= zipCodeMaskLength; i++)
+                if (zipCodeFormatted[i] != '?')
+                    aux += zipCodeFormatted[i];
+
+            zipCodeFormatted = aux;
+        }
+
+        return zipCodeFormatted;
+    }
+
+    this.unmaskZipCode = function (zipcodemaked) {
+        var zipcode = "";
+        if (zipcodemaked) {
+            for (var i = 0; i < zipcodemaked.length; i++) {
+                if (!isNaN(zipcodemaked[i]))
+                    zipcode += zipcodemaked[i];
+            }
+        }
+        return zipcode;
+    }
+
+    var juridicalDocumentMasks = {
+        "pt-br": "99.999.999/9999-99",
+        "en-us": "",
+        "es-ar": "",
+        "es-mx": "",
+        "es-ve": ""
+    };
+
+    this.juridicalDocumentMask = function () {
+        return juridicalDocumentMasks[formatter.culture];
+    }
+
+    var phoneNumberMasks = {
+        "pt-br": "9999-9999?9",
+        "en-us": "",
+        "es-ar": "",
+        "es-mx": "",
+        "es-ve": "999-99-99"
+    };
+
+    this.phoneNumberMask = function () {
+        return phoneNumberMasks[formatter.culture];
+    };
+
+    var phonePrefixMasks = {
+        "pt-br": "(99)",
+        "en-us": "",
+        "es-ar": "",
+        "es-mx": "",
+        "es-ve": "(999)"
+    };
+
+    this.phonePrefixMask = function () {
+        return phonePrefixMasks[formatter.culture];
+    };
+
+    this.formatPhoneNumber = function (value) {
+
+        var culturesFunction =
+            {
+                'pt-br': function (value) {
+                    var mask = value.substring(0, 4);
+
+                    if (value.length <= 4)
+                        return mask;
+
+                    mask += '-' + value.substring(4);
+
+                    if (value.length <= 8)
+                        return mask;
+
+                    mask = value.substring(0, 5) + '-' + value.substring(5, 9);
+
+                    return mask;
+                },
+                'en-us': function (value) {
+                    return value;
+                },
+                'es-ar': function (value) {
+                    return value;
+                },
+                'es-mx': function (value) {
+                    return value;
+                },
+                'es-ve': function (value) {
+
+                    var mask = value.substring(0, 3);
+
+                    if (value.length <= 3)
+                        return mask;
+
+                    mask += '-' + value.substring(3, 5);
+
+                    if (value.length <= 5)
+                        return mask;
+
+                    mask += '-' + value.substring(5, 7);
+
+                    return mask
+                }
+            }
+
+        var mask = culturesFunction[formatter.culture](value);
+
+        return mask;
+
+    }
+
+    this.completePhoneNumberMask = function (value) {
+        var mask = "";
+        if (value.length > 0) {
+            if (value.length <= 2)
+                mask = '(' + value;
+            if (value.length > 2 && value.length <= 6)
+                mask = '(' + value.substring(0, 2) + ') ' + value.substring(2, value.length);
+            if (value.length > 6 && value.length <= 10)
+                mask = '(' + value.substring(0, 2) + ') ' + value.substring(2, 6) + '-' + value.substring(6, value.length);
+            if (value.length > 10)
+                mask = '(' + value.substring(0, 2) + ') ' + value.substring(2, 7) + '-' + value.substring(7, 11);
+        }
+
+        return mask;
+    }
+
+    this.completeCNPJMask = function (value) {
+        var mask = "";
+        if (value.length == 2)
+            mask = value + '.';
+        else if (value.length == 6)
+            mask =  value + '.';
+        else if (value.length == 10)
+            mask = value + '/';
+        else if (value.length == 15)
+            mask = value + '-';        
+        else
+            mask = value;
+      
+
+        return mask;
+    }
+
+    this.numberUnmask = function (value) {
+        var mask = "";
+        for (var i = 0; i < value.length; i++) {
+            if (value[i] != ' ' && !isNaN(value[i]))
+                mask += value[i].toString();
+        }
+
+        return mask;
+    }
+
+    var documentMasks = {
+        "pt-br": "999.999.999-99",
+        "en-us": "",
+        "es-ar": "",
+        "es-mx": "",
+        "es-ve": ""
+    };
+
+    this.documentMask = function () {
+        return documentMasks[formatter.culture];
+    }
+
+    var zipCodeValidations = {
+        "pt-br": function (cep) { return cep.length == 9; },
+        "en-us": function (cep) { return true; },
+        "es-ar": function (cep) { return true; },
+        "es-mx": function (cep) { return true; },
+        "es-ve": function (cep) { return true; }
+    };
+
+    this.zipCodeValidation = function (cep) {
+        return zipCodeValidations[formatter.culture](cep);
+    };
+
+    var documentValidations = {
+        "pt-br": function (document) { return document.isCPF(); },
+        "en-us": function (document) { return true; },
+        "es-ar": function (document) { return true; },
+        "es-mx": function (document) { return true; },
+        "es-ve": function (document) { return true; }
+    };
+
+    this.documentValidation = function (document) {
+        return documentValidations[formatter.culture](document);
+    };
+
+    var phoneNumberValidations = {
+        "pt-br": function (phoneNumber) { return phoneNumber.length == 8 || phoneNumber.length == 9; },
+        "en-us": function (phoneNumber) { return true; },
+        "es-ar": function (phoneNumber) { return true; },
+        "es-mx": function (phoneNumber) { return true; },
+        "es-ve": function (phoneNumber) { return true; }
+    };
+
+    this.phoneNumberValidation = function (phoneNumber) {
+        return phoneNumberValidations[formatter.culture](phoneNumber);
+    };
+
+    var prefixNumberValidations = {
+        "pt-br": function (prefixNumber) { return prefixNumber.length == 2; },
+        "en-us": function (prefixNumber) { return true; },
+        "es-ar": function (prefixNumber) { return true; },
+        "es-mx": function (prefixNumber) { return true; },
+        "es-ve": function (prefixNumber) { return true; }
+    };
+
+    this.prefixNumberValidation = function (prefixNumber) {
+        return prefixNumberValidations[formatter.culture](prefixNumber);
+    };
+
+    var listOfStates = {
+        "pt-br": ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"],
+        "en-us": [],
+        "es-ar": ["C", "B", "K", "H", "U", "X", "W", "E", "P", "Y", "L", "F", "M", "N", "Q", "R", "A", "J", "D", "Z", "S", "G", "V", "T"],
+        "es-mx": [],
+        "es-ve": ["C", "B", "K", "H", "U", "X", "W", "E", "P", "Y", "L", "F", "M", "N", "Q", "R", "A", "J", "D", "Z", "S", "G", "V", "T"]
+    };
+
+    this.states = function () {
+        return listOfStates[formatter.culture];
+    };
+
+    this.cpf = function (cpf) {
+        var cpfFormatted = "";
+
+        cpf = cpf.replace(/[^0-9]/gi, "");
+
+        if (cpf.length == 11)
+            cpf = cpf.substring(0, 3) + "." + cpf.substring(3, 6) + "." + cpf.substring(6, 9) + "-" + cpf.substring(9, 11);
+
+        return cpf;
+    };
+
+    this.FormatPercentage = function (value, decimalHouses) {
+        if (typeof decimalHouses === 'undefined')
+            decimalHouses = 2;
+        return (value.toFixed(decimalHouses) * 100).toFixed(decimalHouses) + '%';
+    };
+
+    this.formatMinutesInHours = function (_minutes) {
+        var hours = Math.floor(_minutes / 60);
+        var minutes = _minutes % 60;
+
+        if (minutes > 9)
+            return Util.StringFormat("{0}:{1}", hours, minutes);
+
+        return Util.StringFormat("{0}:0{1}", hours, minutes);
+    };
+
+    this.currencyTranslate = function (currencyCode, cultureInfo) {
+        var translate = Global.Currencies || {
+            BRL: {
+                'pt-br': 'Real',
+                'en-us': 'Real',
+                'es-ar': 'Real',
+                'es-mx': 'Real',
+                'es-ve': 'Real'
+            },
+            USD: {
+                'pt-br': 'Dólar',
+                'en-us': 'Dollar',
+                'es-ar': 'Dólar',
+                'es-mx': 'Dólar',
+                'es-ve': 'Dólar'
+            },
+            VEF: {
+                'pt-br': 'Bolívar',
+                'en-us': 'Bolivar',
+                'es-ar': 'Bolívar',
+                'es-mx': 'Bolívar',
+                'es-ve': 'Bolívar'
+            },
+            EUR: {
+                'pt-br': 'Euro',
+                'en-us': 'Euro',
+                'es-ar': 'Euro',
+                'es-mx': 'Euro',
+                'es-ve': 'Euro'
+            },
+            JPY: {
+                'pt-br': 'Iene',
+                'en-us': 'Iene',
+                'es-ar': 'Iene',
+                'es-mx': 'Iene',
+                'es-ve': 'Iene'
+            }
+        };
+
+        return translate[currencyCode.toUpperCase()][cultureInfo.toLowerCase()];
+    };
+
+    this.PassengerTypeTranslate = function (passengerType, culture) {
+        //Ref: EnumHelper.Passenger.PassengerTypeTranslate
+        var passengerTranslate = {
+            "pt-br": { 0: "Adulto", 1: "Criança", 2: "Bebê" },
+            "es-ve": { 0: "Adulto", 1: "Ninõ", 2: "Bebé" },
+            "en-us": { 0: "Adult", 1: "Children", 2: "Baby" }
+        };
+
+        culture = culture.toLowerCase();
+        var translated = passengerTranslate[culture][passengerType];
+
+        return translated;
+    };
+
+    this.temp = {};
+})();
+
+function FormattedValue(value, currency, useCurrencySymbol, isDate) {
+    var __this = this;
+    __this.Value = value;
+    __this.Formatted = '';
+    __this.IsNegative = value < 0;
+
+    if (value != undefined) {
+        if (isDate)
+            __this.Formatted = formatter.dateValuesShort(value);
+        else
+            __this.Formatted = formatter.currency(value, useCurrencySymbol, 2, currency);
+    }
+
+    return __this;
+}
+
+
+//#region MODULES FOR POINTS TEMPLATES
+(function (f) {
+    var module = {};
+    var DEFAULTS = {
+        name: 'Pontos',
+        shortName: 'Pts',
+        position: { 'left': 0, 'right': 1 },
+        separator: ' ',
+        precision: 0
+    };
+    var model = {
+        type: DEFAULTS.type,
+        symbol: {
+            name: DEFAULTS.name,
+            position: DEFAULTS.position.right,
+            separator: DEFAULTS.separator
+        }
+    };
+
+    function isSymbolRight(symbol) {
+        return symbol.position === DEFAULTS.position.right;
+    }
+    function isSymbolLeft(symbol) {
+        return symbol.position === DEFAULTS.position.left;
+    }
+
+    module.getSymbolName = function () {
+        return model.symbol.name;
+    }
+
+    module.toFixed = function (value) {
+
+        if (typeof value === 'string')
+            value = parseFloat(value);
+
+        return value.toFixed(DEFAULTS.precision);
+    }
+    module.toString = function (value) {
+        var symbol = model.symbol;
+        if (isSymbolRight(symbol))
+            return module.toStringValue(value) + symbol.separator + symbol.name;
+
+        if (isSymbolLeft(symbol))
+            return symbol.name + symbol.separator + module.toStringValue(value);
+
+        return undefined;
+    }
+
+    module.toShortString = function (value) {
+        var symbol = model.symbol;
+        if (isSymbolRight(symbol))
+            return module.toStringValue(value) + symbol.separator + symbol.shortName;
+
+        if (isSymbolLeft(symbol))
+            return symbol.shortName + symbol.separator + module.toStringValue(value);
+
+        return undefined;
+    }
+
+    module.toStringValue = function (value) {
+        return f.currency(value, false, DEFAULTS.precision);
+    }
+
+    module.changeName = function (name) {
+        model.symbol.name = name;
+    }
+
+    module.changeShortName = function (shortName) {
+        model.symbol.shortName = shortName;
+    }
+
+    module.changePosition = function (name) {
+        var candidate = DEFAULTS.position[name];
+
+        if (typeof candidate === 'undefined')
+            console.log('is not valid candidate: "' + name + '"');
+        else {
+            model.symbol.position = candidate;
+        }
+    }
+
+    module.changeSeparator = function (name) {
+        if (name !== undefined)
+            model.symbol.separator = name;
+    };
+
+    module.switchPosition = function () {
+        var symbol = model.symbol;
+        if (isSymbolRight(symbol))
+            symbol.position = DEFAULTS.position.left;
+        else
+            symbol.position = DEFAULTS.position.right;
+    }
+
+    //OBSOLETE: prefer "formatter.coins.getPoints().getSymbolName()"
+    f.pointsUnits = module.getSymbolName();
+
+    //OBSOLETE: prefer "formatter.coins.getPoints().toString(value)"
+    f.Points = function (points) {
+        return f.coins.getPoints().toString(points);
+    };
+
+    f.FormatToDisplay = function (points, Installments, InstallmentsPrice) {
+        var pointsFormatted = (points && points > 0 ? f.coins.getPoints().toString(points) : "") + (points > 0 && InstallmentsPrice > 0 ? ' + ' : "") + (InstallmentsPrice > 0 ? ((Installments && Installments > 1 ? Installments + ' x ' : '') + f.currency(InstallmentsPrice, true, 2)) : '');
+        return pointsFormatted;
+    };
+
+    f.temp.pointsCoin = module;
+}(formatter));
+
+(function (f) {
+    var module = {};
+    var points = f.temp.pointsCoin;
+
+    var coins = [];
+    coins.push({ key: 'points', value: points });
+    coins.push({ key: 'currency', value: undefined });
+
+    var getCoin = function (key) {
+        var coin = coins.where(function (x) { return x.key === key }).first();
+
+        if (!coin || !coin.value)
+            throw key + ' is not a coin';
+
+        return coin.value;
+    }
+
+    module.getPoints = function () {
+        var points = getCoin('points');
+        return points;
+    }
+
+    module.getCurrency = function () {
+        var currency = getCoin('currency');
+        return currency;
+    }
+
+    f.coins = module;
+}(formatter));
+//#region MODULES FOR POINTS TEMPLATES
+delete formatter.temp;

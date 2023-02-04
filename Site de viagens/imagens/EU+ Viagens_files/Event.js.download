@@ -1,0 +1,87 @@
+function Event() {
+
+    this.listenersByPri = {
+        0: [],
+        1: [],
+        2: []
+    };
+
+    var thisEvent = this;
+    var listenersByPriority = this.listenersByPri;
+
+    this.count = function () { return getListeners().length; };
+
+    this.attach = function (callback, priority, context, once) {
+
+        if (typeof (priority) == "undefined")
+            priority = EnumHelper.EventPriority["High"];
+
+        listenersByPriority[priority].push({ callback: callback, context: context, once: once });
+    };
+
+    this.isEvent = true;
+
+    this.notify = function () {
+        for (var item in listenersByPriority) {
+            if (listenersByPriority[item]) {
+                var list = listenersByPriority[item];
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].callback) 
+                        list[i].callback.apply(list[i].context || this, arguments);
+
+                    if (list[i].once)
+                        thisEvent.dettach(list[i].callback);
+                }
+            }
+        }
+    };
+
+    this.dettach = function (listenerToRemove) {
+        if (listenerToRemove) {
+            for (var item in listenersByPriority) {
+                if (listenersByPriority[item])
+                    listenersByPriority[item] = listenersByPriority[item].removeAll(function (f) { return f.callback == listenerToRemove });
+            }
+        }
+        else {
+            listenersByPriority = {
+                0: [],
+                1: [],
+                2: []
+            };
+        }
+    };
+
+    thisEvent.detach = thisEvent.dettach; //o correto é detach com um único 't'
+
+    this.dettachAndAttach = function (listener) {
+        thisEvent.dettach(listener);
+        thisEvent.attach(listener);
+    };
+
+    this.forceDettachAll = function (listenerToRemove) {
+        var toRemoveString = listenerToRemove.toString();
+        for (var item in listenersByPriority) {
+            if (listenersByPriority[item]) {
+                listenersByPriority[item] = listenersByPriority[item].removeAll(function (h) { return h.callback.toString() == toRemoveString; });
+            }
+        }
+    };
+
+    this.getListeners = function () {
+
+        var listeners = [];
+
+        for (var item in listenersByPriority) {
+            if (listenersByPriority[item]) {
+                var list = listenersByPriority[item];
+                for (var i = 0; i < list.length; i++)
+                    listeners.push(list[i].callback);
+            }
+        }
+
+        return listeners;
+    };
+};
+
+var etsEvent = Event; //utilizado no TypeScript

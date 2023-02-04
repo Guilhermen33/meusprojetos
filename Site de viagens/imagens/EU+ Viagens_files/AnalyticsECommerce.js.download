@@ -1,0 +1,1263 @@
+﻿(function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date(); a = s.createElement(o),
+    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+function AnalyticsEC(_settings) {
+    if (!_settings)
+        _settings = {};
+
+    var settings = { AccountCode: '' };
+
+    var _hotelProductName = 'Hotel';
+    var _hotelCategoryName = 'Hotéis';
+
+    var _airProductName = 'Aereo';
+    var _airCategoryName = 'Passagens';
+
+    var _serviceProductName = 'Serviço';
+    var _serviceCategoryName = 'Serviço';
+
+    var _dynamicPackageProductName = 'Pacotes dinâmicos';
+    var _dynamicPackageCategoryName = 'Pacotes dinâmicos';
+
+    var _packageProductName = 'Pacotes';
+    var _packageCategoryName = 'Pacotes';
+
+    var _cruiseProductName = 'Cruzeiro';
+    var _cruiseCategoryName = 'Cruzeiros';
+
+    var _dynamicPackageListName = 'Busca por Pacotes dinâmicos';
+    var _hotelListName = 'Busca por Hotel';
+    var _airListName = 'Busca por Aereo';
+    var _serviceListName = 'Busca por Serviço';
+    var _packageListName = 'Busca por Pacotes';
+    var _cruiseListName = 'Busca por Cruzeiros';
+
+    var _notRoundTrip = 'Somente ida';
+
+    var order = {};
+
+    var _gaCookieName = '';
+
+    var _clientIP = '';
+
+    var _hotelDetailCheckoutToConfirmation = null;
+    var _airDetailCheckoutToConfirmation = null;
+    var _busDetailCheckoutToConfirmation = null;
+    var _serviceDetailCheckoutToConfirmation = null;
+    var _dynamicPackageDetailCheckoutToConfirmation = null;
+    var _packageDetailCheckoutToConfirmation = null;
+    var _cruiseDetailCheckoutToConfirmation = null;
+
+    var _functions = {
+
+        search: {
+            execute: function (response) {
+
+                order = Global.InterfaceEnvelope;
+
+                _functions.search.setClientIP(response);
+
+                _functions.initAnalyticsTrans();
+
+                var _productFunctions = _functions.search.factory();
+
+                if (_productFunctions) {
+                    var searchDetail = _productFunctions.getSearchDetail(response);
+
+                    var analyticsItems = _functions.search.getAnalyticsItems(searchDetail);
+
+                    for (var i = 0; i < analyticsItems.length; i++) {
+
+                        var analyticsItem = analyticsItems[i];
+                        _functions.addAnalyticsItemImpression(analyticsItem);
+                        _functions.prepareDimensionsAndCommit(searchDetail);
+                    }
+                }
+            },
+            factory: function () {
+
+                var _function = null;
+
+                if (Global.SearchType == 'Hotel') {
+                    _function = _functions.search.hotelFunctions;
+                }
+                else if (Global.SearchType == 'Air') {
+                    _function = _functions.search.airFunctions;
+                }
+                else if (Global.SearchType == 'Service') {
+                    _function = _functions.search.serviceFunctions;
+                }
+                else if (Global.SearchType == 'Package') {
+                    _function = _functions.search.packageFunctions;
+                }
+                else if (Global.SearchType == 'DynamicPackage') {
+                    _function = _functions.search.dynamicFunctions;
+                }
+                //else if (Global.SearchType == 'Cruise') {
+                //    _function = _functions.search.cruiseFunctions;
+                //}
+
+                return _function;
+            },
+            hotelFunctions: {
+                getSearchDetail: function (response) {
+
+                    var searchSummary = response.SearchSummary;
+
+                    var searchDetail = null;
+
+                    if (searchSummary && searchSummary.HotelSummary) {
+
+                        searchDetail = _functions.getInstanceDetail();
+
+                        searchDetail.product = _hotelProductName;
+                        searchDetail.destination = searchSummary.HotelSummary.DestinationLocation.Name;
+                        searchDetail.startDate = formatter.dateValuesShort(searchSummary.HotelSummary.CheckIn);
+                        searchDetail.endDate = formatter.dateValuesShort(searchSummary.HotelSummary.CheckOut);
+
+                        searchDetail.list = _functions.getListNameByCountry(searchSummary.HotelSummary.DestinationLocation.Country);
+
+                        searchDetail.productFullName = searchDetail.product + ' - ' + searchDetail.destination;
+                    }
+
+                    return searchDetail;
+
+
+                },
+            },
+            airFunctions: {
+                getSearchDetail: function (response) {
+
+                    var searchSummary = response.SearchSummary;
+
+                    var searchDetail = null;
+
+                    if (searchSummary && searchSummary.AirSummary) {
+
+                        searchDetail = _functions.getInstanceDetail();
+
+                        searchDetail.product = _airProductName;
+
+                        searchDetail.destination = searchSummary.AirSummary.DestinationCity;
+
+                        searchDetail.origin = searchSummary.AirSummary.OriginCity;
+
+                        searchDetail.productFullName = searchDetail.product + ' - ' + searchDetail.origin + ' -> ' + searchDetail.destination;
+
+                        searchDetail.list = _functions.getListName(searchSummary.AirSummary.IsInternational);
+
+                        searchDetail.startDate = formatter.dateValuesShort(searchSummary.AirSummary.OutboundDateValues);
+
+                        if (searchSummary.AirSummary.RoundTrip) {
+                            searchDetail.endDate = formatter.dateValuesShort(searchSummary.AirSummary.InboundDateValues);
+                        }
+                        else {
+                            searchDetail.endDate = _notRoundTrip;
+                        }
+                    }
+
+                    return searchDetail;
+
+
+                },
+            },
+            serviceFunctions: {
+                getSearchDetail: function (response) {
+
+                    var searchData = order.SearchParameters;
+
+                    var searchDetail = null;
+
+                    if (searchData && searchData.Service && searchData.AdditionalInfo && searchData.AdditionalInfo.ServiceDestination) {
+
+                        searchDetail = _functions.getInstanceDetail();
+
+                        searchDetail.product = _serviceProductName;
+
+                        searchDetail.destination = searchData.AdditionalInfo.ServiceDestination.d;
+                        searchDetail.startDate = formatter.dateValuesShort(searchData.Service.StartDate);
+                        searchDetail.endDate = formatter.dateValuesShort(searchData.Service.EndDate);
+
+                        searchDetail.productFullName = searchDetail.product + ' - ' + searchDetail.destination;
+
+                        searchDetail.list = _functions.getListName(searchData.AdditionalInfo.ServiceDestination.in);
+                    }
+
+                    return searchDetail;
+
+
+                },
+            },
+            packageFunctions: {
+                getSearchDetail: function (response) {
+                    return _functions.getPackageSearchDetail();
+                },
+            },
+            dynamicFunctions: {
+                getSearchDetail: function (response) {
+
+                    var searchDetail = _functions.search.airFunctions.getSearchDetail(response);
+
+                    if (searchDetail == null) {
+                        searchDetail = _functions.search.hotelFunctions.getSearchDetail(response);
+                    }
+
+                    if (!searchDetail == null) {
+                        searchDetail = _functions.search.serviceFunctions.getSearchDetail(response);
+                    }
+
+                    if (searchDetail) {
+                        searchDetail.product = _dynamicPackageProductName;
+                        searchDetail.productFullName = _dynamicPackageProductName + ' - ' + searchDetail.destination;
+                    }
+
+                    return searchDetail;
+                },
+            },
+            cruiseFunctions: {
+                getSearchDetail: function (response) {
+                    var searchData = response.SearchData;
+
+                    var searchDetail = null;
+
+                    if (searchData && searchData.CruiseSearchData) {
+
+                        searchDetail = _functions.getInstanceDetail();
+
+                        searchDetail.product = _cruiseProductName;
+                        searchDetail.destination = searchData.CruiseSearchData.Destination;
+                        searchDetail.startDate = formatter.dateValuesShort(searchData.CruiseSearchData.EmbarkStart);
+                        searchDetail.endDate = formatter.dateValuesShort(searchData.CruiseSearchData.EmbarkEnd);
+
+                        //searchDetail.list = _functions.getListNameByCountry(searchSummary.HotelSummary.DestinationLocation.Country);
+
+                        searchDetail.productFullName = searchDetail.product + ' - ' + searchDetail.destination;
+                    }
+
+                    return searchDetail;
+                }
+            },
+            setClientIP: function (response) {
+                _clientIP = (response) ? response.ClientIP : '';
+            },
+            getAnalyticsItems: function (searchDetail) {
+
+                var analyticsItems = [];
+                var analyticsItem = _functions.createAnalyticsItemImpression(searchDetail);
+                analyticsItems.push(analyticsItem);
+
+                return analyticsItems;
+            }
+
+        },
+        checkout: {
+            execute: function (response) {
+                order = Global.InterfaceEnvelope;
+                _functions.initAnalyticsTrans();
+
+                var _productFunctions = _functions.checkout.factory(response);
+
+                if (_productFunctions) {
+                    var detail = _productFunctions.getDetail(response);
+
+                    if (detail) {
+                        _productFunctions.setValuesAndQuantity(response, detail);
+
+                        _productFunctions.sendToConfirmation(detail);
+
+                        if (!_productFunctions.voidSendCheckoutInformations) {
+                            var analyticsItems = _functions.checkout.getAnalyticsItems(detail);
+
+                            var dimensions = _functions.prepareDimensions(detail);
+
+                            for (var i = 0; i < analyticsItems.length; i++) {
+
+                                var analyticsItem = analyticsItems[i];
+
+                                _functions.addAnalyticsItem(analyticsItem);
+                                ga('ec:setAction', 'click', { list: analyticsItem.list });
+                                ga('set', dimensions);
+                                ga('send', 'event', 'UX', 'click');
+
+                                _functions.addAnalyticsItem(analyticsItem);
+                                ga('ec:setAction', 'detail', { list: analyticsItem.list });
+                                ga('set', dimensions);
+                                ga('send', 'event', 'UX', 'click');
+
+                                _functions.addAnalyticsItem(analyticsItem);
+                                ga('ec:setAction', 'add', { list: analyticsItem.list });
+                                ga('set', dimensions);
+                                ga('send', 'event', 'UX', 'click');
+
+                                _functions.addAnalyticsItem(analyticsItem);
+                                ga('ec:setAction', 'checkout', { 'step': 1, list: analyticsItem.list });
+                            }
+
+                            _functions.commitAnalyticsTrans();
+                        }
+                    }
+                }
+            },
+            factory: function (response) {
+                var _function = null;
+
+                var produtcsCount = 0;
+                if (response.Request && response.Request.SearchData) {
+                    if (response.Request.SearchData.AirSearchData) {
+                        _function = _functions.checkout.airFunctions;
+                        produtcsCount++;
+                    }
+
+                    if (response.Request.SearchData.HotelSearchData) {
+                        _function = _functions.checkout.hotelFunctions;
+                        produtcsCount++;
+                    }
+
+                    if (response.Request.SearchData.ServicesSearchData) {
+                        _function = _functions.checkout.serviceFunctions;
+                        produtcsCount++;
+                    }
+
+                    if (produtcsCount > 1) {
+                        _function = _functions.checkout.dynamicPackageFunctions;
+                    }
+
+                    if (response.Request.SearchData.PackageSearchData) {
+                        _function = _functions.checkout.packageFunctions;
+                        produtcsCount++;
+                    }
+
+                    if (response.Request.SearchData.CruiseSearchData || Util.HasCount(response.Request.CruiseDatas)) {
+                        _function = _functions.checkout.cruiseFunctions;
+                        produtcsCount++;
+                    }
+                }
+
+                return _function;
+            },
+            hotelFunctions: {
+                getDetail: function (response) {
+
+                    var detail = null;
+
+                    if (order.hotel) {
+
+                        detail = _functions.getInstanceDetail();
+
+                        detail.product = _hotelProductName;
+                        detail.category = _hotelCategoryName;
+                        detail.brand = order.hotel.Name;
+                        detail.variant = ((order.hotel.Category) ? (order.hotel.Category + ' - ') : '') +
+                                                order.hotel.Stars + ' estrelas';
+
+                        if (order.hotel.Address && order.hotel.Address.Location) {
+                            detail.list = _functions.getListNameByCountry(order.hotel.Address.Location.Country);
+                            detail.destination = order.hotel.Address.Location.Name;
+                        }
+
+                        if (order.hotel.AuxiliarData) {
+                            detail.startDate = order.hotel.AuxiliarData.CheckInValues;
+                            detail.endDate = order.hotel.AuxiliarData.CheckOutValues;
+                        }
+
+                        detail.productFullName = detail.product + ' - ' + detail.destination;
+                    }
+
+                    return detail;
+                },
+                sendToConfirmation: function (detail) {
+                    _functions.confirmation.hotelFunctions.setDetail(detail)
+                },
+                setValuesAndQuantity: function (response, detail) {
+
+                    if (response.Hotels && response.Hotels.length) {
+
+                        var hotel = response.Hotels[0];
+                        var quantity = hotel.RoomsGroups.length;
+                        var totalAmount = hotel.AuxiliarData.TotalAmount;
+                        var taxAmount = hotel.AuxiliarData.MarkupAmount;
+
+                        detail.totalAmount = totalAmount;
+
+                        detail.quantity = quantity;
+
+                        detail.price = totalAmount / quantity;
+
+                        detail.tax = taxAmount;
+                    }
+                }
+            },
+            airFunctions: {
+                getDetail: function (response) {
+                    var detail = null;
+
+                    var flightGroups = response.FlightGroups;
+
+                    if (flightGroups && flightGroups.length) {
+
+                        detail = _functions.getInstanceDetail();
+
+                        var _airProductComplementName = '';
+                        var brand = '';
+                        var brandTemp = '';
+                        var pipe = "";
+                        var variant = '';
+
+                        for (var i = (flightGroups.length - 1) ; i >= 0 ; i--) {
+
+                            var flight = flightGroups[i];
+
+                            _airProductComplementName += pipe + flight.DestinationCity;
+
+                            brandTemp = flight.IssuerCiaName;
+
+                            if (brandTemp != flight.MajorityAirCompanyName) {
+                                brandTemp = flight.IssuerCiaName + '/' + flight.MajorityAirCompanyName;
+                            }
+
+                            brand += pipe + brandTemp;
+
+                            variant += pipe + Util.CabinNameResolver(flight.CabinType);
+
+                            pipe = ' -> ';
+                        }
+
+                        detail.destination = flightGroups[0].DestinationCity;
+                        detail.startDate = formatter.dateValuesShort(flightGroups[0].FirstArrivalTimeValues);
+                        detail.endDate = '-';
+
+                        if (flightGroups.length > 1) {
+                            var i = flightGroups.length - 1;
+                            detail.origin = flightGroups[i].DestinationCity;
+                            detail.endDate = formatter.dateValuesShort(flightGroups[i].LastArrivalTimeValues);
+                        }
+
+                        detail.product = _airProductName;
+                        detail.productFullName = _airProductName + ' - ' + _airProductComplementName;
+                        detail.category = _airCategoryName;
+                        detail.brand = brand;
+                        detail.variant = variant;
+
+                        if (order.SearchParameters &&
+                            order.SearchParameters.Air &&
+                            order.SearchParameters.Air.Destinations &&
+                            order.SearchParameters.Air.Destinations.length
+                            ) {
+                            detail.list = _functions.getListName(order.SearchParameters.Air.Destinations[0].DestinationData && order.SearchParameters.Air.Destinations[0].DestinationData.in);
+                        }
+                    }
+
+
+                    return detail;
+                },
+                sendToConfirmation: function (detail) {
+                    _functions.confirmation.airFunctions.setDetail(detail)
+                },
+                setValuesAndQuantity: function (response, detail) {
+
+                    if (response.Summary) {
+
+                        var totalAmount = response.Summary.AdultAmount +
+                                          response.Summary.ChildAmount +
+                                          response.Summary.InfantAmount;
+
+                        detail.totalAmount = response.Summary.TotalAmount;
+
+                        detail.tax = response.Summary.TaxesAmount +
+                                                response.Summary.ServiceTaxesAmount;
+
+                        var quantity = response.Summary.Adults + response.Summary.Childs;
+
+                        if (response.Summary.InfantAmount > 0) {
+                            quantity += response.Summary.Babies;
+                        }
+
+                        detail.quantity = quantity;
+
+                        detail.price = totalAmount / quantity;
+                    }
+                }
+            },
+            serviceFunctions: {
+                getDetail: function (response) {
+
+                    var detail = null;
+
+                    if (response.Services && response.Services.length) {
+
+                        var service = response.Services[0];
+
+                        detail = _functions.getInstanceDetail();
+
+                        detail.product = _serviceProductName;
+                        detail.category = _serviceCategoryName;
+                        detail.brand = service.Name;
+                        detail.variant = (service.Category && service.Category.Name) || "";
+
+                        detail.quantity = 1;
+
+                        detail.price = response.Summary.ServicesTotalAmount;
+
+                        detail.destination = '';
+                        if (order.SearchParameters &&
+                            order.SearchParameters.AdditionalInfo &&
+                            order.SearchParameters.AdditionalInfo.ServiceDestination) {
+                            detail.destination = order.SearchParameters.AdditionalInfo.ServiceDestination.d;
+                            detail.list = _functions.getListName(order.SearchParameters.AdditionalInfo.ServiceDestination.in);
+                        }
+
+                        detail.startDate = '';
+                        detail.endDate = '';
+                        if (order.SearchData.ServicesSearchData) {
+                            detail.startDate = formatter.dateValuesShort(order.SearchData.ServicesSearchData.StartDate);
+                            detail.endDate = formatter.dateValuesShort(order.SearchData.ServicesSearchData.EndDate);
+                        }
+
+                        detail.productFullName = detail.product + ' - ' + detail.destination;
+                    }
+
+                    _functions.confirmation.serviceFunctions.setDetail(detail);
+
+                    return detail;
+
+
+                },
+                sendToConfirmation: function (detail) {
+                    _functions.confirmation.serviceFunctions.setDetail(detail)
+                },
+                setValuesAndQuantity: function (response, detail) {
+
+                    if (response.Summary) {
+
+                        var totalAmount = response.Summary.ServicesTotalAmount;
+
+                        detail.totalAmount = totalAmount;
+
+                        detail.tax = response.Summary.TaxesAmount +
+                                                response.Summary.ServiceTaxesAmount;
+
+                        var quantity = response.Summary.Adults + response.Summary.Childs;
+
+                        if (response.Summary.InfantAmount > 0) {
+                            quantity += response.Summary.Babies;
+                        }
+
+                        detail.quantity = quantity;
+
+                        detail.price = totalAmount / quantity;
+                    }
+
+                }
+            },
+            dynamicPackageFunctions: {
+                getDetail: function (response) {
+
+                    var airDetail = _functions.checkout.airFunctions.getDetail(response);
+
+                    var hotelDetail = _functions.checkout.hotelFunctions.getDetail(response);
+
+                    var serviceDetail = _functions.checkout.serviceFunctions.getDetail(response);
+
+                    var detail = _functions.getInstanceDetail();
+
+                    var hasAir = airDetail ? true : false;
+                    var hasHotel = hotelDetail ? true : false;
+                    var hasService = serviceDetail ? true : false;
+
+                    var brand = '';
+                    var variant = '';
+                    var coma = '';
+
+                    if (hasAir) {
+                        detail.destination = airDetail.destination;
+                        detail.startDate = airDetail.startDate;
+                        detail.endDate = airDetail.endDate;
+                        detail.origin = airDetail.origin;
+                        detail.list = airDetail.list;
+                        brand = airDetail.brand;
+                        variant = airDetail.variant;
+                        coma = ', '
+                    }
+
+                    if (hasHotel) {
+
+                        if (!detail.destination) {
+                            detail.destination = hotelDetail.destination;
+                        }
+
+                        if (!detail.startDate) {
+                            detail.startDate = hotelDetail.startDate;
+                        }
+
+                        if (!detail.endDate) {
+                            detail.endDate = hotelDetail.endDate;
+                        }
+
+                        if (!detail.list) {
+                            detail.list = hotelDetail.list;
+                        }
+
+                        brand += coma + hotelDetail.brand;
+                        variant += coma + hotelDetail.variant;
+                        coma = ', '
+                    }
+
+
+                    if (hasService) {
+                        brand += coma + serviceDetail.brand;
+                        variant += coma + serviceDetail.variant;
+                    }
+
+                    detail.brand = brand;
+                    detail.variant = variant;
+
+                    detail.category = _functions.getDynamicPackageCategoryName(hasAir, hasHotel, hasService);
+
+                    detail.product = _dynamicPackageProductName;
+                    detail.productFullName = _dynamicPackageProductName + ' - ' + detail.destination;
+
+                    return detail;
+                },
+                sendToConfirmation: function (detail) {
+                    _functions.confirmation.dynamicFunctions.setDetail(detail)
+                },
+                setValuesAndQuantity: function (response, detail) {
+
+                    var totalAmount = response.Summary.AdultAmount +
+                                        response.Summary.ChildAmount +
+                                        response.Summary.InfantAmount +
+                                        response.Summary.ServicesTotalAmount +
+                                        response.Summary.HotelTotalAmount;
+                    var quantity = 1;
+
+                    if (response.Hotels && response.Hotels.length) {
+                        quantity = response.Hotels[0].RoomsGroups.length;
+                    }
+
+                    if (response.FlightGroups.length) {
+
+                        quantity = response.Summary.Adults + response.Summary.Childs;
+
+                        if (response.Summary.InfantAmount > 0) {
+                            quantity += response.Summary.Babies;
+                        }
+                    }
+
+                    detail.quantity = quantity;
+                    detail.price = totalAmount / quantity;
+                    detail.totalAmount = response.Summary.TotalAmount;
+                    detail.tax = response.Summary.TaxesAmount + response.Summary.ServiceTaxesAmount;
+                }
+
+            },
+            packageFunctions: {
+                getDetail: function () {
+                    return _functions.getPackageSearchDetail();
+                },
+                sendToConfirmation: function (detail) {
+                    _functions.confirmation.packageFunctions.setDetail(detail)
+                },
+                setValuesAndQuantity: function (response, detail) {
+
+                    if (response.Summary) {
+
+                        var totalAmount = response.Summary.AdultAmount +
+                            response.Summary.ChildAmount +
+                            response.Summary.InfantAmount +
+                            response.Summary.HotelTotalAmount +
+                            response.Summary.ServicesTotalAmount;
+
+                        detail.totalAmount = response.Summary.TotalAmount;
+
+                        detail.tax = response.Summary.TaxesAmount +
+                                                response.Summary.ServiceTaxesAmount;
+
+                        var quantity = response.Summary.Adults + response.Summary.Childs;
+
+                        if (response.Summary.InfantAmount > 0) {
+                            quantity += response.Summary.Babies;
+                        }
+
+                        detail.quantity = quantity;
+
+                        detail.price = totalAmount / quantity;
+                    }
+
+                }
+
+            },
+            cruiseFunctions: {
+                voidSendCheckoutInformations: true,
+                getDetail: function (response) {
+
+                    var detail = null;
+
+                    if (order.cruiseDatas) {
+
+                        var cruiseData = order.cruiseDatas;
+
+                        detail = _functions.getInstanceDetail();
+
+                        var hasInsurance = response.Insurance && response.Insurance.InsuranceOption;
+                        var cruiseDestination = cruiseData.Cruise.Destination.Name ? cruiseData.Cruise.Destination.Name.replace('/', '-') : cruiseData.Cruise.Destination.Code;
+
+                        detail.product = _cruiseProductName;
+                        detail.category = _cruiseProductName + '/' + cruiseData.Cruise.Ship.Name + '/' + cruiseDestination + '/' + (hasInsurance ? 'Sim' : 'Não') + '/' + cruiseData.Cruise.NumberOfNights;
+                        detail.brand = cruiseData.Cruise.CruiseLine.Name;
+                        detail.variant = cruiseData.CabinType.SuperCategory.Name;
+
+                        detail.destination = cruiseData.Cruise.Destination.Name;
+                        detail.startDate = formatter.dateValuesShort(cruiseData.Cruise.EmbarkDate);
+                        detail.endDate = formatter.dateValuesShort(cruiseData.Cruise.DebarkDate);
+                        
+                        detail.productFullName = detail.product + ' - ' + detail.destination;
+
+                        //Customs for Cruise (R11)
+                        detail.data = formatter.dateValuesShort(cruiseData.Cruise.EmbarkDate);
+                        detail.name = cruiseData.Cruise.Ship.Name;
+                        detail.categoria = cruiseData.Cruise.Ship.Code;
+                        detail.destination = cruiseData.Cruise.Destination.Name;
+                        detail.ports = cruiseData.Cruise.Destination.Name;
+                        detail.sku = cruiseData.Cruise.Ship.Code;
+                        
+                    }
+
+                    return detail;
+                },
+                sendToConfirmation: function (detail) {
+                    _functions.confirmation.cruiseFunctions.setDetail(detail);
+                },
+                setValuesAndQuantity: function (response, detail) {
+
+                    if (Util.HasCount(response.CruisePriceDatas)) {
+
+                        var cruiseData = response.CruisePriceDatas[0];
+                        var quantity = 1;
+                        var totalAmount = cruiseData.BookingFare.BookingFareBreakDown.Total.Value;
+                        var taxAmount = cruiseData.BookingFare.BookingFareBreakDown.Taxes.Value;
+
+                        var subTotalAmount = totalAmount - taxAmount;
+
+                        detail.totalAmount = totalAmount;
+                        detail.quantity = quantity;
+                        detail.price = subTotalAmount;
+                        detail.tax = taxAmount;
+                        detail.revenue = totalAmount;
+                    }
+                }
+            },
+            getAnalyticsItems: function (detail) {
+
+                var analyticsItems = [];
+
+                var analyticsItem = _functions.createAnalyticsItem(detail);
+                analyticsItems.push(analyticsItem);
+
+                return analyticsItems;
+            },
+        },
+        checkout_payment: {
+            execute: function (order) {
+
+                _functions.initAnalyticsTrans();
+
+                var _productFunctions = _functions.checkout_payment.factory(order);
+
+                if (_productFunctions) {
+                    var detail = _productFunctions.getDetail();
+                    if (detail) {
+                        var analyticsItems = _functions.checkout_payment.getAnalyticsItems(detail);
+
+                        var _option = '';
+
+                        if (order.Payment) {
+                            _option = order.Payment.CreditCardProvider + ' - ' + order.Payment.Installments + ' parcela(s)';
+                        }
+
+                        for (var i = 0; i < analyticsItems.length; i++) {
+                            var analyticsItem = analyticsItems[i];
+                            _functions.addAnalyticsItem(analyticsItem);
+                        }
+
+                        ga('ec:setAction', 'checkout', { 'step': 2, option: _option, list: detail.list });
+                        ga('send', 'event', 'Checkout', 'Option');
+                    }
+                }
+            },
+            factory: function (order) {
+
+                var _function = null;
+
+                if (order && order.SearchData) {
+
+                    var count = 0;
+
+                    if (order.SearchData.HotelSearchData) {
+                        _function = _functions.checkout_payment.hotelFunctions;
+                        count++;
+                    }
+
+                    if (order.SearchData.AirSearchData) {
+                        _function = _functions.checkout_payment.airFunctions;
+                        count++;
+                    }
+
+                    if (order.SearchData.ServicesSearchData) {
+                        _function = _functions.checkout_payment.serviceFunctions;
+                        count++;
+                    }
+
+                    if (count > 1) {
+                        _function = _functions.checkout_payment.dynamicFunctions;
+                    }
+
+                    if (order.SearchData.PackageSearchData) {
+                        _function = _functions.checkout_payment.packageFunctions;
+                    }
+
+                    //if (order.SearchData.CruiseSearchData) {
+                    //    _function = _functions.checkout_payment.cruiseFunctions;
+                    //}
+                }
+
+                return _function;
+            },
+            hotelFunctions: {
+                getDetail: function () {
+                    return _hotelDetailCheckoutToConfirmation;
+                },
+            },
+            airFunctions: {
+                getDetail: function () {
+                    return _airDetailCheckoutToConfirmation;
+                },
+            },
+            busFunctions: {
+                getDetail: function () {
+                    return _busDetailCheckoutToConfirmation;
+                },
+            },
+            serviceFunctions: {
+                getDetail: function () {
+                    return _serviceDetailCheckoutToConfirmation;
+                },
+            },
+            dynamicFunctions: {
+                getDetail: function () {
+                    return _dynamicPackageDetailCheckoutToConfirmation;
+                },
+            },
+            packageFunctions: {
+                getDetail: function () {
+                    return _packageDetailCheckoutToConfirmation;
+                },
+            },
+            cruiseFunctions: {
+                getDetail: function () {
+                    return _cruiseDetailCheckoutToConfirmation;
+                }
+            },
+            getAnalyticsItems: function (detail) {
+
+                var analyticsItems = [];
+
+                var analyticsItem = _functions.createAnalyticsItem(detail);
+                analyticsItems.push(analyticsItem);
+
+                return analyticsItems;
+            },
+
+        },
+        confirmation: {
+            execute: function () {
+
+                order = Global.InterfaceEnvelope;
+
+                _functions.initAnalyticsTrans();
+
+                var _productFunctions = _functions.confirmation.factory();
+
+                var detail = _productFunctions.getDetail();
+
+                var analyticsItems = _functions.confirmation.getAnalyticsItems(detail);
+
+                var dimensions = _functions.prepareDimensions(detail);
+
+                for (var i = 0; i < analyticsItems.length; i++) {
+
+                    var analyticsItem = analyticsItems[i];
+
+                    _functions.addAnalyticsItem(analyticsItem);
+                }
+
+                var analyticsTrans = _functions.createAnalyticsTrans(detail);
+
+                ga('ec:setAction', 'purchase', analyticsTrans);
+
+                _functions.commitAnalyticsTrans();
+            },
+            factory: function () {
+
+                var _function = null;
+
+                if (order && order.SearchData) {
+
+                    var count = 0;
+
+                    if (order.SearchData.HotelSearchData) {
+                        _function = _functions.confirmation.hotelFunctions;
+                        count++;
+                    }
+
+                    if (order.SearchData.AirSearchData) {
+                        _function = _functions.confirmation.airFunctions;
+                        count++;
+                    }
+
+                    if (order.SearchData.ServicesSearchData) {
+                        _function = _functions.confirmation.serviceFunctions;
+                        count++;
+                    }
+
+                    if (count > 1) {
+                        _function = _functions.confirmation.dynamicFunctions;
+                    }
+
+                    if (order.SearchData.PackageSearchData) {
+                        _function = _functions.confirmation.packageFunctions;
+                    }
+
+                    if (order.SearchData.CruiseSearchData || Util.HasCount(order.CruiseBookingDatas) ) {
+                        _function = _functions.confirmation.cruiseFunctions;
+                    }
+                    
+                    if (order.SearchData.BusSearchData) {
+                        _function = _functions.confirmation.busFunctions;
+                    }
+                }
+
+                return _function;
+            },
+            hotelFunctions: {
+                getDetail: function () {
+                    return _hotelDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _hotelDetailCheckoutToConfirmation = detail;
+                }
+            },
+            airFunctions: {
+                getDetail: function () {
+                    return _airDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _airDetailCheckoutToConfirmation = detail;
+                }
+
+            },
+            busFunctions: {
+                getDetail: function () {
+                    return _busDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _busDetailCheckoutToConfirmation = detail;
+                }
+
+            },
+            serviceFunctions: {
+                getDetail: function () {
+                    return _serviceDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _serviceDetailCheckoutToConfirmation = detail;
+                }
+            },
+            dynamicFunctions: {
+                getDetail: function () {
+                    return _dynamicPackageDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _dynamicPackageDetailCheckoutToConfirmation = detail;
+                },
+            },
+            packageFunctions: {
+                getDetail: function () {
+                    return _packageDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _packageDetailCheckoutToConfirmation = detail;
+                },
+
+            },
+            cruiseFunctions: {
+                getDetail: function () {
+                    return _cruiseDetailCheckoutToConfirmation;
+                },
+                setDetail: function (detail) {
+                    _cruiseDetailCheckoutToConfirmation = detail;
+                }
+            },
+            getAnalyticsItems: function (detail) {
+
+                var analyticsItems = [];
+
+                var analyticsItem = _functions.createAnalyticsItem(detail);
+                analyticsItems.push(analyticsItem);
+
+                return analyticsItems;
+            },
+        },
+        getPackageSearchDetail: function () {
+            var searchDetail = null;
+
+            var searchParameters = Global.InterfaceEnvelope.SearchParameters;
+
+            if (searchParameters && searchParameters.Package && searchParameters.Package.PackageDestination) {
+                searchDetail = _functions.getInstanceDetail();
+                searchDetail.origin = searchParameters.Package.Origin;
+                searchDetail.destination = searchParameters.Package.PackageDestination.Location;
+                searchDetail.startDate = formatter.dateValuesShort(searchParameters.Package.BeginDepartureDateTime);
+                searchDetail.endDate = formatter.dateValuesShort(searchParameters.Package.EndDepartureDateTime);
+
+            } else {
+                var searchData = Global.InterfaceEnvelope.SearchData;
+
+                if (searchData && searchData.PackageSearchData) {
+
+                    searchDetail = _functions.getInstanceDetail();
+
+                    searchDetail.origin = searchData.PackageSearchData.Origin;
+                    searchDetail.destination = searchData.PackageSearchData.PackageDestination.Location;
+                    searchDetail.startDate = formatter.dateValuesShort(searchData.PackageSearchData.BeginDepartureDateTime);
+                    searchDetail.endDate = formatter.dateValuesShort(searchData.PackageSearchData.EndDepartureDateTime);
+                }
+            }
+
+            if (searchDetail) {
+                searchDetail.product = _packageProductName;
+                searchDetail.productFullName = searchDetail.product + ' - ' + searchDetail.destination;
+            }
+
+            return searchDetail;
+        },
+        getDynamicPackageCategoryName: function (hasAir, hasHotel, hasService) {
+
+            var _products = [];
+            var _category = ''
+
+            if (hasAir) {
+                _products.push(_airProductName);
+            }
+
+            if (hasHotel) {
+                _products.push(_hotelProductName);
+            }
+
+            if (hasService) {
+                _products.push(_serviceProductName);
+            }
+
+            var coma = '';
+
+            for (var i = 0; i < _products.length; i++) {
+                _category += coma + _products[i];
+                coma = ', ';
+            }
+
+            return _category;
+        },
+        createAnalyticsItem: function (detail) {
+            var item = {
+                'name': detail.productFullName,
+                'quantity': detail.quantity,
+                'price': detail.price,
+                'category': detail.category,
+                'brand': detail.brand,
+                'variant': detail.variant,
+                'list': detail.list
+            };
+
+            if (detail.data)
+                item['data'] = detail.data;
+
+            if (detail.name)
+                item['name'] = detail.name;
+
+            if (detail.categoria)
+                item['categoria'] = detail.categoria;
+
+            if (detail.destination)
+                item['destination'] = detail.destination;
+
+            if (detail.ports)
+                item['ports'] = detail.ports;
+
+            if (detail.revenue)
+                item['revenue'] = detail.revenue;
+
+            if (detail.sku)
+                item['id'] = detail.sku;
+
+            return item;
+        },
+        createAnalyticsItemImpression: function (searchDetail) {
+            if (searchDetail) {
+                return {
+                    'name': searchDetail.productFullName,
+                    'list': searchDetail.list
+                };
+            }
+
+            return {
+                'name': '',
+                'list': ''
+            };
+        },
+        prepareDimensions: function (detail) {
+            var dimensions =
+                {
+                    dimension1: '-',    // Origem
+                    dimension2: '-',    // Destino
+                    dimension3: '-',    // Inicio
+                    dimension4: '-',    // Fim
+                    dimension5: '-',    // IP cliente
+                    dimension6: '-',    // Produto
+                };
+
+            if (detail) {
+
+                dimensions.dimension6 = detail.product;
+
+                if (detail.destination) {
+                    dimensions.dimension2 = detail.destination;
+                }
+
+                if (detail.origin) {
+                    dimensions.dimension1 = detail.origin;
+                }
+
+                dimensions.dimension3 = detail.startDate;
+
+                if (detail.endDate)
+                    dimensions.dimension4 = detail.endDate;
+
+                dimensions.dimension5 = _clientIP;
+            }
+
+            return dimensions;
+        },
+        createAnalyticsTrans: function (detail) {
+
+            var tax = 0;
+
+            if (order) {
+                trans = order.ServiceOrder.Id;
+            }
+
+            return {
+                'id': trans,
+                'revenue': detail.totalAmount,
+                'tax': detail.tax,
+                'list': detail.list
+            }
+        },
+        addAnalyticsItem: function (item) {
+            ga('ec:addProduct', item);
+        },
+        addAnalyticsItemImpression: function (item) {
+
+            ga('ec:addImpression', item);
+
+        },
+        initAnalyticsTrans: function () {
+            if (settings.AccountCode) {
+                ga('create', settings.AccountCode, { 'cookieDomain': 'none', cookieName: _gaCookieName });  // localhost { 'cookieDomain': 'none' }
+                ga('require', 'ec');
+            }
+        },
+        prepareDimensionsAndCommit: function (detail) {
+
+            var dimensions = _functions.prepareDimensions(detail);
+
+            _functions.commitAnalyticsTrans(dimensions)
+        },
+        getListNameByCountry: function (country) {
+            return _functions.getListName(country != 'Brasil');
+        },
+        getListName: function (isInternational) {
+            return isInternational ? 'Internacional' : 'Nacional';
+        },
+        getInstanceDetail: function () {
+
+            return {
+                product: '',
+                productFullName: '',
+                origin: '',
+                destination: '',
+                startDate: '',
+                endDate: '',
+                category: '',
+                brand: '',
+                variant: '',
+                price: null,
+                quantity: null,
+                list: '',
+                tax: null,
+                totalAmount: 0
+            };
+
+        },
+        commitAnalyticsTrans: function (dimensions) {
+            ga('send', 'pageview', dimensions);
+        },
+        register: function (routeName) {
+            if (routeName == 'confirmation') {
+                _functions.confirmation.execute()
+            }
+        },
+        controllers: {
+            setEvents: function (action) {
+
+                Global.CheckOutController = Global.CheckOutController || new CheckOutController();
+                if (Global.CheckOutController) {
+                    Global.CheckOutController.preOrderCompleted[action](_functions.checkout.execute);
+                    Global.CheckOutController.processOrderStarting[action](_functions.checkout_payment.execute);
+                }
+
+                if (Global.UrlController) {
+                    Global.UrlController.startRouteCompleted[action](_functions.register);
+                }
+
+                if (Global.SearchController) {
+                    Global.SearchController.searchCompleted[action](_functions.search.execute);
+                }
+
+            },
+            attachEvents: function () {
+                _functions.controllers.setEvents('attach');
+            },
+            dettachEvents: function () {
+                _functions.controllers.setEvents('dettach');
+            }
+        }
+    };
+
+    $.extend(true, settings, _settings || {});
+
+    $(document).ready(function () {
+
+        var date = new Date();
+
+        _gaCookieName = 'ga' + date.getMilliseconds();
+
+        var path = window.location.pathname;
+        if (path.indexOf('transacional') >= 0) {
+            _functions.controllers.attachEvents();
+        }
+    });
+
+}

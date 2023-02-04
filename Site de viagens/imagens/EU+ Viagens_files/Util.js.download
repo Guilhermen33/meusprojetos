@@ -1,0 +1,5115 @@
+﻿/// <reference path="Jquery-1.6.1-min.js" />
+var formatter = formatter || undefined;
+
+var performance = typeof (performance) !== 'undefined' ? performance : {};
+performance.now = performance.now || function () { return 0; }
+
+if (typeof Util == 'undefined') { Util = {}; }
+
+function binarySearch(selectorFunction, searchString, parcial) {
+    var imin = 0;
+    var imax = this.length - 1;
+
+    searchString = searchString.getNeutralString();
+
+    if (parcial == 'undefined')
+        parcial = false;
+
+    return bsRecursive(this, selectorFunction, imin, imax, searchString, parcial)
+}
+
+function bsRecursive(list, selectorFunction, imin, imax, searchString, parcial) {
+    var imid;
+    var currentElement;
+    var funcRet;
+
+    // test if array is empty
+    if (imax < imin)
+        return -1;
+    else {
+        // calculate midpoint to cut set in half
+        imid = parseInt(imin + ((imax - imin) / 2));
+        currentElement = selectorFunction(list[imid]);
+        if (parcial)
+            currentElement = currentElement.substring(0, searchString.length);
+
+        // three-way comparison
+        if (currentElement.getNeutralString() > searchString)
+            // key is in lower subset
+            return bsRecursive(list, selectorFunction, imin, imid - 1, searchString, parcial);
+        else if (currentElement.getNeutralString() < searchString)
+            // key is in upper subset
+            return bsRecursive(list, selectorFunction, imid + 1, imax, searchString, parcial);
+        else
+            // key has been found
+            return imid;
+    }
+
+}
+
+function binarySearchRange(searchString, selectorFunction) {
+    var index = this.binarySearch(selectorFunction, searchString, true);
+    var begin;
+    var end;
+
+    var subItem = null;
+    if (index > -1) {
+        do {
+            subItem = selectorFunction(this[index]).substring(0, searchString.length);
+            if (subItem.getNeutralString() != searchString) {
+                index++; //Adjust to the last equal element
+                begin = index;
+                break;
+            }
+            index--;
+        } while (index >= 0)
+        if (index < 0) {
+            begin = 0;
+            index = 0;
+        }
+
+        while (index < this.length && selectorFunction(this[index]).substring(0, searchString.length).getNeutralString() == searchString) {
+            index++;
+        }
+
+        end = index - 1;
+    }
+    else {
+        begin = -1;
+        end = -1;
+    }
+
+    return {
+        begin: begin,
+        end: end
+    }
+}
+
+Array.prototype.binarySearch = binarySearch;
+Array.prototype.binarySearchRange = binarySearchRange;
+
+var defaultDiacriticsRemovalap = [
+    { 'base': 'A', 'letters': '\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F' },
+    { 'base': 'AA', 'letters': '\uA732' },
+    { 'base': 'AE', 'letters': '\u00C6\u01FC\u01E2' },
+    { 'base': 'AO', 'letters': '\uA734' },
+    { 'base': 'AU', 'letters': '\uA736' },
+    { 'base': 'AV', 'letters': '\uA738\uA73A' },
+    { 'base': 'AY', 'letters': '\uA73C' },
+    { 'base': 'B', 'letters': '\u0042\u24B7\uFF22\u1E02\u1E04\u1E06\u0243\u0182\u0181' },
+    { 'base': 'C', 'letters': '\u0043\u24B8\uFF23\u0106\u0108\u010A\u010C\u00C7\u1E08\u0187\u023B\uA73E' },
+    { 'base': 'D', 'letters': '\u0044\u24B9\uFF24\u1E0A\u010E\u1E0C\u1E10\u1E12\u1E0E\u0110\u018B\u018A\u0189\uA779' },
+    { 'base': 'DZ', 'letters': '\u01F1\u01C4' },
+    { 'base': 'Dz', 'letters': '\u01F2\u01C5' },
+    { 'base': 'E', 'letters': '\u0045\u24BA\uFF25\u00C8\u00C9\u00CA\u1EC0\u1EBE\u1EC4\u1EC2\u1EBC\u0112\u1E14\u1E16\u0114\u0116\u00CB\u1EBA\u011A\u0204\u0206\u1EB8\u1EC6\u0228\u1E1C\u0118\u1E18\u1E1A\u0190\u018E' },
+    { 'base': 'F', 'letters': '\u0046\u24BB\uFF26\u1E1E\u0191\uA77B' },
+    { 'base': 'G', 'letters': '\u0047\u24BC\uFF27\u01F4\u011C\u1E20\u011E\u0120\u01E6\u0122\u01E4\u0193\uA7A0\uA77D\uA77E' },
+    { 'base': 'H', 'letters': '\u0048\u24BD\uFF28\u0124\u1E22\u1E26\u021E\u1E24\u1E28\u1E2A\u0126\u2C67\u2C75\uA78D' },
+    { 'base': 'I', 'letters': '\u0049\u24BE\uFF29\u00CC\u00CD\u00CE\u0128\u012A\u012C\u0130\u00CF\u1E2E\u1EC8\u01CF\u0208\u020A\u1ECA\u012E\u1E2C\u0197' },
+    { 'base': 'J', 'letters': '\u004A\u24BF\uFF2A\u0134\u0248' },
+    { 'base': 'K', 'letters': '\u004B\u24C0\uFF2B\u1E30\u01E8\u1E32\u0136\u1E34\u0198\u2C69\uA740\uA742\uA744\uA7A2' },
+    { 'base': 'L', 'letters': '\u004C\u24C1\uFF2C\u013F\u0139\u013D\u1E36\u1E38\u013B\u1E3C\u1E3A\u0141\u023D\u2C62\u2C60\uA748\uA746\uA780' },
+    { 'base': 'LJ', 'letters': '\u01C7' },
+    { 'base': 'Lj', 'letters': '\u01C8' },
+    { 'base': 'M', 'letters': '\u004D\u24C2\uFF2D\u1E3E\u1E40\u1E42\u2C6E\u019C' },
+    { 'base': 'N', 'letters': '\u004E\u24C3\uFF2E\u01F8\u0143\u00D1\u1E44\u0147\u1E46\u0145\u1E4A\u1E48\u0220\u019D\uA790\uA7A4' },
+    { 'base': 'NJ', 'letters': '\u01CA' },
+    { 'base': 'Nj', 'letters': '\u01CB' },
+    { 'base': 'O', 'letters': '\u004F\u24C4\uFF2F\u00D2\u00D3\u00D4\u1ED2\u1ED0\u1ED6\u1ED4\u00D5\u1E4C\u022C\u1E4E\u014C\u1E50\u1E52\u014E\u022E\u0230\u00D6\u022A\u1ECE\u0150\u01D1\u020C\u020E\u01A0\u1EDC\u1EDA\u1EE0\u1EDE\u1EE2\u1ECC\u1ED8\u01EA\u01EC\u00D8\u01FE\u0186\u019F\uA74A\uA74C' },
+    { 'base': 'OI', 'letters': '\u01A2' },
+    { 'base': 'OO', 'letters': '\uA74E' },
+    { 'base': 'OU', 'letters': '\u0222' },
+    { 'base': 'OE', 'letters': '\u008C\u0152' },
+    { 'base': 'oe', 'letters': '\u009C\u0153' },
+    { 'base': 'P', 'letters': '\u0050\u24C5\uFF30\u1E54\u1E56\u01A4\u2C63\uA750\uA752\uA754' },
+    { 'base': 'Q', 'letters': '\u0051\u24C6\uFF31\uA756\uA758\u024A' },
+    { 'base': 'R', 'letters': '\u0052\u24C7\uFF32\u0154\u1E58\u0158\u0210\u0212\u1E5A\u1E5C\u0156\u1E5E\u024C\u2C64\uA75A\uA7A6\uA782' },
+    { 'base': 'S', 'letters': '\u0053\u24C8\uFF33\u1E9E\u015A\u1E64\u015C\u1E60\u0160\u1E66\u1E62\u1E68\u0218\u015E\u2C7E\uA7A8\uA784' },
+    { 'base': 'T', 'letters': '\u0054\u24C9\uFF34\u1E6A\u0164\u1E6C\u021A\u0162\u1E70\u1E6E\u0166\u01AC\u01AE\u023E\uA786' },
+    { 'base': 'TZ', 'letters': '\uA728' },
+    { 'base': 'U', 'letters': '\u0055\u24CA\uFF35\u00D9\u00DA\u00DB\u0168\u1E78\u016A\u1E7A\u016C\u00DC\u01DB\u01D7\u01D5\u01D9\u1EE6\u016E\u0170\u01D3\u0214\u0216\u01AF\u1EEA\u1EE8\u1EEE\u1EEC\u1EF0\u1EE4\u1E72\u0172\u1E76\u1E74\u0244' },
+    { 'base': 'V', 'letters': '\u0056\u24CB\uFF36\u1E7C\u1E7E\u01B2\uA75E\u0245' },
+    { 'base': 'VY', 'letters': '\uA760' },
+    { 'base': 'W', 'letters': '\u0057\u24CC\uFF37\u1E80\u1E82\u0174\u1E86\u1E84\u1E88\u2C72' },
+    { 'base': 'X', 'letters': '\u0058\u24CD\uFF38\u1E8A\u1E8C' },
+    { 'base': 'Y', 'letters': '\u0059\u24CE\uFF39\u1EF2\u00DD\u0176\u1EF8\u0232\u1E8E\u0178\u1EF6\u1EF4\u01B3\u024E\u1EFE' },
+    { 'base': 'Z', 'letters': '\u005A\u24CF\uFF3A\u0179\u1E90\u017B\u017D\u1E92\u1E94\u01B5\u0224\u2C7F\u2C6B\uA762' },
+    { 'base': 'a', 'letters': '\u0061\u24D0\uFF41\u1E9A\u00E0\u00E1\u00E2\u1EA7\u1EA5\u1EAB\u1EA9\u00E3\u0101\u0103\u1EB1\u1EAF\u1EB5\u1EB3\u0227\u01E1\u00E4\u01DF\u1EA3\u00E5\u01FB\u01CE\u0201\u0203\u1EA1\u1EAD\u1EB7\u1E01\u0105\u2C65\u0250' },
+    { 'base': 'aa', 'letters': '\uA733' },
+    { 'base': 'ae', 'letters': '\u00E6\u01FD\u01E3' },
+    { 'base': 'ao', 'letters': '\uA735' },
+    { 'base': 'au', 'letters': '\uA737' },
+    { 'base': 'av', 'letters': '\uA739\uA73B' },
+    { 'base': 'ay', 'letters': '\uA73D' },
+    { 'base': 'b', 'letters': '\u0062\u24D1\uFF42\u1E03\u1E05\u1E07\u0180\u0183\u0253' },
+    { 'base': 'c', 'letters': '\u0063\u24D2\uFF43\u0107\u0109\u010B\u010D\u00E7\u1E09\u0188\u023C\uA73F\u2184' },
+    { 'base': 'd', 'letters': '\u0064\u24D3\uFF44\u1E0B\u010F\u1E0D\u1E11\u1E13\u1E0F\u0111\u018C\u0256\u0257\uA77A' },
+    { 'base': 'dz', 'letters': '\u01F3\u01C6' },
+    { 'base': 'e', 'letters': '\u0065\u24D4\uFF45\u00E8\u00E9\u00EA\u1EC1\u1EBF\u1EC5\u1EC3\u1EBD\u0113\u1E15\u1E17\u0115\u0117\u00EB\u1EBB\u011B\u0205\u0207\u1EB9\u1EC7\u0229\u1E1D\u0119\u1E19\u1E1B\u0247\u025B\u01DD' },
+    { 'base': 'f', 'letters': '\u0066\u24D5\uFF46\u1E1F\u0192\uA77C' },
+    { 'base': 'g', 'letters': '\u0067\u24D6\uFF47\u01F5\u011D\u1E21\u011F\u0121\u01E7\u0123\u01E5\u0260\uA7A1\u1D79\uA77F' },
+    { 'base': 'h', 'letters': '\u0068\u24D7\uFF48\u0125\u1E23\u1E27\u021F\u1E25\u1E29\u1E2B\u1E96\u0127\u2C68\u2C76\u0265' },
+    { 'base': 'hv', 'letters': '\u0195' },
+    { 'base': 'i', 'letters': '\u0069\u24D8\uFF49\u00EC\u00ED\u00EE\u0129\u012B\u012D\u00EF\u1E2F\u1EC9\u01D0\u0209\u020B\u1ECB\u012F\u1E2D\u0268\u0131' },
+    { 'base': 'j', 'letters': '\u006A\u24D9\uFF4A\u0135\u01F0\u0249' },
+    { 'base': 'k', 'letters': '\u006B\u24DA\uFF4B\u1E31\u01E9\u1E33\u0137\u1E35\u0199\u2C6A\uA741\uA743\uA745\uA7A3' },
+    { 'base': 'l', 'letters': '\u006C\u24DB\uFF4C\u0140\u013A\u013E\u1E37\u1E39\u013C\u1E3D\u1E3B\u017F\u0142\u019A\u026B\u2C61\uA749\uA781\uA747' },
+    { 'base': 'lj', 'letters': '\u01C9' },
+    { 'base': 'm', 'letters': '\u006D\u24DC\uFF4D\u1E3F\u1E41\u1E43\u0271\u026F' },
+    { 'base': 'n', 'letters': '\u006E\u24DD\uFF4E\u01F9\u0144\u00F1\u1E45\u0148\u1E47\u0146\u1E4B\u1E49\u019E\u0272\u0149\uA791\uA7A5' },
+    { 'base': 'nj', 'letters': '\u01CC' },
+    { 'base': 'o', 'letters': '\u006F\u24DE\uFF4F\u00F2\u00F3\u00F4\u1ED3\u1ED1\u1ED7\u1ED5\u00F5\u1E4D\u022D\u1E4F\u014D\u1E51\u1E53\u014F\u022F\u0231\u00F6\u022B\u1ECF\u0151\u01D2\u020D\u020F\u01A1\u1EDD\u1EDB\u1EE1\u1EDF\u1EE3\u1ECD\u1ED9\u01EB\u01ED\u00F8\u01FF\u0254\uA74B\uA74D\u0275' },
+    { 'base': 'oi', 'letters': '\u01A3' },
+    { 'base': 'ou', 'letters': '\u0223' },
+    { 'base': 'oo', 'letters': '\uA74F' },
+    { 'base': 'p', 'letters': '\u0070\u24DF\uFF50\u1E55\u1E57\u01A5\u1D7D\uA751\uA753\uA755' },
+    { 'base': 'q', 'letters': '\u0071\u24E0\uFF51\u024B\uA757\uA759' },
+    { 'base': 'r', 'letters': '\u0072\u24E1\uFF52\u0155\u1E59\u0159\u0211\u0213\u1E5B\u1E5D\u0157\u1E5F\u024D\u027D\uA75B\uA7A7\uA783' },
+    { 'base': 's', 'letters': '\u0073\u24E2\uFF53\u00DF\u015B\u1E65\u015D\u1E61\u0161\u1E67\u1E63\u1E69\u0219\u015F\u023F\uA7A9\uA785\u1E9B' },
+    { 'base': 't', 'letters': '\u0074\u24E3\uFF54\u1E6B\u1E97\u0165\u1E6D\u021B\u0163\u1E71\u1E6F\u0167\u01AD\u0288\u2C66\uA787' },
+    { 'base': 'tz', 'letters': '\uA729' },
+    { 'base': 'u', 'letters': '\u0075\u24E4\uFF55\u00F9\u00FA\u00FB\u0169\u1E79\u016B\u1E7B\u016D\u00FC\u01DC\u01D8\u01D6\u01DA\u1EE7\u016F\u0171\u01D4\u0215\u0217\u01B0\u1EEB\u1EE9\u1EEF\u1EED\u1EF1\u1EE5\u1E73\u0173\u1E77\u1E75\u0289' },
+    { 'base': 'v', 'letters': '\u0076\u24E5\uFF56\u1E7D\u1E7F\u028B\uA75F\u028C' },
+    { 'base': 'vy', 'letters': '\uA761' },
+    { 'base': 'w', 'letters': '\u0077\u24E6\uFF57\u1E81\u1E83\u0175\u1E87\u1E85\u1E98\u1E89\u2C73' },
+    { 'base': 'x', 'letters': '\u0078\u24E7\uFF58\u1E8B\u1E8D' },
+    { 'base': 'y', 'letters': '\u0079\u24E8\uFF59\u1EF3\u00FD\u0177\u1EF9\u0233\u1E8F\u00FF\u1EF7\u1E99\u1EF5\u01B4\u024F\u1EFF' },
+    { 'base': 'z', 'letters': '\u007A\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763' }
+];
+
+var diacriticsMap = {};
+for (var i = 0; i < defaultDiacriticsRemovalap.length; i++) {
+    var letters = defaultDiacriticsRemovalap[i].letters;
+    for (var j = 0; j < letters.length; j++) {
+        diacriticsMap[letters[j]] = defaultDiacriticsRemovalap[i].base;
+    }
+}
+
+function removeDiacritics(str) {
+    return str.replace(/[^\u0000-\u007E]/g, function (a) {
+        return diacriticsMap[a] || a;
+    });
+}
+
+function getNeutral() {
+    return removeDiacritics(this).toLowerCase();
+}
+
+String.prototype.getNeutralString = getNeutral;
+
+Util.addDaysToDateValue = function (objDate, days) {
+    return Util.DateValuesToDate(objDate).addDays(days).toDateValues();
+}
+
+Util.BetweenDateValues = function (initDateValue, endDateValue, testDateValue, considerNoIntervals) {
+
+    var initDate = Util.DateValuesToDate(initDateValue);
+    var endDate = Util.DateValuesToDate(endDateValue);
+    var testDate = Util.DateValuesToDate(testDateValue);
+    var interval = 'days';
+
+    var _return = initDate <= testDate
+        && endDate >= testDate;
+
+    if (!considerNoIntervals) {
+        _return &= endDate > initDate;
+    } else {
+        _return &= endDate >= initDate;
+    }
+
+    return _return;
+}
+
+Util.DateValuesToDate = function (objDate) {
+    if (objDate && objDate.Year != undefined && objDate.Month != undefined && objDate.Day != undefined)
+        return new Date(objDate.Year, objDate.Month - 1, objDate.Day, objDate.Hour ? objDate.Hour : 0, objDate.Minutes ? objDate.Minutes : 0, 0, 0);
+
+    return null;
+}
+
+Util.IntTimeToDateTime = function (objTime) {
+
+    if (objTime >= 0) {
+        var hour = parseInt(parseFloat(objTime) / 60);
+        var minutes = parseFloat(objTime) % 60;
+        var result = new Date(2010, 1, 1, hour, minutes, 0, 0);
+
+        return result;
+    }
+
+    return null;
+}
+
+Util.ParseTravelAceBrokerCode = {
+    BR: "Território Nacional",
+    X2: "América Central e Caribe",
+    X4: "América do Norte",
+    X3: "América do Sul (menos Brasil)",
+    X6: "Europa",
+    X8: "Oceania",
+    X7: "Ásia",
+    X5: "África"
+};
+
+
+Util.GetLastDayFromMonth = function (month, year) {
+    var _date = new Date(year, month, 0);
+
+    return _date.toDateValues().Day;
+}
+
+Util.DateToDateValues = function (objDate) {
+
+    if (!objDate || !(objDate instanceof Date))
+        return null;
+
+    return objDate.toDateValues();
+};
+
+Util.DateToYearFirstPattern = function (dt) {
+    var ret = '';
+    ret = dt.Day.toString();
+    if (ret.length == 1)
+        ret = '0' + ret;
+    ret = dt.Month + ret;
+    if (ret.length == 3)
+        ret = '0' + ret;
+    ret = dt.Year + ret;
+
+    return ret;
+}
+
+function removeFromAutomaticQuotationAir(automaticQuotations, itemToCompare) {
+    var isSameItem = true;
+    var itemToRemove = undefined;
+
+    for (var i = 0; i < automaticQuotations.length; i++) {
+        var rec = automaticQuotations[i];
+        isSameItem = true;
+        for (var j = 0; j < rec.FlightGroups.length; j++) {
+            var fg = rec.FlightGroups[j];
+            var assFg = itemToCompare[j];
+            if (assFg && fg.OriginalFlightGroup)
+                isSameItem = assFg.Hash == fg.OriginalFlightGroup.Hash;
+
+            if (!isSameItem)
+                break;
+        }
+
+        if (isSameItem) {
+            itemToRemove = rec;
+            break;
+        }
+    }
+
+    return itemToRemove;
+}
+
+function removeFromAutomaticQuotationHotel(automaticQuotations, itemToCompare) {
+    var isSameItem = true;
+    var itemToRemove = undefined;
+    if (itemToCompare.length) {
+        for (var i = 0; i < automaticQuotations.length; i++) {
+            var hotel = automaticQuotations[i];
+            isSameItem = hotel.Id == itemToCompare[0].Id;
+            if (isSameItem) {
+                itemToRemove = hotel;
+                break;
+            }
+        }
+    }
+    return itemToRemove;
+}
+
+var RemoveFromAutomaticQuotationFunctions = {
+    'Air': removeFromAutomaticQuotationAir,
+    'Hotel': removeFromAutomaticQuotationHotel
+};
+
+Util.RemoveFromAutomaticQuotation = function (automaticQuotations, itemToCompare, type) {
+    var isSameItem = true;
+    var itemToRemove = RemoveFromAutomaticQuotationFunctions[type](automaticQuotations, itemToCompare);
+
+    if (itemToRemove)
+        automaticQuotations.removeItem(itemToRemove);
+
+    return automaticQuotations;
+}
+
+Util.CreateAbsoluteDate = function () {
+    var currentDate = new Date();
+    return new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+}
+
+Util.DateValuesDiff = function (init, end, strInterval) {
+    if (strInterval == 'days') {
+        var cloneInit = Util.Clone(init);
+        var cloneEnd = Util.Clone(end);
+        cloneInit.Hour = 0;
+        cloneEnd.Hour = 0;
+        cloneInit.Minutes = 0;
+        cloneEnd.Minutes = 0;
+        return Util.DateValuesToDate(cloneInit).dateDiff('d', Util.DateValuesToDate(cloneEnd));
+    }
+    else {
+        return Util.DateValuesToDate(init).dateDiff(strInterval, Util.DateValuesToDate(end));
+    }
+};
+
+Util.MonthsDiff = function (firstDate, secondDate) {
+    var months = (secondDate.getFullYear() - firstDate.getFullYear()) * 12;
+    months -= firstDate.getMonth() + 1;
+    months += secondDate.getMonth();
+    return months <= 0 ? 0 : months;
+};
+
+Util.NumberDiff = function (firstValue, secondValue) {
+    var subtracted = firstValue - secondValue;
+    if (subtracted < 0)
+        subtracted = subtracted * -1;
+
+    return subtracted;
+}
+
+Util.DateValuesToSQLStringDate = function (objDate) {
+    var ret = "{0}-{1}-{2}".format([objDate.Year, formatter.toTwoDigits(objDate.Month), formatter.toTwoDigits(objDate.Day)]);
+
+    if (Util.isValidNumber(objDate.Hour))
+        ret = ret + " {0}:{1}".format([formatter.toTwoDigits(objDate.Hour), formatter.toTwoDigits(objDate.Minutes)]);
+
+    return ret;
+}
+
+Util.SQLStringDateToDateValue = function (str) {
+
+    var obj = {};
+
+    var dateAndHour = str.split(' ');
+
+    var dateValues = dateAndHour[0].split("-");
+
+    if (dateValues.length == 3) {
+
+        obj = {
+            Year: dateValues[0],
+            Month: dateValues[1],
+            Day: dateValues[2]
+        }
+
+        if (dateAndHour.length == 2) {
+            var hourValues = dateAndHour[1].split(":");
+
+            obj.Hour = hourValues[0];
+            obj.Minutes = hourValues[1];
+        }
+    }
+
+    return obj;
+}
+
+Util.DateValuesEquals = function (dOne, dTwo) {
+    return (dOne && dTwo) && (dOne.Year == dTwo.Year) && (dOne.Month == dTwo.Month) && (dOne.Day == dTwo.Day);
+}
+
+Util.StringToDateValues = function (value, language) {
+    try {
+        var objDate;
+        var invertDayMonth = (language && language.toLowerCase().contains('en')) || (formatter && formatter.culture.contains('en'));
+
+        var splited = value && value.split(' ');
+        if (splited && splited.length > 0) {
+            var splitedDate = [];
+            if (splited[0].indexOf('-') > -1)
+                splitedDate = splited[0].split('-');
+            else
+                splitedDate = splited[0].split('/');
+
+            if (splitedDate.length == 3) {
+                if (invertDayMonth)
+                    objDate = { Year: splitedDate[2], Month: splitedDate[0], Day: splitedDate[1] };
+                else
+                    objDate = { Year: splitedDate[2], Month: splitedDate[1], Day: splitedDate[0] };
+            }
+
+            if (objDate && splited.length == 2) {
+                var time = splited[1].split(':');
+
+                objDate.Hour = time[0];
+                objDate.Minutes = time[1];
+                objDate.Seconds = time.length == 3 ? time[2] : "59";
+            }
+        }
+    }
+    catch (e) {
+        return null;
+    }
+
+    return objDate;
+};
+
+Util.DateValuesToString = function (objDateValues) {
+    return formatter.dateValuesShort(objDateValues);
+};
+
+Util.DateValuesToStringWithCulture = function (objDateValues, culture) {
+    return formatter.dateValuesShortWithCulture(objDateValues, culture);
+};
+
+Util.DateToString = function (objDate) {
+
+    if (!objDate)
+        return null;
+
+    var objDateValues = objDate;
+
+    if (objDate instanceof Date)
+        objDateValues = {
+            Year: objDate.getFullYear(),
+            Month: objDate.getMonth() + 1,
+            Day: objDate.getDate()
+        };
+
+    return Util.DateValuesToString(objDateValues);
+}
+
+Util.StringToDate = function (value, language) {
+    if (!value || value == "")
+        return new Date();
+
+    var dateValues = Util.StringToDateValues(value, language);
+
+    return new Date(dateValues.Year, (dateValues.Month - 1), dateValues.Day);
+}
+
+if (!$ && jQuery)
+    $ = jQuery;
+
+$.fn.containsEvent = function (eventName) {
+    return !!$(this).data("events")[eventName];
+};
+
+Util.PluginNamesToken = "pluginNames";
+
+Util.AllCreatedPluginDatas = {};
+
+Util.GetPluginDataToken = function (pluginName) {
+    if (Util.AllCreatedPluginDatas[pluginName])
+        Util.AllCreatedPluginDatas[pluginName].Count++;
+    else
+        Util.AllCreatedPluginDatas[pluginName] = { Name: pluginName + "Data", Count: 1 };
+
+    return Util.AllCreatedPluginDatas[pluginName].Name;
+}
+
+$.fn.invokePlugin = function (functionName, args) {
+    var ctrl = $(this);
+
+    var instanceNames = ctrl.data(Util.PluginNamesToken);
+
+    if (instanceNames && instanceNames.length) {
+        return ctrl[instanceNames[0]](functionName, args);
+    }
+
+    return ctrl;
+};
+
+$.fn.containsPlugin = function (pluginName) {
+    var token = Util.GetPluginDataToken(pluginName);
+
+    var contains = false;
+    if (this.data(pluginName) != undefined || this.data(token) != undefined)
+        contains = true;
+    else if (this.data('ui' + pluginName.capitalize()) != undefined)
+        contains = true;
+    else if (this.data(token) != undefined)
+        contains = true;
+
+    return contains;
+};
+
+$.fn.destroyPlugin = function (pluginName) {
+    Util.defaultDestroy($(this), pluginName);
+};
+
+$.fn.destroyDialog = function () {
+    var component = $(this);
+
+    if (component.containsPlugin("dialog")) {
+        component.dialog("close");
+    }
+
+    return component;
+};
+
+$.fn.removePlugins = function () {
+    var ctrl = $(this);
+    var pluginNames = ctrl.data(Util.PluginNamesToken);
+
+    for (var i = 0; pluginNames && i < pluginNames.length; i++) {
+        Util.defaultDestroy(ctrl, pluginNames[i]);
+    }
+};
+
+Util.defaultDestroy = function (component, pluginName) {
+    var token = Util.GetPluginDataToken(pluginName);
+    component.data(token) && component.removeData(token);
+
+    var pluginNames = component.data(Util.PluginNamesToken);
+    pluginNames && pluginNames.removeItem(pluginName);
+};
+
+Util.pluginDefaultBehavior = function (plugin, pluginName, args, constructorFunc) {
+    if (!plugin.length)
+        return plugin;
+
+    var options = args[0];
+
+    if (typeof options == 'string') {
+        return Util.execPluginMethod(plugin, pluginName, args, constructorFunc);
+    }
+    else {
+        return plugin.each(function () {
+
+            var token = Util.GetPluginDataToken(pluginName);
+
+            var ctrl = $(this);
+
+            var obj = ctrl.data(token);
+
+            obj && ctrl.removeData(token);
+
+            obj = constructorFunc();
+
+            ctrl.data(token, obj);
+
+            obj.initialize(this, options);
+
+            var instanceNames = ctrl.data(Util.PluginNamesToken);
+
+            if (instanceNames)
+                instanceNames.push(pluginName);
+            else
+                instanceNames = [pluginName];
+
+            ctrl.data(Util.PluginNamesToken, instanceNames);
+        });
+    }
+};
+
+Util.execPluginMethod = function (plugins, pluginName, args, constructorFunc) {
+
+    var options = args[0];
+    var args = Array.prototype.slice.call(args, 1);
+
+    if (typeof options == 'string') {
+        var obj = undefined;
+
+        if (plugins && plugins.length) {
+
+            var ret = [];
+
+            for (var i = 0; i < plugins.length; i++) {
+
+                var token = Util.GetPluginDataToken(pluginName);
+
+                obj = $(plugins[i]).data(token);
+
+                if (obj) {
+                    if (obj[options]) {
+                        ret.push(obj[options].apply(plugins, args));
+                    }
+                    else if (typeof console != 'undefined') {
+                        console.log("Unable to find method " + options + " in element " + pluginName);
+                    }
+                }
+                else if (typeof console != 'undefined') {
+                    console.log("Unable to find instance of " + pluginName);
+                }
+            }
+
+            if (plugins.length > 1) {
+                var ids = $.map(plugins, function (item) { return $(item).attr("id"); })
+
+                ids = ids.where(function (h) { return h.length; });
+
+                if (ids.distinct().length != ids.length) {
+                    console.log("Há Ids iguais na execução do método do plugin: " + ids.join(", "));
+                }
+            }
+
+            return ret.length > 1 ? ret : ret[0];
+        }
+        else {
+            obj = constructorFunc();
+
+            return obj[options].apply(plugins, args);
+        }
+    }
+};
+
+Util.pluginStaticBehavior = function (plugin, pluginName, args, contructorFunc) {
+
+};
+
+Util.stringifyJSON = function (obj) {
+    return JSON2 ? JSON2.stringify(obj) : JSON ? JSON.stringifyWcf(obj) : "";
+}
+
+Util.IsOldNavigator = function () {
+    return (navigator.userAgent.indexOf("MSIE 6.") != -1) || (navigator.userAgent.indexOf("MSIE 5.") != -1) || (navigator.userAgent.indexOf("MSIE 4.") != -1);
+};
+
+Util.IsIE7Navigator = function () {
+    return (navigator.userAgent.indexOf("MSIE 7.") != -1)
+};
+
+Util.IsIENavigator = function () {
+    return (navigator.userAgent.indexOf("MSIE") != -1);
+};
+
+Util.clone = Util.Clone = function (obj, visitedObjects) {
+
+    if (!visitedObjects)
+        visitedObjects = [];
+
+    if (typeof obj !== 'object' || obj == null) {
+        return obj;
+    }
+
+    var c = obj instanceof Array ? [] : {};
+
+    for (var i in obj) {
+        var prop = obj[i];
+
+        if (typeof prop == 'object') {
+
+            var isVisitedObj = false;
+
+            if (visitedObjects && visitedObjects.length) {
+                for (var vObj = 0; vObj < visitedObjects.length; vObj++) {
+                    if (visitedObjects[vObj].prop === prop) {
+                        if (visitedObjects[vObj].count > 0) {
+                            c[i] = null;
+                            isVisitedObj = true;
+                        }
+
+                        visitedObjects[vObj].count++;
+                        break;
+                    }
+                }
+            }
+
+            if (!isVisitedObj) {
+                if (prop instanceof Array) {
+                    c[i] = [];
+
+                    for (var j = 0; j < prop.length; j++) {
+                        if (typeof prop[j] != 'object') {
+                            c[i].push(prop[j]);
+                        } else {
+                            visitedObjects.push({ prop: prop[j], count: 0 });
+                            c[i].push(Util.Clone(prop[j], visitedObjects));
+                        }
+                    }
+                } else if (prop instanceof Date) {
+                    c[i] = new Date(prop.getTime());
+                } else {
+                    visitedObjects.push({ prop: prop, count: 0 });
+                    c[i] = Util.Clone(prop, visitedObjects);
+
+                }
+            }
+        } else {
+            c[i] = prop;
+        }
+    }
+
+    return c;
+};
+
+Util.CloneArray = function (toClone) {
+
+    var cloned = [];
+
+    if (toClone) {
+        cloned = toClone.slice(0);
+    }
+
+    return cloned;
+}
+
+Util.CloneStringify = function (obj) {
+    return JSON.parse(Util.stringifyJSON(obj));
+};
+
+Util.CloseHintBoxy = function (sender) {
+
+    if (sender) {
+        var oDiv = ((typeof sender == "string" || !sender.jquery) ? $(sender) : sender).hide();
+        if (oDiv.attr("CreateHintBoxy") == "true")
+            oDiv.remove();
+    }
+
+    $(document).unbind('keypress', _closeHistBodyEscPressed);
+    var container = $("#CreateHintBoxyDIVFundo").closest('.overlay');
+    if (container && container.children() && container.children().length == 1 && container.children('#CreateHintBoxyDIVFundo'))
+        $('.overlay').remove();
+    else
+        $("#CreateHintBoxyDIVFundo").remove();
+
+};
+
+Util.CloseDoubleHintBoxy = function (sender) {
+
+    if (sender) {
+        var oDiv = ((typeof sender == "string" || !sender.jquery) ? $(sender) : sender).hide();
+
+        if (oDiv.attr("CreateHintBoxy"))
+            if (oDiv.closest('.overlay'))
+                oDiv.remove();
+    }
+
+    $(document).unbind('keypress', _closeHistBodyEscPressed);
+
+    $('.overlay').remove();
+
+
+};
+
+Util.CreateHintBoxy = function (mensagem, sender, bolAutomaticClose, position, doNotCenter, classe, doubleBackground, showBackground) {
+
+    if (classe)
+        classe = "class='" + classe + "'";
+
+    var background = undefined;
+    if (showBackground == true || showBackground === undefined)
+        background = Util.CreateHintBoxBackground(doubleBackground);
+
+    var xPosition;
+    var yPosition;
+    var bolCenter = true;
+
+    if (doNotCenter)
+        bolCenter = !doNotCenter;
+
+    if (bolAutomaticClose == undefined)
+        bolAutomaticClose = false;
+
+    if (!position)
+        position = "fixed";
+
+    if (sender != undefined && $(sender).length) {
+        xPosition = $(sender).position().left;
+        yPosition = $(sender).position().top;
+        width = $(sender).outerWidth(true);
+        height = $(sender).outerHeight(true);
+        xPosition += width;
+    }
+    else {
+        if (self.innerHeight) {
+            xPosition = self.innerWidth;
+            yPosition = self.innerHeight;
+        } else if (document.documentElement && document.documentElement.clientHeight) {
+            xPosition = document.documentElement.clientWidth;
+            yPosition = document.documentElement.clientHeight;
+        } else if (document.body) {
+            xPosition = document.body.clientWidth;
+            yPosition = document.body.clientHeight;
+        }
+
+        yPosition = yPosition <= 5 ? YMousePosition : yPosition / 2;
+
+        xPosition = xPosition / 2;
+    }
+
+    var oDiv = mensagem;
+
+    if (typeof mensagem == "string") {
+
+        oDiv = $("<div style='background: #FFF; position: " + position + "' " + classe + "></div>")
+
+        oDiv.html(mensagem).attr("CreateHintBoxy", true);
+
+        bolCenter = true;
+    }
+
+    if (oDiv) {
+        if (!oDiv.jquery)
+            oDiv = $(oDiv);
+
+        oDiv.hide();
+
+        $(document.body).append(oDiv);
+
+        if (bolCenter) {
+            xPosition -= (oDiv.width() / 2);
+            yPosition -= (oDiv.height() / 2);
+        }
+
+        oDiv[0].style.left = xPosition + "px";
+        oDiv[0].style.top = yPosition + "px";
+        oDiv[0].style.position = position;
+        oDiv[0].style.zIndex = "950";
+
+        if ($(window).height() < oDiv.height()) {
+            oDiv.height($(window).height() - 20);
+            oDiv[0].style.top = "10px";
+            oDiv.css("overflow-y", "scroll");
+        }
+
+        oDiv.fadeIn(500);
+    }
+
+    if (bolAutomaticClose && background) {
+        background.click(function () {
+            Util.CloseHintBoxy(oDiv);
+        });
+        $(document).keypress(_closeHistBodyEscPressed);
+    }
+};
+
+function _closeHistBodyEscPressed(e) {
+    if (e.keyCode == 27) {
+        Util.CloseHintBoxy(oDiv);
+    }
+}
+
+Util.CreateHintBoxBackground = function (doubleBackground, loaderClass) {
+    if (!$("#CreateHintBoxyDIVFundo").length) {
+
+        var oDivFundo = window.document.createElement("div");
+        if (!doubleBackground) {
+            oDivFundo.id = "CreateHintBoxyDIVFundo";
+            oDivFundo.style.filter = "Alpha(Opacity=40)";
+
+            oDivFundo.style.opacity = "0.4";
+            oDivFundo.style.backgroundColor = "#CCC";
+
+            if (window.scrollMaxY == 0)
+                oDivFundo.style.height = "100%";
+            else
+                oDivFundo.style.height = $(document).height() + 100 + "px";
+
+            oDivFundo.style.width = "100%";
+            oDivFundo.style.position = Util.IsOldNavigator() ? "absolute" : "fixed";
+            oDivFundo.style.zIndex = "900";
+            oDivFundo.style.top = "0px";
+            oDivFundo.style.left = "0px";
+        }
+        else {
+            oDivFundo.className = "overlay";
+            oDivFundo.innerHTML = '<div id="CreateHintBoxyDIVFundo" class="' + loaderClass + '"></div>';
+        }
+
+        window.document.body.appendChild(oDivFundo);
+    }
+
+    return $("#CreateHintBoxyDIVFundo");
+}
+
+Util.CreateBackground = function (bgID) {
+    if (!$("#" + bgID).length) {
+        var oDivFundo = window.document.createElement("div");
+        oDivFundo.id = bgID;
+        oDivFundo.style.filter = "Alpha(Opacity=40)";
+
+        oDivFundo.style.opacity = "0.4";
+        oDivFundo.style.backgroundColor = "#CCC";
+
+        if (window.scrollMaxY == 0)
+            oDivFundo.style.height = "100%";
+        else
+            oDivFundo.style.height = $(document).height() + 100 + "px";
+
+        oDivFundo.style.width = "100%";
+        oDivFundo.style.position = Util.IsOldNavigator() ? "absolute" : "fixed";
+        oDivFundo.style.zIndex = "1900";
+        oDivFundo.style.top = "0px";
+        oDivFundo.style.left = "0px";
+
+        window.document.body.appendChild(oDivFundo);
+    }
+
+    return $("#" + bgID);
+}
+
+Util.Block = Util.block = function (jqueryDom, urlLoader, toLeft, loaderClass, mid, percentTop, percentLeft, addHeight, jqueryDomToAppend) {
+
+    var offset = jqueryDom.offset();
+    var width = parseFloat(jqueryDom.width()) + parseFloat(jqueryDom.css('padding-left')) + parseFloat(jqueryDom.css('padding-right'));
+    var height = jqueryDom.height();
+    var top = offset.top;
+    var left = offset.left;
+
+    if (toLeft)
+        left += toLeft;
+
+    if (addHeight)
+        height += addHeight;
+
+    if ($('#block' + jqueryDom.selector.replaceAll('#', '').replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll(',', '').replaceAll(' ', '')).length)
+        Util.BlockUpdate(jqueryDom);
+    else {
+        var block = $('<div>').css({
+            width: width,
+            height: height + 15,
+            'min-height': height + 15,
+            top: top,
+            left: left,
+            position: "absolute",
+            'z-index': 2000,
+            'background-color': '#ccc'
+        }).attr('id', 'block' + jqueryDom.selector.replaceAll('#', '').replaceAll('.', '').replaceAll('(', '').replaceAll(')', '').replaceAll(',', '').replaceAll(' ', '')).addClass('loader');
+
+        if (loaderClass)
+            block.addClass(loaderClass);
+        else
+            block.addClass('loader');
+
+        if (urlLoader) {
+            var img = $('<img>').attr('src', urlLoader);
+            if (mid) {
+                var loaderMarginLeft = percentLeft;
+                var loaderMarginTop = percentTop;
+            }
+            else {
+                var loaderMarginLeft = ((width / 2) - img.width());
+                var loaderMarginTop = 10;
+            }
+
+            var imgClass = '';
+
+            if (!loaderClass) {
+                img.css({ 'margin-left': loaderMarginLeft, 'margin-top': loaderMarginTop });
+            }
+            block.append(img);
+        }
+
+        if (toLeft)
+            block.data('toleft', toLeft);
+
+        if (jqueryDomToAppend) {
+            jqueryDomToAppend.append(block);
+            block.css({
+                'height': jqueryDomToAppend.height(),
+                'max-height': jqueryDomToAppend.height(),
+            });
+        }
+        else {
+            $('body').append(block);
+        }
+
+        if (!Util.IsIENavigator())
+            block.fadeTo(1, 0.3);
+        else
+            block.show();
+
+        jqueryDom.data('block', block.attr('id'));
+        jqueryDom.customResize({
+            interval: 10,
+            func: function () {
+                Util.BlockUpdate(jqueryDom);
+            }
+        });
+        jqueryDom.top({
+            interval: 100,
+            func: function () {
+                Util.BlockUpdate(jqueryDom);
+            }
+        });
+
+        return block;
+    }
+}
+
+Util.BlockModal = function (modal) {
+    if (typeof modal != 'string') {
+        var parent = modal.parent();
+        var block = Util.Block(parent);
+        if (block)
+            block.attr('style', function (i, s) { return s + 'width: ' + parent.outerWidth() + 'px !important;height: ' + parent.outerHeight() + 'px !important;' });
+    }
+}
+
+Util.UnblockModal = function (modal) {
+    if (typeof modal != 'string') {
+        var parent = modal.parent();
+        Util.UnBlock(parent);
+    }
+}
+
+Util.BlockUpdate = function (jqueryDom) {
+    var block = $('#block' + jqueryDom.selector.replaceAll('#', '').replaceAll('.', '').replaceAll(' ', ''));
+    var offset = jqueryDom.offset();
+    var width = parseFloat(jqueryDom.width()) + parseFloat(jqueryDom.css('padding-left')) + parseFloat(jqueryDom.css('padding-right'));
+    var height = jqueryDom.height();
+    var top = offset.top;
+    var left = offset.left;
+
+    if (block.data('toleft'))
+        left += block.data('toleft');
+
+    jqueryDom.data('block', block.attr('id'));
+
+    block.css({
+        width: width,
+        height: height + 15,
+        top: top,
+        left: left,
+        display: jqueryDom.is(":visible") ? "block" : "none"
+    });
+}
+
+function getValuesToOrder(element, selector, func) {
+    var toOrder = [];
+    $(selector, element).each(function () { toOrder.push(func($(this))) });
+    return toOrder;
+}
+
+Util.getMin = function (element, selector, func) {
+    var toOrder = getValuesToOrder(element, selector, func);
+    var minimo = toOrder.orderBy()[0];
+    return toOrder.indexOf(minimo);
+}
+
+Util.getMax = function (element, selector, func) {
+    var toOrder = getValuesToOrder(element, selector, func);
+    var maximo = toOrder.orderByDescending()[0];
+    return toOrder.indexOf(maximo);
+}
+
+Util.UnBlock = Util.unblock = function (jqueryDomBlocked) {
+    jqueryDomBlocked.top('destroy');
+    jqueryDomBlocked.customResize('destroy');
+    var idBlock = jqueryDomBlocked.data('block');
+    $('#' + idBlock).remove();
+}
+
+Util.CreateStarsTypes = function (NumberOfStars) {
+
+    var stars = ["silver", "silver", "silver", "silver", "silver"];
+    var i = 0;
+    for (i; i < NumberOfStars; i++)
+        stars[i] = "gold";
+
+    if (NumberOfStars < i)
+        stars[i - 1] = "half";
+
+    return stars;
+};
+
+Util.GetSetting = function (key) {
+    var settings = (typeof Ide != 'undefined') && Ide.applicationSettings;
+
+    settings = (typeof settings != 'undefined' && !$.isEmptyObject(settings) && settings) || (Global && Global.Settings);
+
+    return typeof settings != 'undefined' && settings[key] || undefined;
+};
+
+Util.GetContextSetting = function (key) {
+    var settings = Ide && Ide.companyContext && Ide.companyContext.Settings;
+
+    return typeof settings != 'undefined' && settings[key] || undefined;
+};
+
+Util.CompareSettingValue = function (settingName, value) {
+    return Util.GetSetting(settingName) == value;
+};
+
+Util.SelectComponent = function (component, context, onlyincontext) {
+    if (component != undefined) {
+        var toFind = '';
+
+        if (component.jquery)
+            toFind = component.selector.contains('parent') ? component : component.selector;
+        else
+            toFind = component;
+
+        component = context ? $(toFind, context) : $(toFind);
+
+        if (!onlyincontext) {
+            if (context && component != null) {
+                component = $(toFind);
+            }
+        }
+
+        return component;
+    }
+};
+
+Util.SelectComponents = function (components, context, onlyincontext) {
+    for (var component in components) {
+        if (component != "originalComponents") {
+            if (component && components[component] != undefined && !jQuery.isArray(components[component])) {
+                if (typeof components[component] == 'object' && !components[component].jquery)
+                    Util.SelectComponents(components[component], context, onlyincontext);
+                else {
+                    var toFind = '';
+                    if (components[component].jquery)
+                        toFind = components[component].selector.contains('parent') ? components[component] : components[component].selector;
+                    else
+                        toFind = components[component];
+                    components[component] = context ? $(toFind, context) : $(toFind);
+
+                    if (!onlyincontext) {
+                        if (context && (!components[component] || !components[component].length))
+                            components[component] = $(toFind);
+                    }
+                }
+            }
+        }
+    }
+};
+
+Util.GetShortIATA = function (str) {
+    if (str) {
+        str.toUpperCase();
+        var indexOfSymbol;
+        if (str.length == 3) {
+            return str;
+        }
+        else if ((indexOfSymbol = str.lastIndexOf("(")) >= 0) {
+            try {
+                var StartPositionIata = indexOfSymbol;
+                var EndPositionIata = str.lastIndexOf(")");
+                return str.substring(StartPositionIata + 1, EndPositionIata);
+            }
+            catch (ex) {
+                return "";
+            }
+
+        }
+        else if ((indexOfSymbol = str.indexOf("--")) >= 0) {
+            try {
+                var StartPositionIata = indexOfSymbol;
+                var EndPositionIata = str.lastIndexOf("--");
+                return str.substring(StartPositionIata + 2, EndPositionIata - 1);
+            }
+            catch (ex) {
+                return "";
+            }
+
+        }
+        else if ((indexOfSymbol = str.indexOf("%28")) >= 0) {
+            try {
+                var StartPositionIata = indexOfSymbol;
+                var EndPositionIata = str.indexOf("%29");
+                return str.substring(StartPositionIata + 3, EndPositionIata);
+            }
+            catch (ex) {
+                return "";
+            }
+        }
+    }
+
+    return str || "";
+};
+
+Util.GetTreatyTime = function (oTime, type) {
+
+    type = type.toLowerCase();
+
+    if (oTime != undefined && oTime != null && oTime != "") {
+        var resp = undefined;
+
+        if (isNaN(oTime)) {
+            if (oTime.indexOf(":") >= 0) {
+                oTime = oTime.split(":")[0];
+            }
+            else {
+                oTime = oTime.toLowerCase();
+
+                if (oTime == "madrugada" || oTime == "dawn")
+                    resp = Util.GetTimeSetByPeriod(0, type);
+                else if (oTime == "manhã" || oTime == "morning")
+                    resp = Util.GetTimeSetByPeriod(6, type);
+                else if (oTime == "tarde" || oTime == "afternoon")
+                    resp = Util.GetTimeSetByPeriod(12, type);
+                else if (oTime == "noite" || oTime == "night")
+                    resp = Util.GetTimeSetByPeriod(18, type);
+                else if (oTime == "indifferent")
+                    return 0;
+            }
+        }
+
+        return resp == undefined ? Util.GetTimeSet(oTime, type) : resp;
+    }
+
+    return undefined;
+};
+
+Util.GetTimeSetByPeriod = function (startHour, type) {
+    var resp = undefined;
+
+    if (type == "start")
+        resp = startHour;
+    else if (type == "end")
+        resp = startHour + 6;
+
+    return resp;
+};
+
+Util.GetTimeSet = function (timeset, type) {
+    if (timeset != undefined && timeset != null && !isNaN(timeset) && type) {
+
+        timeset = parseInt(timeset);
+
+        if (type == "start") timeset -= 1;
+        else if (type == "end") timeset += 1;
+
+        if (timeset < 0) timeset = 0;
+        else if (timeset > 24) timeset = 24;
+    }
+
+    return timeset;
+};
+
+Util.GetPeriod = function (period) {
+    period = period.toLowerCase();
+    var ret = [];
+    if (period == "dawn") {
+        ret.push(0);
+        ret.push(6);
+    }
+    else if (period == "morning") {
+        ret.push(6);
+        ret.push(12);
+    }
+    else if (period == "afternoon") {
+        ret.push(12);
+        ret.push(18);
+    }
+    else if (period == "night") {
+        ret.push(18);
+        ret.push(0);
+    }
+
+    return ret;
+}
+
+Util.GetPeriodByTime = function (time) {
+    var ret = '';
+    if (time[0] == 0 && time[1] == 6) {
+        ret = 'dawn';
+    }
+    else if (time[0] == 6 && time[1] == 12) {
+        ret = "morning";
+    }
+    else if (time[0] == 12 && time[1] == 18) {
+        ret = "afternoon"
+    }
+    else if (time[0] == 18 && time[1] == 0) {
+        ret = 'night';
+    }
+
+    return ret;
+}
+
+Util.SetSeparatedRooms = function (hotel) {
+    hotel.SeparatedRooms = [];
+
+    if (hotel.Rooms) {
+        var groupKeys = hotel.Rooms.select(function (r) { return r.GroupKey; }).distinct();
+
+        for (var i = 0; i < groupKeys.length; i++)
+            hotel.SeparatedRooms.push(hotel.Rooms.where(function (r) { return r.GroupKey == groupKeys[i] }));
+
+        var sortSeparatedRooms = function (room1, room2) {
+            var result = 0;
+            var option1 = room1.SelectedRoomOption;
+            var option2 = room2.SelectedRoomOption;
+
+
+            if (option1.TotalAmount > option2.TotalAmount || option1.PromoDisplayDailyPoints > option2.PromoDisplayDailyPoints)
+                result = 1;
+            else if (option1.TotalAmount < room2.SelectedRoomOption.TotalAmount || option1.PromoDisplayDailyPoints < option2.PromoDisplayDailyPoints)
+                result = -1;
+
+            return result;
+        }
+
+        for (var i = 0; i < hotel.SeparatedRooms.length; i++)
+            hotel.SeparatedRooms[i].sort(sortSeparatedRooms);
+
+        if (hotel.SeparatedRooms.length != groupKeys.length && console)
+            console.log("O hotel " + hotel.Name + " não está com os quartos separados corretamente!");
+    }
+};
+
+
+Util.prepareRenderSearchPackageParameters = function (searchParameters) {
+
+    searchParameters.Package.RoomsRequest = [];
+
+    searchParameters.Package.PackageRoomsRequest.forEach(function (r) {
+
+        var roomRequest = Util.prepareRoomRequestAges(r);
+        searchParameters.Package.RoomsRequest.push(roomRequest);
+    });
+
+    searchParameters.Package.OriginFormatted = searchParameters.Package.OriginData.Name;
+    searchParameters.Package.DestinationFormatted = searchParameters.Package.PackageDestination.PackageDestinationData.Name;
+    searchParameters.Package.OutboundFormatted =
+        Util.StringFormat("{0}/{1}", formatter.monthName(searchParameters.Package.BeginDepartureDateTime.Month), searchParameters.Package.BeginDepartureDateTime.Year);
+};
+
+Util.prepareRoomRequestAges = function (r) {
+
+    var roomRequest = {
+        Adults: 0,
+        ChildAges: []
+    };
+
+    var totalChildren = 0;
+    var totalInfants = 0;
+    r.PassengersAges.forEach(function (a) {
+        if (a >= 18)
+            roomRequest.Adults++
+        else {
+            roomRequest.ChildAges.push(a);
+            if (a > 2) totalChildren++;
+            else totalInfants++;
+        }
+    });
+
+    r.QtdeChild = totalChildren;
+    r.QtdeBaby = totalInfants;
+
+    return roomRequest;
+};
+
+
+Util.prepareRenderSearchPackageParameters = function (searchParameters) {
+
+    searchParameters.Package.RoomsRequest = [];
+
+    searchParameters.Package.PackageRoomsRequest.forEach(function (r) {
+
+        var roomRequest = Util.prepareRoomRequestAges(r);
+        searchParameters.Package.RoomsRequest.push(roomRequest);
+    });
+
+    searchParameters.Package.OriginFormatted = searchParameters.Package.OriginData.Name;
+    searchParameters.Package.DestinationFormatted = searchParameters.Package.PackageDestination.PackageDestinationData.Name;
+    searchParameters.Package.OutboundFormatted =
+        Util.StringFormat("{0}/{1}", formatter.monthName(searchParameters.Package.BeginDepartureDateTime.Month), searchParameters.Package.BeginDepartureDateTime.Year);
+};
+
+Util.prepareRoomRequestAges = function (r) {
+
+    var roomRequest = {
+        Adults: 0,
+        ChildAges: []
+    };
+
+    var totalChildren = 0;
+    var totalInfants = 0;
+    r.PassengersAges.forEach(function (a) {
+        if (a >= 18)
+            roomRequest.Adults++
+        else {
+            roomRequest.ChildAges.push(a);
+            if (a > 2) totalChildren++;
+            else totalInfants++;
+        }
+    });
+
+    r.QtdeChild = totalChildren;
+    r.QtdeBaby = totalInfants;
+
+    return roomRequest;
+};
+
+Util.ParseAddress = function (address) {
+    var resp = "";
+
+    if (address) {
+        resp = address.Street;
+        resp += address.Number ? ", " + address.Number : "";
+        resp += address.Complement ? " - " + address.Complement : "";
+        resp += address.PostalCode ? " - " + address.PostalCode : "";
+        resp += address.City ? " - " + address.City : "";
+        resp += address.District ? " - " + address.District : "";
+        resp += address.Country ? " - " + address.Country : "";
+    }
+
+    return resp;
+};
+
+Util.ForceMaskDate = function (sender) {
+
+    var ctrl = $(this);
+
+    var value = ctrl.val().trim().replaceAll("/", "").replaceAll("_");
+
+    iKey = sender.keyCode;
+
+    var strDia = "", strMes = "";
+
+    if (value.length > 0 && ((iKey >= 48 && iKey <= 57) || (iKey >= 96 && iKey <= 105))) {
+        mask = '';
+        if (value.length > 0 && value.length <= 2) {
+            mask = value;
+            if (value.length == 2) {
+                if (parseFloat(value.substring(0, 2)) > 31) {
+                    mask = '31';
+                }
+            }
+        }
+        if (value.length > 2 && value.length <= 4) {
+            if (parseFloat(value.substring(0, 2)) > 31) { strDia = '31' }
+
+            else { strDia = value.substring(0, 2) }
+
+            if (value.length == 4) {
+                var valueSubString = value.substring(2, 4);
+                if (parseFloat(valueSubString) > 12) {
+                    strMes = '12'
+                }
+                else {
+                    strMes = valueSubString
+                }
+            }
+            else {
+                strMes = value.substring(2, 4);
+            }
+            mask = mask + strDia + '/' + strMes;
+        }
+        if (value.length > 4) {
+            if (parseFloat(value.substring(0, 2)) > 31) { strDia = '31' }
+
+            else { strDia = value.substring(0, 2) }
+
+            if (value.length > 4) {
+                if (parseFloat(value.substring(2, 4)) > 12) { strMes = '12' }
+
+                else { strMes = value.substring(2, 4) }
+            }
+            else {
+                strMes = value.substring(2, 4);
+            }
+            mask = mask + strDia + '/' + strMes + '/' + value.substring(4, 8);
+        }
+
+        ctrl.val(mask);
+    }
+}
+
+Util.ForceMaskTime = function (sender) {
+
+    var ctrl = $(this);
+
+    var req = ctrl.val().trim();
+
+    hrs = (req.substring(0, 2));
+    min = (req.substring(3, 5));
+
+    if (parseFloat(hrs) > 23) {
+        hrs = '00';
+    }
+
+    if (parseFloat(min) > 59) {
+        min = '00';
+    }
+    mask = '';
+    mask = hrs + ":" + min;
+
+    if (mask != req)
+        ctrl.val(mask);
+}
+
+Util.Sources = {
+    'None': 0,
+    'Amadeus': 1,
+    'Sabre': 2,
+    'Tam': 3,
+    'Gol': 4,
+    'Team': 5,
+    'Avianca': 6,
+    'WebJet': 7,
+    'Total': 8,
+    'Trip': 9,
+    'Passaredo': 10,
+    'AirMinas': 11,
+    'TAF': 12,
+    'Rico': 13,
+    'Sete': 14,
+    'NHT': 15,
+    'Pantanal': 16,
+    'AeroStar': 17,
+    'Azul': 18,
+    'Sol': 19,
+    'H2W': 20,
+    'Tourico': 21,
+    'Travel': 22,
+    'Trend': 23,
+    'Puma': 24,
+    'HotelBeds': 25,
+    'Services': 26,
+    'Fake': 27,
+    'CMNet': 30,
+    'HotelOffline': 32,
+    'Asta': 36,
+    'T4W': 37,
+    'ExpediaHotel': 38,
+    'Juniper': 39,
+    'HBSi': 40,
+    'CTNTours': 41,
+    'AviancaAmadeus': 42,
+    'AmericanAirlines': 43,
+    'GTA': 44,
+    'TravelAce': 45,
+    'MikiTravel': 46,
+    'Bonotel': 47,
+    'MarkTravel': 48,
+    'Galileo': 49,
+    'Charter': 50,
+    'Travelport': 51,
+    'OmnibeesHoteisNet': 52,
+    'MAP': 53,
+    'B2B': 54,
+    'ReservaFacil': 55,
+    'GuestCentric': 56,
+    'Kiu': 57,
+    'Ifaseg': 58,
+    'Latam': 59,
+    'Royal': 60,
+    'AssistCard': 61,
+    'Chameleon': 62,
+    'GTAInsurance': 64,
+    'TZSystems': 65,
+    'CruiseCharter': 66,
+    'EHTL': 67,
+    'EzLink': 68,
+    'Movida': 69,    
+    'ItineraryManager': 71,
+    'SabreCSL': 72,
+    'Itapemirim': 75,
+    'GolGWS': 76,
+    'Mobility': 73,
+    'Omint': 74,
+    'Copa': 77,
+    'Eucatur': 78,
+    'Iberia': 79,
+    '0': 'None',
+    '1': 'Amadeus',
+    '2': 'Sabre',
+    '3': 'Tam',
+    '4': 'Gol',
+    '5': 'Team',
+    '6': 'Avianca',
+    '7': 'WebJet',
+    '8': 'Total',
+    '9': 'Trip',
+    '10': 'Passaredo',
+    '11': 'AirMinas',
+    '12': 'TAF',
+    '13': 'Rico',
+    '14': 'Sete',
+    '15': 'NHT',
+    '16': 'Pantanal',
+    '17': 'AeroStar',
+    '18': 'Azul',
+    '19': 'Sol',
+    '20': 'H2W',
+    '21': 'Tourico',
+    '22': 'Travel',
+    '23': 'Trend',
+    '24': 'Puma',
+    '25': 'HotelBeds',
+    '26': 'Services',
+    '27': 'Fake',
+    '30': 'CMNet',
+    '32': 'HotelOffline',
+    '36': 'Asta',
+    '37': 'T4W',
+    '38': 'ExpediaHotel',
+    '39': 'Juniper',
+    '40': 'HBSi',
+    '41': 'CTNTours',
+    '42': 'AviancaAmadeus',
+    '43': 'AmericanAirlines',
+    '44': 'GTA',
+    '45': 'TravelAce',
+    '46': 'MikiTravel',
+    '47': 'Bonotel',
+    '48': 'MarkTravel',
+    '49': 'Galileo',
+    '50': 'Charter',
+    '51': 'Travelport',
+    '52': 'OmnibeesHoteisNet',
+    '53': 'MAP',
+    '54': 'B2B',
+    '55': 'ReservaFacil',
+    '56': 'GuestCentric',
+    '57': 'Kiu',
+    '58': 'Ifaseg',
+    '59': 'Latam',
+    '60': 'Royal',
+    '61': 'AssistCard',
+    '62': 'Chameleon',
+    '64': 'GTAInsurance',
+    '65': 'TZSystems',
+    '66': 'CruiseCharter',
+    '67': 'EHTL',
+    '68': 'EzLink',
+    '69': 'Movida',
+    '71': 'ItineraryManager',
+    '72': 'SabreCSL',
+    '73': 'Mobility',
+    '74': 'Omint',
+    '75': 'Itapemirim',
+    '76': 'GolGWS',
+    '73': 'Mobility',
+    '77': 'Copa',
+    '78': 'Eucatur',
+    '79': 'Iberia'
+};
+
+Util.AirSourcesIds = [1, 2, 3, 4, 10, 18, 42, 43, 50, 49, 53, 59, 77];
+Util.HotelSourcesIds = [2, 21, 22, 23, 25, 30, 32, 38, 39, 40, 41, 44, 46, 47, 48, 72];
+
+Util.AirSources = {};
+
+Util.HotelSources = {};
+
+
+Util.mountSources = function (ids, obj) {
+    if (ids) {
+        for (var item in Util.Sources) {
+            if (!isNaN(item) && ids.any(item)) {
+                obj[item] = Util.Sources[item];
+                obj[Util.Sources[item]] = item;
+            }
+        }
+    }
+};
+
+Util.mountSources(Util.AirSourcesIds, Util.AirSources);
+Util.mountSources(Util.HotelSourcesIds, Util.HotelSources);
+
+Util.SeatProperties = {
+    Smoking: 0,
+    Infant: 1,
+    Oxygen: 2,
+    LegRoom: 3,
+    Engine: 4,
+    Disability: 5,
+    NearLavatory: 6,
+    PayableSeat: 7,
+    "0": "Smoking",
+    "1": "Infant",
+    "2": "Oxygen",
+    "3": "LegRoom",
+    "4": "Engine",
+    "5": "Disability",
+    "6": "NearLavatory",
+    "7": "PayableSeat"
+};
+
+Util.SeatPositionType = {
+    Front: 0,
+    Middle: 1,
+    Back: 2,
+    NoPreference: 3,
+    "0": "Frente",
+    "1": "Meio",
+    "2": "Traseira",
+    "3": "Sem preferência"
+};
+
+Util.SeatRowProperty = {
+    Wing: 0,
+    RightExit: 1,
+    LeftExit: 2,
+    Exit: 3,
+    Undefined: 4,
+    "0": "Wing",
+    "1": "RightExit",
+    "2": "LeftExit",
+    "3": "Exit",
+    "4": "Undefined"
+};
+
+var passengerTypes = {
+    0: {
+        "pt-br": "Adulto",
+        "es-ar": "Adulto",
+        "es-mx": "Adulto"
+    },
+    1: {
+        "pt-br": "Criança",
+        "es-ar": "Criança",
+        "es-mx": "Criança"
+    },
+    2: {
+        "pt-br": "Bebê",
+        "es-ar": "Bebê",
+        "es-mx": "Bebê"
+    }
+};
+
+var genders = {
+    0: {
+        "pt-br": "Masculino",
+        "es-ar": "Masculino",
+        "es-mx": "Masculino"
+    },
+    1: {
+        "pt-br": "Feminino",
+        "es-ar": "Femenino",
+        "es-mx": "Femenino"
+    }
+};
+
+Util.GenderResolver = function (gender) {
+    if (!genders[gender])
+        gender = 0;
+
+    return genders[gender][formatter ? formatter.culture : "pt-br"];
+};
+
+Util.PassengerTypeResolver = function (paxType) {
+    if (!passengerTypes[paxType])
+        paxType = 0;
+
+    return passengerTypes[paxType][formatter ? formatter.culture : "pt-br"];
+};
+
+var equipmentTypes = {
+    0: {
+        "pt-br": "",
+        "es-ar": "",
+        "es-mx": "",
+        "en-us": ""
+    },
+    1: {
+        "pt-br": "ônibus",
+        "es-ar": "Onibus",
+        "es-mx": "Onibus"
+    },
+    2: {
+        "pt-br": "Trem",
+        "es-ar": "Trem",
+        "es-mx": "Trem"
+    },
+    3: {
+        "pt-br": "Carro",
+        "es-ar": "Carro",
+        "es-mx": "Carro"
+    },
+    4: {
+        "pt-br": "Caminhão",
+        "es-ar": "Caminhão",
+        "es-mx": "Caminhão"
+    },
+    5: {
+        "pt-br": "Barco",
+        "es-ar": "Barco",
+        "es-mx": "Barco"
+    },
+    6: {
+        "pt-br": "Helicóptero",
+        "es-ar": "Helicoptero",
+        "es-mx": "Helicoptero"
+    }
+};
+
+Util.EquipmentResolver = function (Type) {
+    if (!equipmentTypes[Type]) Type = 0;
+    var equipment = equipmentTypes[Type][formatter ? formatter.culture : "pt-br"];
+    return (equipment) ? equipment : "";
+};
+
+Util.stringformat = function (format) {
+    var s = format;
+    if (s) {
+        for (var i = 0; i < arguments.length - 1; i++) {
+            var reg = new RegExp("\\{" + i + "\\}", "gm");
+            s = s.replace(reg, arguments[i + 1]);
+        }
+    }
+
+    return s;
+}
+
+Util.memoizedSerializedTypesDefinitions = {};
+
+Util.getSerializedTypesDefinitions = function (namesArr, callback) {
+
+    if (!Util.memoizedSerializedTypesDefinitions[namesArr[0]]) {
+        $.ajax({
+            url: Global.SerializedTypesDefinitionsPath + "?assemblyName={0}&fullTypeName={1}".format([namesArr[0], namesArr[1]]),
+            success: function (res) {
+                Util.memoizedSerializedTypesDefinitions[namesArr[0]] = JSON.parse(res);
+                callback(Util.memoizedSerializedTypesDefinitions[namesArr[0]]);
+            }
+        });
+    }
+    else {
+        callback(Util.memoizedSerializedTypesDefinitions[namesArr[0]]);
+    }
+};
+
+Util.MinimumJSONDeserialize = function (serializedObj, callback) {
+
+    if (callback) {
+        if ($.isArray(serializedObj) && serializedObj.length == 2 && callback) {
+
+            var getObject = function (value, currentType, types) {
+                if (!currentType || value == undefined)
+                    return value;
+
+                var obj = undefined;
+
+                if (currentType.d || currentType.e) {
+
+                    obj = [];
+
+                    if (typeof (currentType.i) === "undefined")
+                        currentType.i = -1;
+
+                    var innerType = types[currentType.i];
+
+                    if (currentType.d) {
+                        for (var i = 0; i < value.length; i += 2)
+                            obj.push({ Key: value[i], Value: getObject(value[i + 1], innerType, types) });
+                    }
+                    else {
+                        for (var i = 0; i < value.length; i++)
+                            obj.push(getObject(value[i], innerType, types));
+                    }
+                }
+                else {
+                    obj = {};
+
+                    if (currentType.p)
+                        for (var i = 0; i < currentType.p.length; i++) {
+                            if (typeof (currentType.p[i].i) === 'undefined')
+                                currentType.p[i].i = -1;
+
+                            obj[currentType.p[i].n] = getObject(value[i], types[currentType.p[i].i], types);
+                        }
+                }
+
+                return obj;
+            };
+
+            Util.getSerializedTypesDefinitions(serializedObj[0], function (serializedTypes) {
+                callback(getObject(serializedObj[1], serializedTypes[0], serializedTypes));
+            });
+        }
+        else {
+            callback(serializedObj);
+        }
+    }
+    else {
+        return serializedObj;
+    }
+};
+
+Util.isNumber = function (o) {
+    return typeof o == "number";
+};
+
+Util.isInteger = function (o) {
+    return Util.isNumber(o) && (o % 1 == 0);
+};
+
+Util.isValidNumber = function (n) {
+    var isValid = !isNaN(parseFloat(n)) && isFinite(n);
+
+    if (!isValid && n != undefined && typeof n === 'string') {
+        var candidate = n.replace(',', ".");
+
+        isValid = !isNaN(parseFloat(candidate)) && isFinite(candidate);
+    }
+
+    return isValid;
+}
+
+Util.isString = function (o) {
+    return typeof o == "string";
+};
+
+Util.isNotNullOrWhiteSpace = function (o) {
+    if (o != undefined && Util.isString(o)) {
+        var trimmedString = o.trim();
+
+        if (trimmedString.length > 0) {
+            return trimmedString.replace(' ', '').length > 0;
+        }
+    }
+
+    return false;
+};
+
+Util.isDate = function (o) {
+    return o.getDay && typeof o.getDay == "function";
+};
+
+Util.isDateRegExp = function (date) {
+    var dateDetector = new RegExp(/^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/);
+    return dateDetector.test(date);
+}
+
+Util.isBool = function (o) {
+    return typeof o == "boolean";
+};
+
+Util.isEmail = function (Email) {
+    var emailDetector = new RegExp(/^[\d\w_.+-]+@([\d\w_-]+\.){1,}[\w\d]+$/);
+    return emailDetector.test(Email);
+}
+
+Util.isDateValues = function (o) {
+    return o != undefined && o.Day != undefined && o.Month != undefined && o.Year != undefined;
+};
+
+Util.isFunction = function (o) {
+    return typeof o == "function";
+};
+
+//Valida hora no formato HH:MM
+Util.isValidTime = function (timeStr) {
+    return (timeStr.search(/^\d{2}:\d{2}$/) != -1)
+        && (timeStr.substr(0, 2) >= 0 && timeStr.substr(0, 2) <= 24)
+        && (timeStr.substr(3, 2) >= 0 && timeStr.substr(3, 2) <= 59);
+};
+
+Util.validateCreditCard = function (number, expirationDate, provider) {
+    return true;
+}
+
+Util.QueryString = function (Key, QueryString, Index) {
+    if (!Index) Index = 0;
+
+    var Element = "";
+    if (QueryString && QueryString.indexOf('?') > -1) {
+        var interr = QueryString.indexOf('?');
+        QueryString = QueryString.substr(interr);
+    }
+
+    var arrURI = (QueryString ? QueryString : window.location.search).substring(1).split("&");
+
+    Key = Key.toLowerCase();
+
+    for (var i = 0, leng = arrURI.length; i < leng; i++) {
+        Element = arrURI[i].split("=");
+        if (Element[0].toLowerCase() == Key) {
+            if (Index == 0)
+                return Element[1];
+            else
+                Index--;
+        }
+    }
+}
+
+Util.RemoveQueryStringParameter = function (url, key) {
+    var urlparts = url.split('?');
+    if (urlparts.length >= 2) {
+
+        var prefix = encodeURIComponent(key) + '=';
+        var pars = urlparts[1].split(/[&;]/g);
+
+        for (var i = pars.length; i-- > 0;) {
+            if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+                pars.splice(i, 1);
+            }
+        }
+
+        url = urlparts[0] + '?' + pars.join('&');
+        return url;
+    } else {
+        return url;
+    }
+}
+
+Util.QueryStringToObject = function (urlParams) {
+    var finalObj = {};
+    var propsWithValues = urlParams.split('&');
+    if (propsWithValues) {
+        for (var i = 0; i < propsWithValues.length; i++) {
+            var propWithValue = propsWithValues[i];
+            var propAndValue = propWithValue.split('=');
+
+            var propName = propAndValue.first();
+            var propVal = propAndValue.last();
+
+            if (propName.startsWith('?'))
+                propName = propName.substring(1);
+
+            finalObj[propName] = propVal;
+        }
+    }
+
+    return finalObj;
+}
+
+Util.getServiceTypeKey = function (serviceTypeId) {
+    var key = '';
+    EnumHelper.ServiceDefinition.Identifier.forEach(function (st) {
+        var atualKey = st.Key;
+        st.Value.Subcategories.forEach(function (stv) {
+            if (typeof (serviceTypeId) == "number" && stv.Value.Id == serviceTypeId) {
+                atualKey += stv.Key;
+            }
+            else if (stv.Value == serviceTypeId) {
+                atualKey += stv.Key;
+            }
+        });
+
+        if (atualKey != st.Key) {
+            key = atualKey;
+        }
+    });
+
+    return key;
+}
+
+Util.getServiceTypeClass = function (serviceTypeId) {
+    var key = Util.getServiceTypeKey(serviceTypeId);
+    switch (key) {
+        case 'ServiceOrder':
+            return 'service_order';
+        case 'AirOrder':
+            return 'ordering_air';
+        case 'HotelOrder':
+            return 'ordering_hotel';
+        case 'CarOrder':
+            return 'ordering_car';
+        case 'AirBook':
+            return 'reserve_air';
+        case 'HotelBook':
+            return 'reserve_hotel';
+        case 'CarBook':
+            return 'reserve_car';
+        case 'AirIssue':
+            return 'ticketing';
+        case 'OtherInsurance':
+            return 'insurance';
+        case 'ReimbursementRequest':
+            return 'refund';
+        case 'AdvancedRequest':
+            return 'advance';
+        case 'RefundRequest':
+            return 'refund';
+        case 'OtherGroup':
+            return 'group';
+        default:
+            return key;
+    }
+}
+
+Util.RetiraAcentos = function (word, doNotUpperCase) {
+    var Acentos = "áàãââÁÀÃÂéêÉÊíÍóõôÓÔÕúüÚÜçÇ";
+    var Traducao = "aaaaaAAAAeeEEiIoooOOOuuUUcC";
+    var Posic, Carac;
+    var TempLog = "";
+    var value = (doNotUpperCase) ? word : word.toUpperCase();
+
+    for (var i = 0, len = word.length; i < len; i++) {
+
+        Carac = value.charAt(i);
+        Posic = Acentos.indexOf(Carac);
+
+        if (Posic > -1)
+            TempLog += Traducao.charAt(Posic);
+        else
+            TempLog += Carac;
+    }
+
+    return TempLog;
+}
+
+Util.NormalizeString = function (str) {
+    if (str === 'undefined') {
+        return str;
+    }
+
+    if (typeof str.normalize !== undefined) {
+        return str.normalize('NFD');
+    }
+}
+
+Util.NormalizedEquals = function (str1, str2) {
+    if (str1 === 'undefined' || str2 === 'undefined') {
+        return false;
+    }
+
+    var normalizedStr1 = Util.NormalizeString(str1);
+    var normalizedStr2 = Util.NormalizeString(str2);
+
+    return normalizedStr1.trim().toLowerCase() === normalizedStr2.trim().toLowerCase();
+}
+
+$(document).on('blur', '.have-placeholder', function (e) {
+    if (this.value == "") {
+        this.value = this.defaultValue;
+    }
+});
+
+$(document).on('focus', '.have-placeholder', function (e) {
+    if (this.value == this.defaultValue) {
+        this.value = '';
+    }
+});
+
+Util.keys = {
+    BACKSPACE: 8,
+    TAB: 9,
+    ENTER: 13,
+    SHIFT: 16,
+    ESC: 27,
+    PAGEUP: 33,
+    PAGEDOWN: 34,
+    END: 35,
+    HOME: 36,
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40
+}
+
+var ignoredKeysToCheck = [Util.keys.BACKSPACE, Util.keys.ENTER, Util.keys.SHIFT, Util.keys.ESC, Util.keys.PAGEUP, Util.keys.PAGEDOWN, Util.keys.END, Util.keys.END, Util.keys.HOME, Util.keys.LEFT, Util.keys.RIGHT, Util.keys.UP, Util.keys.DOWN];
+$(document).on('blur keyup', '.just-letters', function (e) {
+    if (e.keyCode && !ignoredKeysToCheck.any(e.keyCode)) {
+        var ctrl = $(this);
+        ctrl.val(ctrl.val().removeDiacritics().replace(/[^a-zA-Z ]+/g, ''));
+    }
+});
+
+$(document).on('keyup', '.just-letters-for-locations', function (e) {
+    if (!e.ctrlKey) {
+        var ctrl = $(this);
+
+        if (!ctrl.locationsFinder("getData")) {
+            if (![37, 39, 9, 13, 40, 38, 35, 36, 33, 34, 32, 16, 17].any(e.keyCode)) {
+                ctrl.val(ctrl.val().removeDiacritics().replace(/[^a-zA-Z ]+/g, ''));
+            }
+        }
+    }
+});
+
+$(document).on('blur keyup', '.only-numbers', function (e) {
+    if (e.keyCode && !ignoredKeysToCheck.any(e.keyCode)) {
+        var ctrl = $(this);
+
+        if (ctrl.hasClass("phone-prefix-mask")) {
+            ctrl.val(ctrl.val().replace(/[^0-9]+(_)/g, ''));
+        }
+        else {
+            ctrl.val(ctrl.val().replace(/[^0-9]+/g, ''));
+        }
+    }
+});
+
+$(document).on('blur keyup', '.only-floatNumbers', function (e) {
+    if (e.keyCode && !ignoredKeysToCheck.any(e.keyCode)) {
+        var ctrl = $(this);
+        $(this).val(ctrl.val().replace(/[^0-9.,]+/g, ''));
+    }
+});
+
+Util.adjustDate = function () {
+    var ctrl = $(this);
+    var valor = ctrl.val().trim().replaceAll("/");
+
+    iDia = 0;
+    iMes = 0;
+    iAno = 0;
+    mask = '';
+    var today = new Date();
+    var today_year = today.getFullYear();
+    var today_mes = today.getMonth();
+    var today_dia = today.getDay();
+    if (valor.length != 0) {
+        if (valor.length >= 1) {
+            iDia = parseFloat(valor.substring(0, 2));
+            if (iDia < 01) { iDia = 01 }
+            if (iDia > 31) { iDia = 31 }
+        }
+        else {
+            iDia = today_dia;
+        }
+        if (valor.length >= 3) {
+            iMes = parseFloat(valor.substring(2, 4));
+            if (iMes < 01) { iMes = 01 }
+            if (iMes > 12) { iMes = 12 }
+        }
+        else {
+            iMes = today_mes + 1;
+        }
+        if (valor.length > 4) {
+            iAno = parseFloat(valor.substring(4, 8));
+            if (iAno < 100) { iAno = iAno + 2000 }
+        }
+        else {
+            iAno = today_year;
+        }
+        if (iAno < 1500 || iAno > 2500)
+            iAno = today_year;
+        ctrl.val("");
+        //
+        //Validacao de dias por mes
+        //
+        if (iMes == 4 && iDia > 30) { iDia = 30 }
+        if (iMes == 6 && iDia > 30) { iDia = 30 }
+        if (iMes == 9 && iDia > 30) { iDia = 30 }
+        if (iMes == 11 && iDia > 30) { iDia = 30 }
+        if (iMes == 2 && iDia > 29) { iDia = 29 }
+        //
+        //Bissexto
+        //
+        if (iMes == 2 && iDia >= 28) {
+            iBiSexto = iAno / 4;
+            iDia = iBiSexto.toString().length == 3 ? 29 : 28;
+        }
+        //
+        //Dia
+        //
+        var iDiaToString = iDia.toString();
+        ctrl.val(ctrl.val() + (iDiaToString.length < 2 ? '0' : '') + iDiaToString + '/');
+        //
+        //Mes e Ano
+        //
+        var iMesToString = iMes.toString();
+        ctrl.val(ctrl.val() + (iMesToString.length < 2 ? '0' : '') + iMesToString + '/' + iAno.toString());
+    }
+}
+
+Util.UpdateTips = function (t, tipComponent) {
+    $(".validateTips", component).text("");
+    if (tipComponent != undefined) {
+        if (t != undefined && t.length > 0) {
+            $(".ui-state-highlight", component).removeClass("ui-state-highlight");
+            tipComponent.text(t).addClass("ui-state-highlight");
+        }
+        else
+            $(".ui-state-highlight", component).removeClass("ui-state-highlight");
+    }
+}
+
+Util.CheckLength = function (component, componentName, min, max, tipComponent) {
+    if (min > 0 && max > 0) {
+        if (component.val().length > max || component.val().length < min) {
+            component.addClass("ui-state-error");
+            component.focus();
+
+            Util.UpdateTips("Tamanho do " + componentName + " deve estar entre " + min + " e " + max + ".", tipComponent);
+            return false;
+        }
+        else {
+            Util.UpdateTips("", tipComponent);
+            return true;
+        }
+    }
+    else {
+        Util.UpdateTips("", tipComponent);
+        return true;
+    }
+}
+
+Util.CheckRegexp = function (component, regexp, n, tipComponent) {
+    if (regexp != undefined) {
+        if (!(regexp.test(component.val()))) {
+            component.addClass("ui-state-error");
+            Util.UpdateTips(n, tipComponent);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    else
+        return true;
+}
+
+Util.MountTree = function (objects, primaryField, foreignField, childListField, rootId) {
+    var items = [];
+
+    if (!rootId) {
+        objects.forEach(function (item) {
+            item.AuxForeignValue = typeof foreignField == "function" ? foreignField(item) : item[foreignField];
+
+            if (!item[childListField])
+                item[childListField] = [];
+
+            if (!item.AuxForeignValue || !objects.any(function (obj) { return item.AuxForeignValue == obj[primaryField]; }))
+                items.push(item);
+        });
+
+        items.forEach(function (item) {
+            var childs = Util.MountTree(objects, primaryField, foreignField, childListField, item[primaryField]);
+
+            for (var i = 0; i < childs.length; i++) {
+                if (!item[childListField].any(function (current) { return current[primaryField] == childs[i][primaryField] }))
+                    item[childListField].push(childs[i]);
+            }
+
+        });
+
+    } else {
+        objects.forEach(function (item) {
+            if (!item.AuxForeignValue && rootId != item[primaryField])
+                item.AuxForeignValue = typeof foreignField == "function" ? foreignField(item) : item[foreignField];
+            if (!item[childListField])
+                item[childListField] = [];
+
+            if (rootId != item[primaryField] && rootId == item.AuxForeignValue) {
+                var childs = Util.MountTree(objects, primaryField, foreignField, childListField, item[primaryField]);
+
+                for (var i = 0; i < childs.length; i++) {
+                    if (!item[childListField].any(function (current) { return current[primaryField] == childs[i][primaryField] }))
+                        item[childListField].push(childs[i]);
+                }
+                items.push(item);
+            }
+        });
+    }
+
+    if (items.length > 0) {
+        Util.CheckLengthForGroupPnr(items, foreignField, childListField);
+    }
+
+    return items;
+}
+
+Util.CheckLengthForGroupPnr = function (roots, foreignField, childListField) {
+    for (var i = 0; i < roots.length; i++) {
+        if (roots[i][childListField] && Util.LengthEnoughForGroupPnr(roots[i][childListField].length))
+            roots[i].LengthEnoughForGroupPnr = true;
+    }
+}
+
+Util.ProfileEntityType = {
+    UserProfile: 0,
+    UserProfile_Policies: 1,
+    UserProfile_Company: 2,
+    UserProfile_Agency: 3,
+    UserProfile_Preferences: 4,
+    UserProfile_SSR: 5,
+    UserProfile_MembershipCards: 6,
+    UserProfile_Passports: 7,
+    UserProfile_Visas: 8,
+    UserProfile_Vacines: 9,
+    UserProfile_BankingDetails: 10,
+    Warehouse_LastRequests: 11,
+    UserSettings: 12,
+    CreditCard: 13
+}
+
+Util.CreditCardProvider = {
+    4: "MasterCard",
+    1: "Visa",
+    "MC": "MasterCard",
+    "VI": "Visa",
+    "AX": "Amex"
+}
+
+Util.CreditCardType = {
+    0: "Cartão Corporativo",
+    1: "EBTA",
+    2: "CTA",
+    3: "VIRCC",
+    4: "CFC"
+}
+
+Util.SeatPreference = {
+    NoPrefrence: 0,
+    Corridor: 1,
+    Window: 2,
+    Center: 3
+}
+
+Util.SeatPosition = {
+    NoPreference: 0,
+    Front: 1,
+    Middle: 2,
+    Back: 3
+}
+
+Util.setCookieWithExpire = function (name, value, expires, considerDomain, removeBlankPath) {
+    cookie = name + "=" + value + expires;
+
+    if (considerDomain == undefined || considerDomain)
+        cookie += "; domain=" + document.domain;
+
+    if (removeBlankPath == undefined || !removeBlankPath)
+        cookie += "; path=/";
+
+    document.cookie = cookie;
+}
+
+Util.setCookie = function (name, value, days, considerDomain, removeBlankPath) {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        var expires = "; expires=" + date.toGMTString();
+    }
+    else var expires = "";
+
+    Util.setCookieWithExpire(name, value, expires, considerDomain, removeBlankPath);
+}
+
+Util.setCookieWithSeconds = function (name, value, seconds, considerDomain, removeBlankPath) {
+    if (seconds) {
+        var date = new Date();
+        date.setTime(date.getTime() + (seconds * 1000));
+        var expires = "; expires=" + date.toGMTString();
+    }
+    else var expires = "";
+
+    Util.setCookieWithExpire(name, value, expires, considerDomain, removeBlankPath);
+}
+
+Util.setCookieJSON = function (obj) {
+    var cookie = { name: '', value: '', expires: '', domain: '', path: '' };
+
+    if (typeof (obj) === 'object') {
+        cookie.name = obj.name;
+        cookie.value = obj.value;
+
+        if (obj.days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (obj.days * 24 * 60 * 60 * 1000));
+            cookie.expires = "; expires=" + date.toGMTString();
+        }
+
+        if (obj.considerDomain == undefined || (typeof (obj.considerDomain) === 'boolean' && obj.considerDomain)) {
+            cookie.domain = "; domain=" + document.domain;
+        }
+
+        if (obj.path) {
+            cookie.path = "; path=" + obj.path;
+        } else {
+            cookie.path = "; path=/";
+        }
+
+        document.cookie = _toString(cookie);
+
+        function _toString(cookie) {
+            return cookie.name + "=" + cookie.value + cookie.expires + cookie.domain + cookie.path;
+        }
+    }
+}
+
+Util.getDecodeUriJSONCookie = function (name) {
+    var value = Util.getDecodeUriCookie(name);
+
+
+    try {
+        return JSON.parse(value);
+    } catch (e) {
+        return value;
+    }
+
+}
+
+Util.getCookie = function (name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+Util.getDecodeUriCookie = function (name) {
+    var cookie = Util.getCookie(name);
+
+    try {
+        cookie = decodeURIComponent(cookie);
+    }
+    catch (ex) {
+        if (typeof console != "undefined") {
+            console.log("Erro ao decodificar o cookie '" + name + "'");
+            console.log(ex);
+        }
+    }
+
+    return cookie;
+}
+
+Util.removeCookie = function (name, considerDomain, removeBlankPath) {
+    Util.setCookie(name, "", -10, considerDomain, removeBlankPath)
+}
+
+Util.removeCookieJSON = function (obj) {
+    if (typeof (obj) === 'object') {
+        obj.days = -10;
+        Util.setCookieJSON(obj);
+    }
+}
+
+function GetRabbitEncryptedString(input) {
+
+    // ** utiliza biblioteca http://crypto-js.googlecode.com/files/2.5.3-crypto-sha1-hmac-pbkdf2-rabbit.js
+    // ** referência: http://code.google.com/p/crypto-js/
+
+    var aux = Crypto.Rabbit.encrypt(input, "b00gnish");
+    while (aux.indexOf("+") != -1 || aux.indexOf("/") != -1) {
+        aux = Crypto.Rabbit.encrypt(input, "b00gnish");
+    }
+
+    return aux;
+}
+
+function GetRabbitDecryptedString(input) {
+
+    // ** utiliza biblioteca http://crypto-js.googlecode.com/files/2.5.3-crypto-sha1-hmac-pbkdf2-rabbit.js
+    // ** referência: http://code.google.com/p/crypto-js/
+
+    return Crypto.Rabbit.decrypt(input, "b00gnish");
+}
+
+/*********Funções recém incluidas*****/
+function MascaraCPF_CNPJ(inputCPF_CNPJ, event) {
+    if (inputCPF_CNPJ.value.length > 14)
+        return fnMascaraCNPJ(inputCPF_CNPJ, event);
+    else
+        return fnMascaraCPF(inputCPF_CNPJ, event);
+}
+
+function fnlmpCNPJ(strCNPJ) {
+    strResult = '';
+    for (iCont = 0; iCont < strCNPJ.length; iCont++) {
+        if (strCNPJ.charAt(iCont) != '.' && strCNPJ.charAt(iCont) != '-' && strCNPJ.charAt(iCont) != '/') {
+            strResult += strCNPJ.charAt(iCont);
+        }
+    }
+    return strResult;
+}
+
+function fnMascaraCNPJ(sCNPJ, event) {
+    valor = '';
+    valor = trim(fnlmpCNPJ(sCNPJ.value));
+    Key = KeyStroke(event);
+    if (valor.length > 0 && ((Key >= 48 && Key <= 57) || (Key >= 96 && Key <= 105))) {
+        mask = '';
+        if (valor.length > 0) {
+            mask = valor;
+            if (valor.length >= 2)
+                mask = valor.substring(0, 2) + '.' + valor.substring(2, 5);
+            if (valor.length >= 5)
+                mask = valor.substring(0, 2) + '.' + valor.substring(2, 5) + '.' + valor.substring(5, 8);
+            if (valor.length >= 8)
+                mask = valor.substring(0, 2) + '.' + valor.substring(2, 5) + '.' + valor.substring(5, 8) + '/' + valor.substring(8, 12);
+            if (valor.length >= 12)
+                mask = valor.substring(0, 2) + '.' + valor.substring(2, 5) + '.' + valor.substring(5, 8) + '/' + valor.substring(8, 12) + '-' + valor.substring(12, 14);
+        }
+        sCNPJ.value = mask;
+    }
+}
+
+function MascaraCEP(sender, event) {
+    valor = sender.value;
+    valor = valor.replace("-", "");
+
+    Key = KeyStroke(event);
+
+    if (valor.length > 0 && ((Key >= 48 && Key <= 57) || (Key >= 96 && Key <= 105))) {
+        mask = '';
+        if (valor.length > 0) {
+            mask = valor;
+            if (valor.length >= 5)
+                mask = valor.substring(0, 5) + '-' + valor.substr(5, 3);
+        }
+        sender.value = mask;
+    }
+}
+
+function fnMascaraCPF(sCPF, event) {
+    valor = '';
+    valor = trim(fnlmpCPF(sCPF.value));
+    Key = KeyStroke(event);
+    if (valor.length > 0 && ((Key >= 48 && Key <= 57) || (Key >= 96 && Key <= 105))) {
+        mask = '';
+        if (valor.length > 0) {
+            mask = valor;
+            if (valor.length >= 3)
+                mask = valor.substring(0, 3) + '.' + valor.substring(3, 6);
+            if (valor.length >= 6)
+                mask = valor.substring(0, 3) + '.' + valor.substring(3, 6) + '.' + valor.substring(6, 9);
+            if (valor.length >= 9)
+                mask = valor.substring(0, 3) + '.' + valor.substring(3, 6) + '.' + valor.substring(6, 9) + '-' + valor.substring(9, 11);
+        }
+        sCPF.value = mask;
+    }
+}
+
+function fnlmpCPF(strCPF) {
+    strResult = '';
+    for (iCont = 0; iCont < strCPF.length; iCont++) {
+        if (strCPF.charAt(iCont) != '.' && strCPF.charAt(iCont) != '-') {
+            strResult += strCPF.charAt(iCont);
+        }
+    }
+    return strResult;
+}
+
+function fnMascaraCEP(sCEP, event) {
+    valor = '';
+    valor = trim(fnlmpCEP(sCEP.value));
+    Key = KeyStroke(event);
+    if (valor.length > 0 && ((Key >= 48 && Key <= 57) || (Key >= 96 && Key <= 105))) {
+        mask = '';
+        if (valor.length > 0) {
+            mask = valor;
+            if (valor.length >= 5)
+                mask = valor.substring(0, 5) + '-' + valor.substring(5, 8);
+        }
+        sCEP.value = mask;
+    }
+}
+
+function fnlmpCEP(strCEP) {
+    strResult = '';
+    for (iCont = 0; iCont < strCEP.length; iCont++) {
+        if (strCEP.charAt(iCont) != '-') {
+            strResult += strCEP.charAt(iCont);
+        }
+    }
+    return strResult;
+}
+
+function ltrim(str) {
+    l = new Number(str.length);
+    if (l > 0) {
+        while (str.charAt(0) == " " || str.charAt(0) == "\t")
+            str = str.substr(1, l - 1);
+    }
+    return str;
+}
+
+function rtrim(str) {
+    l = new Number(str.length);
+    if (l > 0) {
+        while (str.charAt(l - 1) == " " || str.charAt(l - 1) == "\t") {
+            str = str.substr(0, l - 1);
+            l = str.length;
+        }
+    }
+    return str;
+}
+
+function lmpStr(strVal, StrCar) {
+
+    strResult = '';
+    for (iCont = 0; iCont < strVal.length; iCont++) {
+        if (strVal.charAt(iCont) != StrCar) {
+            strResult += strVal.charAt(iCont);
+        }
+    }
+    return strResult;
+}
+
+function trim(str) {
+    return (str == undefined || str == null) ? "" : ltrim(rtrim(str));
+}
+
+function soNumero(event) {
+    var iKey = KeyStroke(event);
+    return ((iKey > 47 && iKey < 58) || iKey == 0 || iKey == 8 || iKey == 13);
+}
+
+function soCaracter(event) {
+    var iKey = KeyStroke(event);
+    return ((iKey >= 97 && iKey <= 122) || (iKey >= 65 && iKey <= 90) || iKey == 0 || iKey == 8 || iKey == 13 || iKey == 32 || iKey == 89);
+}
+
+function soNumSinal(iKeyPerm, event) {
+    var iKey = KeyStroke(event);
+    return ((iKey > 47 && iKey < 58) || (iKey == 0 || iKey == 8 || iKey == 13 || iKey == 44 || iKey == iKeyPerm));
+}
+
+function soNumSinalsemVirgula(iKeyPerm, event) {
+    var iKey = KeyStroke(event);
+    return ((iKey > 47 && iKey < 58) || (iKey == 0 || iKey == 8 || iKey == 13 || iKey == iKeyPerm));
+}
+
+function soNaoSinal(iKeyPerm, event) {
+    return !(KeyStroke(event) == iKeyPerm);
+}
+
+function KeyStroke(event) {
+    var ikey = 0;
+    if (event.which == undefined) {
+        ikey = window.event.keyCode;
+    }
+    else {
+        ikey = event.which;
+    }
+    return ikey;
+}
+
+function KeyIns(event, iKey) {
+    if (event.which == undefined) {
+        window.event.keyCode = iKey;
+    }
+    else {
+        event.keyCode = iKey;
+    }
+}
+
+$.fn.setDocumentProperties = function (doctype) {
+    return $(this).each(function () {
+        var $this = $(this);
+
+        var type = EnumHelper.DocumentType[doctype * 1];
+
+        $this.unmask();
+        $this.removeAttr('validations');
+
+        if (type == 'CPF') {
+            $this.attr('validations', 'isCPF:Wrong, CPF');
+            $this.mask(formatter.documentMask());
+        }
+        else if (type == 'CNPJ') {
+            $this.attr('validations', 'isCNPJ:Wrong, CNPJ');
+            $this.mask(formatter.juridicalDocumentMask());
+        }
+        else if (type == 'RNE')
+            $this.attr('validations', 'isNotEmpty:Required, RNE');
+
+        $this.attr('doctype', type);
+    });
+}
+
+$.fn.setCreditCardProviderProperties = function (flagname) {
+    return $(this).each(function () {
+        var $this = $(this);
+
+        $this.attr('flag', flagname);
+
+        switch (flagname) {
+            case "VI":
+            case "MC":
+            case "MS":
+                $this.attr("maxlength", 19);
+                $this.attr("digitquantity", 16);
+                break;
+            case "DC":
+            case "DI":
+                $this.attr("maxlength", 16);
+                $this.attr("digitquantity", 14);
+                break;
+            case "AX":
+                $this.attr("maxlength", 17);
+                $this.attr("digitquantity", 15);
+                break;
+            case "HI":
+            case "HP":
+            case "GE":
+                $this.attr("maxlength", 23);
+                $this.attr("digitquantity", 19);
+                break;
+        };
+    });
+};
+
+$.fn.removeDiacritics = function () {
+    return $(this).each(function () {
+        var ctrl = $(this);
+        ctrl.val(ctrl.val().removeDiacritics());
+    });
+};
+
+$.fn.containerOf = function (child) {
+    var containersOf = $([]);
+
+    this.each(function () {
+        var $this = $(this);
+        if ($this.find(child).length)
+            containersOf = containersOf.add($this);
+    });
+
+    return containersOf;
+
+}
+
+jQuery.expr[':'].containerOf = function (element, child, meta) {
+    return $(element).find(meta[3]).length;
+};
+
+
+Util.GetMaxZIndex = function (myselector) {
+
+    return $("*").filter(":visible")
+        .not(myselector || ".a-useless-class")
+        .not("script")
+        .not("link")
+        .not("style")
+        .map(function () {
+            var zIndex = $(this).css('z-index');
+            return isNaN(zIndex) ? 0 : parseInt(zIndex, 10);
+        }).toArray().max();
+};
+
+var messagesExhibitorType = {
+    0: {
+        "pt-br": "Mensagem",
+        "en-us": "Message"
+    },
+    1: {
+        "pt-br": "Erro",
+        "en-us": "Error"
+    },
+    2: {
+        "pt-br": "Aviso",
+        "en-us": "Warning"
+    }
+};
+
+Util.MessagesExhibitionTypeResolver = function (Type) {
+    if (!messagesExhibitorType[Type]) Type = 0;
+    return messagesExhibitorType[Type][formatter ? formatter.culture : "pt-br"];
+};
+
+Util.GetDropBoxComponentText = function (comp) {
+    var value = "";
+    var parent = $(comp.find(".current"));
+    if (parent && parent.length) {
+        if (parent.children().length)
+            value = parent.children().text();
+        else
+            value = parent.text();
+    }
+
+    return value;
+};
+
+
+Util.GetComponentValue = function (comp) {
+    var value = "";
+
+    function _getCustomElementValue(comp) {
+        var value = "";
+
+        if (comp.hasClass("customcheck")) {
+            value = comp.attr("value");
+        }
+        else if (comp.hasClass("customradio")) {
+            var type = comp.attr("type");
+
+            var radios = $("[type='" + type + "']");
+
+            for (var i = 0; i < radios.length; i++) {
+                var radio = $(radios[i]);
+
+                if (radio.hasClass("current")) {
+                    value = radio.attr('value');
+
+                    break;
+                }
+            }
+        }
+        else {
+            var parent = $(comp.find(".current"));
+
+            if (parent && parent.length) {
+                if (parent.children().length)
+                    value = parent.children().attr("value");
+                else
+                    value = parent.attr("value");
+            }
+        }
+
+        return value;
+    }
+
+    if (comp && comp.length) {
+        if (!comp.is("select") && !comp.is("input") && (comp.hasClass("multi_options") || comp.hasClass("customradio") || comp.hasClass("customcheck")))
+            value = _getCustomElementValue(comp);
+        else {
+            if (comp.is("input:radio")) {
+
+                var name = comp.attr("name");
+
+                var radios = $("[name='" + name + "']");
+
+                for (var i = 0; i < radios.length; i++) {
+                    var radio = $(radios[i]);
+
+                    if (radio.is(":checked")) {
+                        value = radio.attr('value');
+
+                        break;
+                    }
+                }
+            }
+            else if (comp.is("input:checkbox"))
+                value = comp.attr("value");
+            else
+                value = comp.val();
+        }
+    }
+
+    return value;
+}
+
+Util.IsChecked = function (comp) {
+    var checked = undefined;
+
+    if (!comp.is("input")) {
+        if (comp.hasClass("customradio") || comp.hasClass("customcheck")) {
+            checked = comp.hasClass("current");
+        }
+    }
+    else {
+        checked = comp.is(":checked");
+    }
+
+    return checked;
+}
+
+Util.GetInterfaceMessage = function (code) {
+    var legend = code;
+    var arguments = [];
+
+    if ($.isArray(code)) {
+        legend = code[0];
+
+        if (code.length > 1)
+            arguments = code.slice(1);
+    }
+
+    if (cultureResource)
+        legend = cultureResource[legend];
+
+    if (arguments.length > 0 && legend)
+        legend = legend.format(arguments);
+
+    return legend;
+}
+
+Util.CabinNameResolver = function (cabinType) {
+
+    var cabin = {
+        0: {
+            "pt-br": "Primeira Classe"
+        },
+        1: {
+            "pt-br": "Executiva"
+        },
+        2: {
+            "pt-br": "Econômica"
+        },
+        3: {
+            "pt-br": "Econômica Premium"
+        }
+    };
+
+    if (!cabin[cabinType])
+        cabinCode = 2;
+
+    return cabin[cabinType][formatter ? formatter.culture : "pt-br"];
+};
+
+Util.CutText = function (text, limit) {
+    if (text.length > limit) {
+        text = text.substring(0, limit);
+        return text + "...";
+    } else
+        return text;
+};
+
+Util.GetCultureResourceMessages = function (thisMessages) {
+
+    for (var i = 0, messagesLen = thisMessages.length; i < messagesLen; i++) {
+        var token = thisMessages[i];
+
+        var messageArguments = undefined;
+
+        if ($.isArray(token)) {
+            token = thisMessages[i][0];
+            messageArguments = thisMessages[i].slice(1);
+
+            var message = cultureResource[token];
+
+            if (message)
+                if (messageArguments)
+                    message = message.format(messageArguments) + "<br/>";
+
+            thisMessages[i] = message + "<br/>";
+        }
+
+    }
+    thisMessages.clearUndefined();
+
+    for (var i = 0; i < thisMessages.length; i++) {
+        thisMessages[i] = thisMessages[i] + "<br/>";
+    }
+
+    return thisMessages;
+};
+
+Util.StripHtml = function (text) {
+    var newText = text.replace(/<(.|\n)*?>/gi, '');
+    return (newText) ? newText : '';
+}
+
+Util.GetSumFareTaxesDU = function (step) {
+    var config;
+    if (typeof (Ide) != 'undefined')
+        config = Ide.applicationSettings && Ide.applicationSettings["SumFareTaxesDU"];
+    else if (typeof (Global) != 'undefined')
+        config = Global.Settings && Global.Settings["SumFareTaxesDU"];
+
+    var stepConfig;
+
+    if (typeof (Ide) != 'undefined')
+        stepConfig = Ide.applicationSettings && Ide.applicationSettings["SumFareTaxesDU_" + step];
+    else if (typeof (Global) != 'undefined')
+        stepConfig = Global.Settings && Global.Settings["SumFareTaxesDU_" + step];
+
+    if (stepConfig)
+        config = stepConfig;
+
+    var str = "";
+
+    if (config) {
+
+        config = config.toLowerCase();
+
+        var tokens = config.split('+');
+
+        tokens.any("fare") && (str += "fare");
+
+        tokens.any("taxes") && (str.length ? str += "+taxes" : str += "taxes");
+
+        tokens.any("du") && (str.length ? str += "+du" : str += "du");
+    }
+
+    return str;
+};
+
+Util.GetQueryStringValue = function (querystring, key) {
+    var resp;
+    if (querystring.indexOf('?') == 0)
+        querystring = querystring.substr(1, querystring.length);
+
+    var values = querystring.split('&');
+
+    for (var i = 0, len = values.length; i < len; i++) {
+        var value = values[i].split('=');
+        if (value[0] == key) {
+            resp = value[1];
+            break;
+        }
+    }
+
+    return resp;
+}
+
+Util.DuResolver = function (source, fareAmmount, isInternational) {
+    function calculate(fare, percentageTax, minTax) {
+        var tax = ((fare * percentageTax) / 100);
+        var duTaxes = (tax > minTax) ? tax : minTax;
+        return duTaxes;
+    }
+
+    switch (source) {
+        case Util.Sources.Sete:
+        case Util.Sources.Azul:
+        case Util.Sources.TAF:
+        case Util.Sources.Puma:
+            return calculate(fareAmmount, 10, 30);
+        case Util.Sources.Asta:
+        case Util.Sources.Trip:
+        case Util.Sources.Azul:
+        case Util.Sources.Passaredo:
+        case Util.Sources.WebJet:
+        case Util.Sources.Azul:
+        case Util.Sources.Gol:
+            return calculate(fareAmmount, 10, 40);
+        case Util.Sources.Tam:
+        case Util.Sources.Latam:
+            var percentOfFare = isInternational ? 7 : 10;
+            return calculate(fareAmmount, percentOfFare, 40);
+        default:
+            return 0;
+            break;
+    }
+
+    return duTaxes;
+}
+
+Util.GetExternalPropertieValue = function (externalProperties, key) {
+    if (externalProperties) {
+        var obj = externalProperties.first(function (property) { return property.Key == key; });
+
+        if (obj) {
+            return obj.Value;
+        }
+    }
+
+    return undefined;
+};
+
+
+Util.DontLostFocus = function (event) {
+    if (event.keyCode !== $.ui.keyCode.TAB)
+        return;
+
+    var tabbables = $(':tabbable', this),
+        first = tabbables.filter(':first'),
+        last = tabbables.filter(':last');
+
+    if (event.target === last[0] && !event.shiftKey) {
+        first.focus(1);
+        return false;
+    } else if (event.target === first[0] && event.shiftKey) {
+        last.focus(1);
+        return false;
+    }
+};
+
+Util.FieldValuesToObj = function (item) {
+    item.FieldValuesObj = Util.FieldValuesToNewObj(item.FieldValues, true);
+    item.FieldValuesObj.Id = item.Id;
+
+    return item;
+}
+
+Util.FieldValuesToNewObj = function (fieldValues, removeInitial) {
+    function getFunctionToEvaluate(type) {
+        var funcToEvaluate = function (x) { return x; };
+
+        if (type) {
+            if (type.toLowerCase() == "int")
+                funcToEvaluate = function (x) { return !isNaN(x) ? parseInt(x, 10) : null; };
+            else if (type.toLowerCase() == "decimal")
+                funcToEvaluate = function (x) { return !isNaN(x) ? parseFloat(x, 10) : null; };
+        }
+
+        return funcToEvaluate;
+    }
+
+    var rs = {};
+
+    var regex = removeInitial ? /.*\./g : "";
+
+    fieldValues.forEach(function (field) {
+        var value;
+
+        if (typeof field.PrimitiveValue !== 'undefined' && !field.DateValue && !field.GridColumns) {
+            var funcToEvaluate = function (x) { return x; };
+
+            funcToEvaluate = getFunctionToEvaluate(EnumHelper.FieldType[field.Type]);
+
+            value = funcToEvaluate(field.PrimitiveValue);
+        }
+        else if (field.DateValue) {
+            value = field.DateValue;
+            value.MonthShort = formatter.monthNamesShort[formatter.culture][field.DateValue.Month - 1];
+            value.Time = formatter.timeValuesShortSimple(field.DateValue);
+        }
+        else if (field.GridColumns && field.GridColumns.length) {
+
+            var referenceColumn = field.GridColumns.getItemByMax(function (gc) { return gc.Values && gc.Values.length; });
+
+            value = new Array(referenceColumn.Values.length);
+
+            for (var i = 0; i < value.length; i++)
+                value[i] = {};
+
+            var col = null;
+            for (var i = 0; i < field.GridColumns.length; i++) {
+                var gridCol = field.GridColumns[i];
+                var funcToEvaluate = getFunctionToEvaluate(gridCol.Type);
+
+                for (var j = 0; j < value.length; j++) {
+                    col = field.GridColumns[i].Values[j];
+
+                    if (col)
+                        value[j][field.GridColumns[i].Name.replace(regex, "")] = col.DateValue ? col.DateValue : funcToEvaluate(col.PrimitiveValue);
+                }
+            }
+        }
+
+        rs[field.RefName.replace(regex, "")] = value;
+    });
+
+    return rs;
+}
+
+Util.GetTypedResultSet = function (set) {
+    var res = [];
+
+    if (set.length === 0)
+        return res;
+
+    for (var i = 0; i < set[0].Value.length; i++) {
+        var obj = {};
+        for (var j = 0; j < set.length; j++) {
+            obj[set[j].Key] = set[j].Value[i];
+        }
+        res[i] = obj;
+    }
+    return res;
+}
+
+Util.PassengerTitle = {
+    Senhor: "Mr",
+    Senhora: "Mrs",
+    Senhorita: "Miss",
+    Mr: "Senhor",
+    Mrs: "Senhora",
+    Miss: "Senhorita"
+};
+
+Util.ValidateResponse = function (response) {
+    return (response.FlightGroups && response.FlightGroups.length > 0) || (response.Recommendations && response.Recommendations.length > 0) ||
+        ((response.CityPairs && response.CityPairs.length > 0) && (response.CityPairs.first().FlightGroups && response.CityPairs.first().FlightGroups.length > 0)) ||
+        (response.Hotels && response.Hotels.length > 0);
+};
+
+Util.ValidateWarnings = function (response, exhibitionType) {
+    var warningList = [];
+
+    for (var i = 0, len = response.Warnings.length; i < len; i++) {
+
+        if (response.Warnings[i].FriendlyMessage != '') {
+            warningList[i] = response.Warnings[i].FriendlyMessage;
+
+            if (response.Warnings[i].Severity === EnumHelper.Warning.WarningSeverity.High)
+                exhibitionType = EnumHelper.MessagesExhibitor.ExhibitionType.Alert;
+        }
+    }
+
+    if (warningList.length > 0)
+        Ide.notifyMessagesExhibitor("CustomError", warningList, exhibitionType);
+};
+
+Util.CompleteWithZeros = function (value, length, direction) {
+    var value = value.toString();
+
+    if (value.length < length) {
+        var quantity = length - value.length;
+
+        switch (direction) {
+            case EnumHelper.NumberDirection.Right:
+                for (var i = 0; i < quantity; i++)
+                    value = value.toString() + "0";
+                break;
+            case EnumHelper.NumberDirection.Left:
+                for (var i = 0; i < quantity; i++)
+                    value = "0" + value.toString();
+                break;
+        }
+    }
+
+    return value;
+};
+
+Util.SorterCityPairBySchedule = function (propertyToSort, previousProperty) {
+    function byFlightGroupCheapestFare() {
+        var functionToSort = function (fg) { if (fg.RoundTripCheapestFare) { return fg.RoundTripCheapestFare.FareAmount + fg.RoundTripCheapestFare.TaxAmount + fg.RoundTripCheapestFare.DUTaxes; } else { return 99999999999999999999999999999; } };
+
+        if (previousProperty == "OneWay")
+            functionToSort = function (fg) { if (fg.OneWayCheapestFare) { return fg.OneWayCheapestFare.FareAmount + fg.OneWayCheapestFare.TaxAmount + fg.OneWayCheapestFare.DUTaxes; } else { return 99999999999999999999999999999; }; };
+
+        return functionToSort;
+    }
+
+    function byGds() {
+        return function (fg) { return Util.Sources[fg.SourceType]; };
+    }
+
+    function byFare() {
+        return function (fg) {
+            var value = 999999999999999999999999999;
+            if (fg.FareOption)
+                value = fg.FareOption.FareAmount;
+            else if (fg.FareOptions.length)
+                value = fg.FareOptions.min(function (fo) { return fo.FareAmount; });
+
+            return value;
+        };
+    }
+
+    function byFirstFlightsDateValues(index) {
+        return function (fg) { return Util.DateValuesToDate(fg.Flights[0][propertyToSort]); };
+    }
+    function byLastFlightsDateValues(index) {
+        return function (fg) { return Util.DateValuesToDate(fg.Flights[fg.Flights.length - 1][propertyToSort]); };
+    }
+
+    function byDateValues() {
+        return function (fg) { return Util.DateValuesToDate(fg[propertyToSort]); };
+    }
+
+    function byFlightProperty() {
+        return function (fg) { return fg.Flights[0][propertyToSort]; };
+    }
+
+    function byOtherOptionToBudget() {
+        var functionToSort = function (fg) { return fg.Flights[0][propertyToSort] != true && Util.DateValuesToDate(fg.FirstDepartureTimeValues); };
+        if (previousProperty) {
+            functionToSort = function (fg) { if (fg.RoundTripCheapestFare) { return fg.Flights[0][propertyToSort] != true && fg.RoundTripCheapestFare.FareAmount + fg.RoundTripCheapestFare.TaxAmount + fg.RoundTripCheapestFare.DUTaxes; } else { return 99999999999999999999999999999; } };
+
+            if (previousProperty == "OneWay")
+                functionToSort = function (fg) { if (fg.OneWayCheapestFare) { return fg.Flights[0][propertyToSort] != true && fg.OneWayCheapestFare.FareAmount + fg.OneWayCheapestFare.TaxAmount + fg.OneWayCheapestFare.DUTaxes; } else { return 99999999999999999999999999999; }; };
+        }
+
+        return functionToSort;
+    }
+
+    var sorters = {
+        flightGroupCheapestFare: byFlightGroupCheapestFare,
+        GDS: byGds,
+        Fare: byFare,
+        ArrivalDateTimeValues: byLastFlightsDateValues,
+        DepartureDateTimeValues: byFirstFlightsDateValues,
+        FirstDepartureTimeValues: byDateValues,
+        LastArrivalTimeValues: byDateValues,
+        IsOtherOptionToBudget: byOtherOptionToBudget
+    };
+
+    if (sorters[propertyToSort])
+        return sorters[propertyToSort]();
+    else
+        return byFlightProperty();
+};
+
+Util.GetHotelConnections = function (connections) {
+    var hotelConnections = [];
+    var keys = ['Sabre', 'Tourico', 'CMNet', 'Trend', 'Fake', 'T4W']
+
+    connections.forEach(function (c) {
+        keys.forEach(function (k) {
+            if (k == 'Sabre' && c.Key == 'Sabre') {
+                var propertie = c.Value.LoginInformations[0].ExternalProperties.first(function (prop) { return prop.Key == "SearchHotel" });
+
+                if (propertie && propertie.Value.toLowerCase() == "true")
+                    hotelConnections.push(c);
+            } else if (c.Key == k)
+                hotelConnections.push(c);
+        });
+    });
+
+    return hotelConnections;
+}
+
+Util.GetAirConnections = function (connections) {
+    var airConnections = [];
+    var keys = ['Sabre', 'Tam', 'Gol', 'Avianca', 'Fake', 'Azul', 'Passaredo', 'Latam', 'Copa']
+
+    connections.forEach(function (c) {
+        keys.forEach(function (k) {
+            if (c.Key == k)
+                airConnections.push(c);
+        });
+    });
+
+    return airConnections;
+};
+
+
+Util.ParseImagesUrl = function (pathImage) {
+    if (document.location.protocol == "https:" && pathImage)
+        pathImage = pathImage.replace("http:", "https:");
+
+    return pathImage;
+};
+
+Util.CallFunctionWithNamespace = function (funcNamespace, args) {
+    var parts = funcNamespace.split('.');
+
+    if (parts.length == 1)
+        return window[parts[0]](args && args[0]);
+    else {
+        var obj = window[parts[0]];
+
+        for (var i = 1; obj && i <= parts.length - 2; i++)
+            obj = obj[parts[i]];
+
+        var func = obj && obj[parts[parts.length - 1]];
+
+        if (func)
+            return func(args && args[0]);
+        else
+            console.log("Não foi possível executar a função: " + funcNamespace);
+    }
+};
+
+Util.showLoader = function (container, additionalClasses) {
+    if (!container.children().last().hasClass("loader")) {
+        container.append("<div class='loader'/>");
+
+        if (additionalClasses)
+            for (var i = 0; i < additionalClasses.length; i++)
+                $(".loader", container).addClass(additionalClasses[i]);
+    }
+};
+
+Util.hideLoader = function (container) {
+    $(".loader", container).remove();
+};
+
+Util.StringFormat = function () {
+    var s = arguments[0];
+    if (s) {
+        for (var i = 0; i < arguments.length - 1; i++) {
+            var reg = new RegExp("\\{" + i + "\\}", "gm");
+            s = s.replace(reg, arguments[i + 1]);
+        }
+    }
+    return s;
+};
+
+Util.replaceCiaImagesError = function () {
+    var path = Global.ImagesPath + "IconsCias/airplane_64x64.png";
+    $(this).attr("src", path).css("width", 25).css("height", 18).addClass('visible');
+};
+
+Util.callOneParamClosureTemplate = function (template, paramName, value) {
+    var opt_sb = "";
+    var opt_data = {};
+    opt_data[paramName] = value;
+    return template(opt_data, opt_sb);
+}
+
+/*
+Função ResolverCEP: Efetuar a busca de CEP retornarndo os dados (nome da rua, cidade, estado)
+Parametros: objComp - objeto JSON com os seguintes parametros:
+                      objComp.CEP - componente com o campo CEP - Valor deve vir preenchido
+                      objComp.Street - componente com o campo Rua
+                      objComp.City - componente com o campo Cidade
+                      objComp.State - componente com o campo Estado
+*/
+Util.ResolverCEP = function (objComp) {
+
+    var settings = {
+        components: {
+            address: {
+                CEP: objComp.CEP,
+                Street: objComp.Street,
+                City: objComp.City,
+                State: objComp.State,
+                Focus: objComp.Focus
+            }
+        },
+        controllers: {
+            checkOutController: new CheckOutController({ Global: {} })
+        }
+    };
+
+    $(objComp.CEP).resolverCEP(settings);
+}
+
+Util.generateRandomGuids = function () {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+};
+
+Util.CreditCardPropertiesParser = function (provider) {
+    var properties = {};
+    switch (provider) {
+        case "amex":
+            properties.DisplayName = "Amex";
+            properties.FlagName = "AX";
+            break;
+        case "aura":
+            properties.DisplayName = "Aura";
+            properties.FlagName = "AU";
+            break;
+        case "avista":
+            properties.DisplayName = "Avista";
+            properties.FlagName = "AV";
+            break;
+        case "brasilcard":
+            properties.DisplayName = "BrasilCard";
+            properties.FlagName = "BC";
+            break;
+        case "cabal":
+            properties.DisplayName = "Cabal";
+            properties.FlagName = "CA";
+            break;
+        case "cardban":
+            properties.DisplayName = "CardBan";
+            properties.FlagName = "CB";
+            break;
+        case "diners":
+            properties.DisplayName = "Diners";
+            properties.FlagName = "DI";
+            break;
+        case "discover":
+            properties.DisplayName = "Discover";
+            properties.FlagName = "DS";
+            break;
+        case "elo":
+            properties.DisplayName = "ELO";
+            properties.FlagName = "EL";
+            break;
+        case "fortbrasil":
+            properties.DisplayName = "FortBrasil";
+            properties.FlagName = "FB";
+            break;
+        case "grandcard":
+            properties.DisplayName = "GrandCard";
+            properties.FlagName = "GC";
+            break;
+        case "hipercard":
+            properties.DisplayName = "Hipercard";
+            properties.FlagName = "HI";
+            break;
+        case "jcb":
+            properties.DisplayName = "JCB";
+            properties.FlagName = "JC";
+            break;
+        case "mais":
+            properties.DisplayName = "Mais!";
+            properties.FlagName = "MI";
+            break;
+        case "mastercard":
+            properties.DisplayName = "MasterCard";
+            properties.FlagName = "MC";
+            break;
+        case "personalcard":
+            properties.DisplayName = "PersonalCard";
+            properties.FlagName = "PC";
+            break;
+        case "plenocard":
+            properties.DisplayName = "PlenoCard";
+            properties.FlagName = "PL";
+            break;
+        case "sorocred":
+            properties.DisplayName = "Sorocred";
+            properties.FlagName = "SO";
+            break;
+        case "valecard":
+            properties.DisplayName = "ValeCard";
+            properties.FlagName = "VC";
+            break;
+        case "visa":
+            properties.DisplayName = "Visa";
+            properties.FlagName = "VI";
+            break;
+    }
+
+    return properties;
+}
+
+Util.SendToExternalLinks = function (data) {
+
+    if (Util.getCookie('ExternalToken')) {
+        var links = $('.sendToExternalLinks');
+
+        if (links) {
+            links.attr('href', function () {
+                var link = $(this).attr('href');
+                var character = link.indexOf('?') > -1 ? "&" : "?";
+                $(this).attr('href', link + character + 'token=' + Util.getCookie('ExternalToken'));
+            });
+        }
+    }
+}
+
+Util.CreateTravellerHash = function (user) {
+    return (user.Name.trim() + user.MiddleName.trim() + user.LastName.trim()).replace(' ', '');
+}
+
+Util.GetRawDatesRange = function (startDate, endDate) {
+    var datesRange = [];
+
+    moment.lang(formatter.culture);
+
+    var iteration = moment.twix(startDate, endDate, { allDay: true }).iterate("days");
+
+    while (iteration.hasNext()) {
+        var dateMoment = iteration.next();
+
+        var nextDate = dateMoment.toDate();
+
+        if (!datesRange.any(function (date) {
+            return date.getFullYear() == nextDate.getFullYear()
+                && date.getMonth() == nextDate.getMonth()
+                && date.getDate() == nextDate.getDate();
+        })) {
+            datesRange.push(nextDate);
+        }
+    }
+
+    return datesRange;
+};
+
+Util.GetDatesRange = function (startDate, endDate, datesRange) {
+
+    if (!datesRange)
+        datesRange = [];
+
+    var rawDates = Util.GetRawDatesRange(startDate, endDate);
+
+    datesRange.addRange(rawDates.select(function (date) { return Util.DateToString(date); }));
+
+    return datesRange;
+};
+
+Util.ParseLocationsFinderDataToLocation = function (data) {
+    return {
+        "Id": data.id,
+        "Hits": data.h,
+        "IATA": data.i,
+        "Name": data.n,
+        "Type": data.t,
+        "HasHotelCode": data.hc,
+        "IdProximity": data.ip,
+        "AirportsChildren": data.ac,
+        "IataDescription": data.d,
+        "IataCity": data.c,
+        "IsInternational": data["in"],
+        "DestinationId": data.id
+    };
+};
+
+Util.CallResources = function (code) {
+    return Resources.translate({ code: code });
+};
+
+Util.GetLastMonthDay = function (month, year) {
+    var dt = new Date(year, month, 0);
+    return dt.getDate();
+};
+
+Util.GetCurrentDateWithLastDay = function () {
+    var currentDate = (new Date()).toDateValues();
+
+    return new Date(currentDate.Year, (currentDate.Month - 1),
+        Util.GetLastMonthDay(currentDate.Month, currentDate.Year));
+};
+
+Util.GetDateWithLastDay = function (date) {
+    var dateValues = date.toDateValues();
+    var lastDay = Util.GetLastMonthDay(dateValues.Month, dateValues.Year);
+
+    return new Date(dateValues.Year, (dateValues.Month - 1), lastDay);
+};
+
+Util.ResolveDisplaySourceName = function (sourceType) {
+
+    if (!isNaN(sourceType))
+        sourceType = Util.Sources[sourceType];
+
+    var displaySourceNames = '';
+    if (typeof Ide == 'undefined')
+        displaySourceNames = Global.Settings["DisplaySourceNamesConfiguration"];
+    else
+        displaySourceNames = Ide.applicationSettings["DisplaySourceNamesConfiguration"];
+
+    if (displaySourceNames && displaySourceNames.length) {
+        var sourceNames = JSON2.parse(displaySourceNames);
+
+        var display = sourceNames[sourceType];
+
+        if (display)
+            sourceType = display;
+    }
+
+    return sourceType;
+};
+
+Util.ValidResponseArrayProperty = function (data, propertyName) {
+    return data && data[propertyName] && (data[propertyName] instanceof Array) && data[propertyName].hasCount();
+};
+
+Util.CreateLocationsFinder = function (element, options) {
+
+    var _settings = {
+        "CurrentProduct": Global.Product.Air,
+        "HasIata": false,
+        "IsCity": true,
+        "SearchType": Global.SearchTypes.Full,
+        "maxResultsClient": 15,
+        "maxResultsServer": 30,
+        "idealNumberOfProximities": 6,
+        "idealNumberOfProximitiesRoots": 3,
+        "useCacheEnhancer": true,
+        "onlyHalfClientResults": true,
+        "onDropBoxSelect": function () { },
+        "clientCache": Global.LocationsCache,
+        "useScroll": true,
+        "applyStatusClasses": false,
+        "applyFixedClass": false,
+        "controllers": {
+            "locationsController": Global.LocationsController
+        },
+        "onDropBoxSelect": function (field, item) {
+        }
+    };
+
+    $.fn.extend(_settings, options || {});
+
+    $(element).locationsFinder(_settings);
+}
+
+Util.CreateUserExternalIDBackOfficeDropBox = function (element, options) {
+
+    var _settings = {
+        "controllers": {
+            "profileController": new ProfileController()
+        }
+    };
+
+    $.fn.extend(_settings, options || {});
+
+    $(element).userExternalIDBackOfficeDropBox(_settings);
+}
+
+
+Util.CreateCostCentreAutocompleteDropBox = function (element, options) {
+
+    var _settings = {
+        companyContext: Ide.companyContext,
+        controllers: {
+            profileController: new ProfileController()
+        }
+    };
+
+    $.fn.extend(_settings, options || {});
+
+    $(element).costCenterAutocomplete(_settings);
+
+    $(element).change(function () { isCostCenterFilled = false });
+}
+
+Util.CreateUserRequestorDropBox = function (element, options) {
+
+    var _settings = {
+        "controllers": {
+            "profileController": new ProfileController()
+        }
+    };
+
+    $.fn.extend(_settings, options || {});
+
+    $(element).UserRequestorDropBox(_settings);
+}
+
+Util.ValidateFileExtension = function (fileName, validExtensions) {
+    return validExtensions.contains(fileName.split(".")[1]);
+};
+
+Util.CreateCiaCodeImagePath = function (ciaCode) {
+    return Util.StringFormat("{0}IconsCias/{1}.gif", Global.ImagesPath, ciaCode);
+}
+
+Util.JSONParse = function (value) {
+    return typeof value === 'string'
+        ? JSON2 ? JSON2.parse(value) : JSON.parse(value) : value;
+};
+
+Util.HasOwnProperty = function (propertyName, candidate) {
+    if (candidate.hasOwnProperty(propertyName))
+        return true;
+
+    for (var p in candidate) {
+        if (p.contains(propertyName))
+            return true;
+    }
+
+    return false;
+};
+
+Util.GetProperty = function (propertyName, data) {
+    if (data.hasOwnProperty(propertyName))
+        return data[propertyName];
+
+    for (var p in data) {
+        if (p.contains(propertyName))
+            return data[p];
+    }
+
+    return null;
+};
+
+Util.ControllerMaker = function (controller, model, events) {
+
+    var actions = ["Starting", "Completed", "Error"];
+
+    events && events.foreach(function (ev) {
+        actions.foreach(function (action) {
+            controller[ev + action] = new Event();
+        });
+
+        controller[ev] = function (req) {
+            controller[ev + "Starting"].notify(req);
+            model[ev](req);
+        };
+
+        ["Completed", "Error"].foreach(function (action) {
+            controller["on" + ev.capitalize(true) + action] = function (resp) {
+                controller[ev + action].notify(resp);
+            };
+        });
+    });
+};
+
+Util.LengthEnoughForGroupPnr = function (length) {
+    return length > 9;
+}
+
+Util.RemoveCurrencySymbol = function (value) {
+    return value.replace(/[^0-9\,-.]/g, '');
+};
+
+Util.GetCardValidYears = function () {
+    var cardValidYears = [new Date().getFullYear()];
+
+    for (var i = 0; i < 14; i++)
+        cardValidYears.push(cardValidYears[i] + 1);
+
+    return cardValidYears;
+};
+
+Util.GetCardValidMonths = function () {
+    return [{ Code: 1, Name: 'January' },
+    { Code: 2, Name: 'February' },
+    { Code: 3, Name: 'March' },
+    { Code: 4, Name: 'April' },
+    { Code: 5, Name: 'May' },
+    { Code: 6, Name: 'June' },
+    { Code: 7, Name: 'July' },
+    { Code: 8, Name: 'August' },
+    { Code: 9, Name: 'September' },
+    { Code: 10, Name: 'October' },
+    { Code: 11, Name: 'November' },
+    { Code: 12, Name: 'December' }];
+};
+
+Util.IsValidObject = function (candidate) {
+    return typeof candidate === "object" && candidate != null && !$.isEmptyObject(candidate);
+};
+
+Util.GetPaymentOptionsCreditCards = function (paymentOptions) {
+    return paymentOptions.where(function (o) {
+        return o.Type == EnumHelper.PaymentType.CreditCard;
+    }).select(function (o) {
+        return {
+            DisplayName: o.DisplayName,
+            FlagName: o.FlagName
+        };
+    }).orderBy(function (o) {
+        return o.DisplayName;
+    });
+};
+
+Util.RemoveCurrencyMask = function (value, precision, currencyCode) {
+    currencyCode = (currencyCode || Global.CurrencyCode || "BRL");
+
+    if (!precision) precision = 2;
+
+    if (value) {
+
+        var currencyDefault = formatter.currencyDefaults[currencyCode];
+
+        var firstSignal = value.reverse().toArray().first(function (h) { return isNaN(h); });
+
+        if (firstSignal == currencyDefault.thousandSeparator) {
+            value = value.replaceAll(currencyDefault.decimalSeparator, "token")
+                .replaceAll(currencyDefault.thousandSeparator, currencyDefault.decimalSeparator)
+                .replaceAll("token", currencyDefault.decimalSeparator);
+        }
+
+        value = value.replaceAll(currencyDefault.thousandSeparator, '');
+
+        if (currencyDefault.decimalSeparator != '.')
+            value = value.replaceAll(currencyDefault.decimalSeparator, '.');
+
+        value = parseFloat(parseFloat(value).toFixed(precision));
+    }
+    else {
+        value = 0;
+    }
+
+    return value;
+};
+
+Util.AllowSendAirIssueByEmail = function (ticketStatus) {
+    return !(["cancelled", "replaced", "pending"].any(function (s) { return s == ticketStatus.toLowerCase(); }));
+};
+
+Util.AllowSendHotelBookByEmail = function (hotelBook) {
+    return hotelBook.IsPayed != undefined && hotelBook.IsPayed;
+};
+
+
+Util.UpdateExchangedPrices = function (exchangeRates) {
+    var currentTabElem = Ide.getCurrentTabElement();
+
+    if (currentTabElem) {
+        var allSelects = $(".change_currency_select", currentTabElem);
+
+        var select = allSelects.filter(":visible");
+
+        if (select.is(":visible") && exchangeRates) {
+
+            var ctrl = select.find("option:selected");
+
+            var currentTab = Ide.getCurrentTab();
+
+            var currency = ctrl.val();
+
+            var exchangeRate = exchangeRates.first(function (h) { return h.OriginalCurrency == currency && h.ExchangedCurrency == formatter.currencyType(); });
+
+            if (!exchangeRate)
+                exchangeRate = { Value: 1 };
+
+            currentTab.selectedCurrency = currency;
+            currentTab.currentExchangeRate = exchangeRate;
+
+            allSelects.each(function () { $(this).val(currency) });
+
+            $(".price-exchange", currentTabElem).each(function () {
+                var price = $(this);
+
+                var originalPrice = price.attr("originalprice");
+
+                if (originalPrice && originalPrice != "undefined") {
+                    if (originalPrice.contains(","))
+                        originalPrice = originalPrice.replaceAll(".", "").replaceAll(",", ".");
+
+                    originalPrice = originalPrice.replaceAll("R$", "").trim();
+
+                    var useSymbol = price.attr("usesymbol");
+
+                    if (!useSymbol)
+                        useSymbol = "true";
+
+                    price.html(formatter.currency(originalPrice / exchangeRate.Value, useSymbol == "true", 2, currency));
+                }
+            });
+
+            $(".currency-exchange", currentTabElem).each(function () {
+                $(this).html(currency);
+            });
+        }
+    }
+};
+
+Util.RemoveStackTraceFromErrorMessage = function (errorMessage) {
+    if (errorMessage) {
+        var limit = errorMessage.indexOf("\n   at ");
+
+        if (limit == -1)
+            limit = errorMessage.length;
+
+        return errorMessage.substr(0, limit);
+    }
+    else {
+        return errorMessage;
+    }
+};
+
+Util.Guid = function () {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+}
+
+Util.FloatToPercent = function (value, perc) {
+    return parseFloat(value) * (parseFloat(perc) / 100.0);
+}
+
+Util.GetWidth = function (classNameOrJQueryObject) {
+
+    if (classNameOrJQueryObject != null) {
+        var width = null;
+
+        if (typeof classNameOrJQueryObject == 'string') {
+            width = $.css('.' + classNameOrJQueryObject, "width", true);
+
+            if (width.toString().indexOf('%') > -1) {
+                return Util.FloatToPercent(Util.GetWidth($('.' + classNameOrJQueryObject).parent().get(0)), parseFloat(width));
+            }
+
+        } else if (typeof classNameOrJQueryObject == 'object' && classNameOrJQueryObject.clientWidth != null) {
+            width = $.css(classNameOrJQueryObject, "width", true);
+
+            if (width.toString().indexOf('%') > -1) {
+                return Util.FloatToPercent(Util.GetWidth(classNameOrJQueryObject.parentNode), parseFloat(width));
+            }
+        }
+
+        if (width != null) {
+            return parseFloat(width);
+        }
+    }
+}
+
+Util.AirCompanies = {
+    "AR": "Aerolineas Argentinas",
+    "AM": "Aeroméxico",
+    "5L": "Aerosur",
+    "AC": "Air Canada",
+    "CA": "Air China",
+    "UX": "Air Europa",
+    "AF": "Air France",
+    "NH": "Air Nippon Airways",
+    "AZ": "Alitalia",
+    "AA": "American Airlines",
+    "AV": "Avianca",
+    "O6": "Avianca",
+    "A0": "Avianca Argentina",
+    "AD": "Azul",
+    "BA": "British Airways",
+    "CO": "Continental Airlines",
+    "CM": "Copa Airlines",
+    "DL": "Delta Airlines",
+    "LY": "El Al",
+    "EK": "Emirates",
+    "G3": "Gol",
+    "IB": "Iberia",
+    "JL": "Japan Airlines",
+    "KL": "Klm",
+    "KE": "Korean Airlines",
+    "4M": "Lan Argentina",
+    "LA": "Lan Chile",
+    "LP": "Lan Peru",
+    "LH": "Lufthansa",
+    "MX": "Mexicana",
+    "GP": "Pantanal",
+    "Z4": "Puma",
+    "P3": "Passaredo",
+    "PU": "Pluna",
+    "QF": "Qantas",
+    "QL": "Regional Laser C.A",
+    "QR": "Qatar Airways",
+    "S3": "SAN Air",
+    "SA": "South African",
+    "H2": "",
+    "LX": "Swiss",
+    "DT": "Taag Airlines",
+    "JJ": "Tam",
+    "TP": "Tap",
+    "T4": "Trip Linhas Aéreas",
+    "TK": "Turkish",
+    "UA": "United Airlines",
+    "US": "US Airways",
+    "RG": "Varig",
+};
+
+Util.ObjectContainsProperty = function (obj, property) {
+    return obj.hasOwnProperty(property) &&
+        typeof obj[property] != "undefined" &&
+        obj[property] != null;
+};
+
+Util.GetUrlParameterByName = function (parameterName) {
+    var href = window.location.href.toLowerCase();
+
+    parameterName = parameterName.toLowerCase();
+    parameterName = parameterName.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + parameterName + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(href);
+
+    if (results == null)
+        return "";
+
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+};
+
+Util.IsMultipleSelectOnTrayBar = function (productType) {
+    var _isMultipleItem = {
+        Air: false,
+        Hotel: false,
+        Service: true
+    };
+
+    if (_isMultipleItem[productType])
+        return _isMultipleItem[productType];
+};
+
+Util.GePassengerHash = function (passenger) {
+    return Util.StringFormat("{0}{1}{2}{3}",
+        passenger.Name,
+        passenger.MiddleName,
+        passenger.LastName,
+        Util.DateValuesToString(passenger.BirthDateValues));
+};
+
+Util.InlineCSS = function (container) {
+    var rules = document.styleSheets[document.styleSheets.length - 1].cssRules;
+    for (var idx = 0, len = rules.length; idx < len; idx++) {
+        container.find($(rules[idx].selectorText)).each(function (i, elem) {
+            elem.style.cssText += rules[idx].style.cssText;
+        });
+    }
+};
+
+Util.IsIntelligentSearchEnabled = function () {
+    var configEnabledIntelligentSearch = Ide.applicationSettings['EnableIntelligentSearch'];
+
+    return (configEnabledIntelligentSearch != null) && (configEnabledIntelligentSearch === 'true');
+}
+
+Util.DeepCopy = function (originalObject) {
+    return $.extend(true, {}, originalObject);
+}
+
+Util.RemoveUnusedSlickGridStyleTags = function () {
+    var slickGridStyleTags = $('style[rel=stylesheet].slickGrid');
+    var stylesToRemove = [];
+
+    if (slickGridStyleTags != null && slickGridStyleTags.length > 0) {
+        for (tagIndex = 0; tagIndex < slickGridStyleTags.length; tagIndex++) {
+            var styleTag = slickGridStyleTags[tagIndex];
+            var innerStyleText = styleTag.innerHTML;
+            var styles = innerStyleText.split(' ');
+
+            if (styles) {
+                var slickGridStyleToCheck = styles[0];
+                var elementsWithStyleToCheck = $(slickGridStyleToCheck);
+
+                if (elementsWithStyleToCheck && elementsWithStyleToCheck.length === 0) {
+                    stylesToRemove.push(styleTag);
+                }
+            }
+        }
+
+        if (stylesToRemove.length > 0) {
+            var size = stylesToRemove.length;
+
+            for (tagIndex = (size - 1); tagIndex > 0; tagIndex--) {
+                stylesToRemove[tagIndex].remove();
+            }
+        }
+    }
+}
+
+Util.ResolveSourceCapability = function (sourceCapabilities, source, capability) {
+    var sourceCapability = sourceCapabilities.first(function (s) {
+        return s.SourceName == source;
+    });
+
+    return sourceCapability && sourceCapability.hasOwnProperty(capability) && sourceCapability[capability];
+};
+
+Util.HasCount = function (param) {
+    return param != undefined && param.length != undefined && param.length > 0;
+}
+
+Util.HasPlugin = function (control, pluginname) {
+    if (control != null && control.data) {
+        var data = control.data();
+        return data.pluginNames && data.pluginNames.any(function (p) { return p == pluginname });
+    }
+    return false;
+}
+
+Util.TimeValuesToString = function (timeValue) {
+    if (timeValue != undefined && timeValue.Hour != undefined && typeof timeValue.Hour === 'number' && timeValue.Minutes != undefined && typeof timeValue.Minutes === 'number' && timeValue.Seconds != undefined && typeof timeValue.Seconds === 'number') {
+        return formatter.toTwoDigits(timeValue.Hour) + ':' + formatter.toTwoDigits(timeValue.Minutes.toString()) + ':' + formatter.toTwoDigits(timeValue.Seconds.toString());
+    }
+
+    return '';
+}
+
+Util.StringToFloat = function (value) {
+    if (typeof value === 'number') {
+        return parseFloat(value);
+    } else if (typeof value === 'string') {
+        if (/^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/.test(value)) {
+            return parseFloat(value);
+        }
+    }
+
+    return NaN;
+};
+
+Util.GetShortCodeParameter = function (key) {
+    return Global.ShortCodeParameters && Global.ShortCodeParameters[key];
+};
+
+Util.LocationFormatter = new (function () {
+    this.isProximity = function (str) {
+        return str.contains("[") && str.contains("]");
+    },
+        this.getIataOrDefault = function (fullName) {
+            var str = fullName;
+
+            if (str.contains("[") && str.contains("(")) {
+                var iata = str.substring(str.indexOf("(") + 1, str.indexOf(")"));
+
+                if (iata.length == 3)
+                    return iata;
+            }
+
+            return str;
+        },
+        this.getDistancePartOrDefault = function (fullName) {
+
+            var str = fullName;
+
+            if (Util.LocationFormatter.isProximity(str)) {
+                var distancePart = str.substring(str.indexOf("["), str.indexOf("]") + 1);
+
+                if (distancePart.length)
+                    return distancePart;
+            }
+
+            return "";
+        },
+        this.formatProximity = function (fullName) {
+            return (Util.LocationFormatter.getIataOrDefault(fullName) + " " + Util.LocationFormatter.getDistancePartOrDefault(fullName)).trim();
+        },
+        this.formatAirLocation = function (locationLight) {
+            var resp = "";
+
+            if (locationLight) {
+                var distancePart = Util.LocationFormatter.getDistancePartOrDefault(locationLight.n);
+
+                if (distancePart.length) {
+                    resp = (locationLight.i || locationLight.d) + " " + distancePart;
+                }
+                else if (locationLight.i) {
+                    resp = locationLight.i;
+                }
+            }
+
+            return resp;
+        }
+})();
+
+Util.ValidateByType = function (objectToValidate, propertiesToValidate) {
+
+    if (objectToValidate == undefined || propertiesToValidate == undefined || !Array.isArray(propertiesToValidate)) {
+        return false;
+    } else {
+        var isValid = true;
+        var propertySize = propertiesToValidate.length;
+
+        for (i = 0; i < propertySize; i++) {
+            var propertyToValidate = propertiesToValidate[i];
+
+            if (objectToValidate[propertyToValidate.Property] == undefined || typeof objectToValidate[propertyToValidate.Property] !== propertyToValidate.Type) {
+                isValid = false;
+
+                break;
+            }
+        }
+
+        return isValid;
+    }
+};
+
+Util.IsEnableReplaceResultOptionInBatchSettingEnabled = function () {
+    var config = Ide.applicationSettings['EnableReplaceResultOptionInBatch'];
+
+    return (config != undefined) && (config === 'true');
+};
+
+Util.DateToHtml5Date = function (dt) {
+    return Util.DateValueToHtml5Date(Util.DateToDateValues(dt));
+}
+
+Util.DateValueToHtml5Date = function (dt) {
+    return dt.Year + '-' + formatter.toTwoDigits(dt.Month) + '-' + formatter.toTwoDigits(dt.Day);
+}
+
+Util.DateHtml5ToDateValue = function (dt) {
+    var splitted = dt.split('-');
+    if (splitted.length == 3) {
+        return { Year: splitted[0], Month: splitted[1], Day: splitted[2] };
+    }
+    return null;
+}
+
+Util.Html5DateToDate = function (dt) {
+    return Util.DateValuesToDate(Util.DateHtml5ToDateValue(dt));
+}
+
+Util.Html5DateToString = function (dt) {
+    return Util.DateValuesToString(Util.DateHtml5ToDateValue(dt));
+}
+
+Util.StringToHtml5Date = function (dt) {
+    return Util.DateValueToHtml5Date(Util.StringToDateValues(dt));
+}
+
+Util.SameContext = function (context, toCompare) {
+
+    var toCheck = ["ConsolidatorId", "TravelAgencyId", "CustomerId"];
+
+    for (var i = 0; i < toCheck.length; i++) {
+        if (context[toCheck[i]] != toCompare[toCheck[i]])
+            return false;
+    }
+
+    return true;
+};
+
+//EnumHelper.Passenger.PassengerType
+Util.PassengerAge = function (passengerType) {
+    switch (passengerType) {
+        case EnumHelper.Passenger.PassengerType.Senior:
+            return 56;
+        case EnumHelper.Passenger.PassengerType.Adult:
+            return 18;
+        case EnumHelper.Passenger.PassengerType.Child:
+            return 5;
+        case EnumHelper.Passenger.PassengerType.Baby:
+            return 1;
+    }
+};
+
+Util.GetRecommendationTotalFare = function (recommendation, searchData) {
+    var totalValue =
+        (recommendation.BrandedFare.MarkupedTotalAmount * (searchData.Adults || searchData.NumberADTs || 0)) +
+        (recommendation.BrandedFare.TotalAmountCHD * (searchData.Children || searchData.NumberCHDs || 0)) +
+        (recommendation.BrandedFare.TotalAmountINF * (searchData.Babies || searchData.NumberINFs || 0)) +
+        (recommendation.BrandedFare.TotalAmountSRC * (searchData.Srcs || searchData.NumberSRCs || 0));
+
+    return totalValue;
+};
+
+Util.DebugMessage = function (message) {
+    if (typeof console != 'undefined') {
+        console.log(message);
+    }
+}
+
+Util.CreatePerson = function (quantity, type) {
+    return { Quantity: quantity, Type: type };
+};
+
+Util.IsValidDate = function (d) {
+    if (Object.prototype.toString.call(d) !== "[object Date]")
+        return false;
+    return !isNaN(d.getTime());
+}
+
+Util.ParseIntOrZero = function (value) {
+    return (parseInt(value) || 0);
+}
+
+Util.DictionaryToObject = function (dictionary) {
+    var dictionaryObject = {};
+
+    if (!dictionary || !(dictionary instanceof Array))
+        return dictionaryObject;
+
+    dictionary.forEach(function (k) { dictionaryObject[k.Key] = k.Value; });
+
+    return dictionaryObject;
+};
+
+Util.CompareDictionaryKeyValue = function (dictionary, key, value) {
+    var obj = Util.DictionaryToObject(dictionary)
+
+    return (obj.hasOwnProperty(key) && obj[key] == value);
+};
+
+Util.ServiceItemContextEqualsCurrentContext = function (serviceItem) {
+    var sameConsolidator = (Ide.companyContext.ConsolidatorId == serviceItem.ConsolidatorId);
+    var sameTravelAgency = (Ide.companyContext.TravelAgencyId == serviceItem.TravelAgencyId);
+    var sameCustomer = (Ide.companyContext.CustomerId == serviceItem.CorporateCostumerId);
+
+    return (sameConsolidator && sameTravelAgency && sameCustomer);
+};
+
+Util.CreateServiceItemWithDefaults = function () {
+    return {
+        Id: 0,
+        Fees: [],
+        Links: [],
+        Messages: [],
+        Passengers: [],
+        FieldValues: [],
+        FieldValuesObj: {},
+        ConsolidatorId: 0,
+        ConsolidatorName: "",
+        ConsolidatorType: "",
+        CorporateCostumerId: 0,
+        CorporateCostumerName: "",
+        TravelAgencyId: 0,
+        TravelAgencyName: ""
+    };
+};
+
+Util.SetTravelAgentLogo = function (element, defaultLogoPath) {
+    var agencyLogo;
+
+    try { agencyLogo = Util.GetTravelAgentLogo(); }
+    catch (ex) { }
+
+    if (agencyLogo)
+        Util.SetTopLogo(element, agencyLogo);
+    else
+        Util.SetTopLogo(element, defaultLogoPath);
+};
+
+Util.SetTopLogo = function (element, logo) {
+    element.attr("src", logo).css("width", "105px");
+};
+
+Util.GetTravelAgentLogo = function () {
+
+    var logoFileName = Ide.companyContext.CustomerUrlLogo;
+    var logoUrl;
+
+    if (!logoFileName) {
+        logoFileName = Util.CompareSettingValue("useAgencyLogoOnTravelAgent", "true")
+            ? (Ide.companyContext.TravelAgencyUrlLogo == "" ? Ide.companyContext.ConsolidatorUrlLogo : Ide.companyContext.TravelAgencyUrlLogo)
+            : Ide.companyContext.ConsolidatorUrlLogo;
+    }
+
+    if (logoFileName && logoFileName != "") {
+        logoUrl = Ide.filesRepositoryUrl.endsWith("/")
+            ? Ide.filesRepositoryUrl + logoFileName
+            : Ide.filesRepositoryUrl + "/" + logoFileName;
+
+        logoUrl = location.href.contains("https://") ? logoUrl.replaceAll("http://", "https://") : logoUrl;
+    }
+
+    return logoUrl;
+};
+
+Util.subtractDates = function (lowerDate, greaterDate, returnType) {
+    var inputInvalid = lowerDate == undefined || greaterDate == undefined || !Util.IsValidDate(lowerDate) || !Util.IsValidDate(greaterDate);
+
+    if (inputInvalid || greaterDate <= lowerDate) {
+        return 0;
+    }
+
+    if (returnType == undefined || (returnType != "d" && returnType != "h" && returnType != "m" && returnType != "s")) {
+        returnType = "d";
+    }
+
+    var dateDiff = (greaterDate - lowerDate) / 1000;
+    var days = 0;
+
+    if (returnType == "d") {
+        days = Math.round(dateDiff / (24 * 60 * 60));
+        return days;
+    }
+    else {
+        days = Math.floor(dateDiff / (24 * 60 * 60));
+    }
+
+    var leftSec = dateDiff - days * 24 * 60 * 60;
+    var hrs = Math.floor(leftSec / (60 * 60));
+
+    if (returnType == "h") {
+        return hrs;
+    }
+
+    var leftSec = leftSec - hrs * 60 * 60;
+    var min = Math.floor(leftSec / (60));
+
+    if (returnType == "m") {
+        return min;
+    }
+
+    return leftSec - min * 60;
+};
+
+Util.RoundDecimal = function (value, exp) {
+    if (value == undefined || exp == undefined || isNaN(value) || isNaN(exp) || exp % 1 !== 0) {
+        return NaN;
+    }
+
+    value = +value;
+    exp = +exp;
+
+    if (value == 0) {
+        return 0;
+    } else if (exp == 0) {
+        return Math.round(value);
+    } else if (value.toString().indexOf('.') == -1) {
+        return value;
+    }
+
+    if (exp > 0) {
+        exp = exp * -1;
+    }
+
+    value = value.toString().split('e');
+    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    value = value.toString().split('e');
+
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+};
+
+Util.ProposalIsActive = function () {
+    if (typeof (ComplexEditor) != 'undefined' && ComplexEditor.Proposal) {
+        var configuration = ComplexEditor.Proposal.GetConfiguration(Ide.applicationSettings);
+        var active = configuration["Active"] || configuration["active"];
+
+        switch (typeof active) {
+            case "boolean": return active;
+            case "string": return active.toLowerCase() === "true" || active === "1";
+            case "number": return active === 1;
+            default: return false;
+        }
+    }
+
+    return Util.CompareSettingValue("proposal.active", "true");
+};
+
+Util.EnableQuotation = function () {
+    var enable = true;
+    if (typeof (ComplexEditor) != 'undefined' && ComplexEditor.Proposal) {
+        enable = !Util.ProposalIsActive();
+        if (!enable) {
+            var configuration = ComplexEditor.Proposal.GetConfiguration(Ide.applicationSettings);
+            var enableConfig = configuration["EnableEmailQuotation"] || configuration["EnableEmailQuotation"];
+
+            switch (typeof enableConfig) {
+                case "boolean": enable = enableConfig; break;
+                case "string": enable = enableConfig.toLowerCase() === "true" || enableConfig === "1"; break;
+                case "number": enable = enableConfig === 1; break;
+            }
+        }
+    }
+
+    return enable;
+};
+
+Util.PersonIsActive = function () {
+    return Util.CompareSettingValue("Person.Active", "true");
+};
+
+Util.IsBuyerActive = function () {
+    return "true".normalizedEquals(Util.GetSetting("Buyer.Active"));
+};
+
+Util.IsBuyerRequired = function () {
+    var required = Util.GetSetting("MandatoryBuyerSelection");
+    return typeof (required) == 'undefined' || "true".normalizedEquals(required);
+};
+
+Util.AskForCorporatePassenger = function () {
+    return Ide.companyContext.CustomerId != undefined &&
+        (Util.CompareSettingValue("AskForCorporatePassenger", "true") ||
+            typeof Util.GetSetting("AskForCorporatePassenger") === "undefined");
+};
+
+Util.ImageExists = function (imageUrl) {
+    var http = new XMLHttpRequest();
+
+    http.open('HEAD', imageUrl, false);
+    http.send();
+
+    return http.status != 404;
+};
+
+Util.MinValue = function (values) {
+    if (values != undefined && Array.isArray(values)) {
+        return Math.min.apply(null, values);
+    }
+}
+
+Util.MaxValue = function (values) {
+    if (values != undefined && Array.isArray(values)) {
+        return Math.max.apply(null, values);
+    }
+}
+
+Util.GetServiceTypeIdFromIde = function (name, category, subCategory) {
+    var definition = Ide.getServiceDefinitionType(name, category, subCategory);
+
+    if (definition) {
+        return definition.Id;
+    }
+
+    if (console && console.log)
+        console.log(Util.StringFormat("{0} Service Definition Type not found.", name));
+
+    return 0;
+};
+
+Util.TryGetProposalSettingConfig = function () {
+    try {
+        return ComplexEditor.Proposal.GetConfiguration(Ide.applicationSettings)
+    }
+    catch (e) {
+        try {
+            return ComplexEditor.Proposal.GetDefaultValue();
+        }
+        catch (e) {
+        }
+    }
+
+    return null;
+};
+
+
+Util.GetDateValuesKey = function (dateValues) {
+
+    var padding = function (str) {
+        var pad = "00";
+        return pad.substring(0, pad.length - str.length) + str;
+    };
+
+    dateValues = dateValues || {};
+
+    var year = (dateValues.Year || 0).toString();
+    var month = (dateValues.Month || 0).toString();
+    var day = (dateValues.Day || 0).toString();
+    var hour = (dateValues.Hour || 0).toString();
+    var minutes = (dateValues.Minutes || 0).toString();
+    var seconds = (dateValues.Seconds || 0).toString();
+
+    return padding(year) + padding(month) + padding(day) + padding(hour) + padding(minutes) + padding(seconds);
+};
+
+Util.extendPluginSettings = function (defaultSettings, argumentSettings) {
+    var ret = $.extend(false, {}, argumentSettings || {});
+
+    if (defaultSettings && typeof (defaultSettings) == "object") {
+        for (var prop in defaultSettings)
+            if (!ret[prop])
+                ret[prop] = Util.extendPluginSettings(defaultSettings[prop]);
+    }
+    else {
+        return typeof (argumentSettings) == "undefined" ? defaultSettings : argumentSettings;
+    }
+
+    return ret;
+};
+
+Util.GetAge = function (birthday, whatDay) {
+    var whatDay = whatDay || moment().toDate(),
+        birthday = typeof birthday.getTime === "function" ? birthday : moment(birthday).toDate();
+
+    var age = whatDay.getFullYear() - birthday.getFullYear(),
+        m = whatDay.getMonth() - birthday.getMonth();
+
+    if (m < 0 || (m === 0 && whatDay.getDate() < birthday.getDate())) {
+        age--;
+    }
+
+    return age;
+};
+
+Util.GenerateHexColor = function (randomString) {
+
+    function _hashCode(str) {
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return hash;
+    }
+
+    function _intToRGB(i) {
+        var c = (i & 0x00FFFFFF)
+            .toString(16)
+            .toUpperCase();
+
+        return "00000".substring(0, 6 - c.length) + c;
+    }
+
+    function _balanceColor(hex) {
+        return _getBalancedValue(hex.substring(0, 2)) + _getBalancedValue(hex.substring(2, 4)) + _getBalancedValue(hex.substring(4, 6));
+    }
+
+    //balanciamento para não ficar muito escuro nem muito claro
+    function _getBalancedValue(hexPart) {
+
+        var minToBalance = 66;
+        var maxToBalance = 192;
+
+        var hexadecimal = ("0x" + hexPart).toString(10);
+
+        while (hexadecimal > maxToBalance || hexadecimal < minToBalance) {
+            if (hexadecimal > maxToBalance)
+                hexadecimal--;
+            else
+                hexadecimal++;
+
+            hexPart = (hexadecimal & 0x00FFFFFF)
+                .toString(16)
+                .toUpperCase();
+
+            hexadecimal = ("0x" + hexPart).toString(10);
+        }
+
+        return hexPart;
+    }
+
+    var evaluatedString = "";
+
+    for (var i = 0; i <= 3; i++) {
+
+        if (i % 2 != 0)
+            evaluatedString = evaluatedString.reverse();
+
+        evaluatedString += randomString;
+    }
+
+    return _balanceColor(_intToRGB(_hashCode(evaluatedString)));
+
+};
+
+Util.GetBytes = function (s) {
+    return ~-encodeURI(s).split(/%..|./).length;
+};
+
+Util.GetJSONSize = function (json) {
+    return json && Util.GetBytes(JSON.stringify(json)) || 0;
+};
+
+Util.CalculateJSONSizes = function (json, myPath, acc) {
+    if (!json)
+        return [];
+
+    if (!myPath)
+        myPath = "";
+
+    if (!acc)
+        acc = [];
+
+    if (typeof (json) === "object" && !Array.isArray(json)) {
+        json["my_size"] = Util.GetJSONSize(json);
+        json["my_path"] = myPath;
+
+        acc.push({
+            size: json["my_size"],
+            path: json["my_path"]
+        });
+    }
+
+    for (var item in json) {
+        if (json[item]) {
+            if (Array.isArray(json[item])) {
+                json[item].foreach(function (subItem, i) {
+                    Util.CalculateJSONSizes(subItem, (myPath ? myPath + "." + item : item.toString()) + "[{0}]".format(i), acc);
+                });
+            }
+            else if (typeof (json[item]) === "object") {
+                Util.CalculateJSONSizes(json[item], myPath ? myPath + "." + item : item.toString(), acc);
+            }
+        }
+    }
+
+    return acc.orderBy(function (h) { return h.size; });
+};
+
+Util.TrySetSessionStorage = function (name, value) {
+    try {
+        sessionStorage.setItem(name, value);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+    finally {
+    }
+
+
+}
+
+Util.TryGetSessionStorage = function (name) {
+    try {
+        return sessionStorage.getItem(name);
+    }
+    catch (e) {
+        return false;
+    }
+    finally {
+    }
+
+
+}
+
+Util.MountResolveQueryResult = function (queryResults, validation) {
+
+    if (!validation) {
+        validation = function () { return true; };
+    }
+
+    var objects = [];
+
+    if (queryResults && queryResults.Values) {
+
+
+        for (var i = 0; i < queryResults.Values.length; i++) {
+            var items = [];
+
+            var obj = {};
+
+            for (var j = 0; j < queryResults.Values[i].length; j++)
+                if (validation(queryResults, i, j))
+                    obj[queryResults.Header[j].RefName] = queryResults.Header[j].Type == EnumHelper.FieldType.Grid && queryResults.Values[i][j] != null && queryResults.Values[i][j].length > 0 ? JSON.parse(queryResults.Values[i][j]) : queryResults.Values[i][j];
+
+            objects.push(obj);
+        }
+    }
+
+    return objects;
+};
+
+Util.HeaderToColumns = function (headers) {
+
+    var columns = [];
+
+    if (headers) {
+
+        for (var i = 0; i < headers.length; i++) {
+            var column = {
+                name: headers[i].RefName,
+                title: Util.CallResources(headers[i].Name),
+                width: (600 / headers.length - 6)
+            }
+            columns.add(column);
+        }
+
+    }
+
+    return columns;
+};
+
+Util.LoadAddressByZipCode = function (zipCode, callback) {
+
+    if (formatter && "pt-br".normalizedEquals(formatter.culture)) {
+
+        zipcode = formatter.unmaskZipCode(zipCode);
+
+        if (zipcode.length == 8) {
+            var myControlObj = {};
+
+            var controller = new CheckOutController({ Global: myControlObj });
+
+            if (callback) {
+                controller.loadAddressCompleted.attach(function (response) {
+                    if (response.CEPInformation) {
+                        callback(response.CEPInformation);
+                    }
+                });
+            }
+
+            controller.loadAddress({ CEP: zipCode });
+        }
+    }
+};
+
+Util.complementDateValues = function (dateValues) {
+    dateValues.DayOfWeekShortFormmated = formatter.dayOfWeekShort(dateValues.DayOfWeek);
+    dateValues.DayMonthFormatted = formatter.dateValuesCustomizedShort(dateValues, "dd/mm");
+    dateValues.DayMonthYearFormatted = formatter.dateValuesCustomizedShort(dateValues, "dd/mm/yyyy");
+}
+
+Util.GetQueryStringValue = function (Key, QueryString, ReplaceHTMLEncodedChars) {
+    var value = Util.QueryString(Key, QueryString);
+
+    if (value && ReplaceHTMLEncodedChars && ReplaceHTMLEncodedChars == true)
+        value = unescape(value).replaceAll("---", ")").replaceAll("--", "(");
+
+    return value;
+}
+
+Util.isTravelGo = function () {
+    return typeof (Ide) == 'undefined';
+}
+
+Util.UserResolution = function () {
+    var bodyWidth = $("body").width();
+    if (bodyWidth <= 767)
+        return EnumHelper.UserResolution.Mobile;
+    else if (bodyWidth >= 767 && bodyWidth <= 1023)
+        return EnumHelper.UserResolution.Tablet;
+    else
+        return EnumHelper.UserResolution.Desktop;
+}
+
+Util.hasNumber = function (content) {
+    return /\d/.test(content);
+}
+
+Util.getOnlyNumbers = function (text) {
+    return text.replace(/[^0-9]/gi, '');
+}
+
+Util.GetMonthYear = function (dateValues) {
+    if (dateValues && dateValues.Month && dateValues.Year)
+        return dateValues.Month + '-' + dateValues.Year;
+    else
+        return null;
+}
+
+Util.ShowModal = function (modalElement, show) {
+    if (show == undefined)
+        show = true;
+
+    $(modalElement).find('.modalClose')[0].checked = !show;
+}
+
+//Util.GetPropertyIndex = function (obj, property) {
+//    var idx = 0;
+//    for (propName in obj) {
+//        var prop = obj[propName];
+//        if (property === prop)
+//            return idx;
+//        idx++;
+//    }
+//    return -1;
+//}
+
+Util.saveAsPDF = function (data) {
+    var form = document.createElement("form");
+    form.setAttribute("id", "bla");
+    form.setAttribute("method", "post");
+    form.setAttribute("enctype", "text/plain");
+    form.setAttribute("action", '{0}travelagent/SaveAsPDF'.format([Global.RootPath]));
+    form.setAttribute("target", "_blank");
+    form.setAttribute("style", "display: none;");
+
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("name", "data");
+    hiddenField.setAttribute("value", data);
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+
+    document.body.removeChild(form);
+}
+
+Util.SendGtagEvent = function (action, category, label) {
+    if (!Util.isTravelGo() && !Util.IsSupportUser(Ide.user) && Util.IsGtagInstalled() && Util.IsNotLocalhost()) {
+        try {
+            if (!action || !category)
+                throw "Os parâmetros action e category são obrigatórios para enviar o evento para o Google Analytics.";
+            else
+                var fieldsObject = { "event_category": category };
+
+
+            if (label) {
+                fieldsObject.event_label = label;
+            } else {
+                var rootSystemAccountName = Util.GetRootSystemAccountInfo();
+
+                if (!rootSystemAccountName)
+                    throw "O evento para o Google Analytics não foi disparado pois o rootSystemAccountName retornou vazio";
+                else
+                    fieldsObject.event_label = rootSystemAccountName;
+            }
+
+            //https://developers.google.com/analytics/devguides/collection/gtagjs/events
+            gtag('event', action, fieldsObject);
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+}
+
+Util.ConcatenateStringSeparatedBy = function (separator, acc, str, index) {
+    if (str) {
+        if (index == 0 || acc == '') {
+            return str;
+        } else {
+            return acc + separator + str;
+        }
+    } else {
+        return acc;
+    }
+}
+
+Util.IsGtagInstalled = function () {
+    return typeof window.gtag != 'undefined' && typeof gtag != 'undefined';
+}
+
+Util.IsNotLocalhost = function () {
+    return location.hostname !== "localhost" && location.hostname !== "127.0.0.1";
+}
+
+Util.IsSupportUser = function (user) {
+    var ret = false;
+    if (user.Username && user.Username.length)
+        ret = user.Username.toLowerCase().indexOf("suporte") >= 0;
+
+    return ret;
+}
+
+Util.IsAbleToSendGtagEvents = function (rootSystemAccountName) {
+    return (!Util.isTravelGo() && rootSystemAccountName && !Util.IsSupportUser(Ide.user) && Util.IsGtagInstalled() && Util.IsNotLocalhost());
+}
+
+Util.GetRootSystemAccountInfo = function () {
+    return !Util.isTravelGo() && Ide.user.RootSystemAccountName;
+}
+
+Util.SendPagePathToGA = function (path) {
+    // Variável global GA_MEASUREMENT_ID definida em Site.Master
+    if (!Util.isTravelGo() && !Util.IsSupportUser(Ide.user) && Util.IsGtagInstalled() && Util.IsNotLocalhost()) {
+        if (GA_MEASUREMENT_ID)
+            gtag('config', GA_MEASUREMENT_ID, {
+                'page_title': path,
+                'page_path': '/' + path
+            });
+    }
+}
+
+Util.IntegrateWithApp = function (serviceOrderController, serviceItemId, serviceOrderId) {
+    serviceOrderController.processExtension({
+        Operation: 'IntegrateWithApp',
+        Parameters: [
+            { Key: 'ServiceItemId', Value: serviceItemId },
+            { Key: 'ServiceOrderId', Value: serviceOrderId }
+        ]
+    });
+}
+
+Util.NoTraceDownloadTypes = ['Person', 'Proposal', 'ProposalOption'];
+
+Util.getRawPhoneNumber = function (phone) {
+    if (phone) {
+        phone = phone
+            .replaceAll('(', '')
+            .replaceAll(')', '')
+            .replaceAll(' ', '')
+            .replaceAll('-', '')
+            .trim();
+
+        if (!phone.startsWith('+55'))
+            phone = '+55' + phone;
+    }
+
+    return phone;
+}
+
+Util.AddPassengerToBusTicket = function (busTickets, passengers){
+    // adicionar os onibus na ordem
+    var buses = [];
+    var busGroupOutbound = busTickets.filter(b => b.IsOutbound === true);
+    var busGroupInbound = busTickets.filter(b => b.IsOutbound === false);
+
+    if (busGroupOutbound && busGroupOutbound.length){
+        busGroupOutbound[0].BusGroup.Buses.forEach(function (bus) { bus.IsOutbound = true});
+        buses.push(...busGroupOutbound[0].BusGroup.Buses);
+    }
+
+    if (busGroupInbound && busGroupInbound.length){
+        busGroupInbound[0].BusGroup.Buses.forEach(function (bus) { bus.IsOutbound = false});
+        buses.push(...busGroupInbound[0].BusGroup.Buses);
+    }
+
+    // adiciona o passenger no busTicket para renderizar
+    passengers.forEach(function (passenger){
+        var seatNumbers = passenger.ExternalProperties.find(e => e.Key === "SeatNumbers").Value.split(',');
+
+        for (var i = 0; i < seatNumbers.length;i ++){
+            var seatNumber = seatNumbers[i];
+            var busTicket = busTickets.find(b => b.Seat.Number == seatNumber && b.Bus.OriginId == buses[i].OriginId);
+
+            busTicket.Passenger = passenger;
+            busTicket.Index = i;
+        }
+    });
+}

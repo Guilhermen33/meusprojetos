@@ -1,0 +1,23 @@
+﻿var mandatoryLoginTPL = function (options) {
+
+    var _settings = {
+        'type': 1
+    };
+
+    $.fn.extend(_settings, options || {});
+
+    switch (_settings.type) {
+        case 1:
+        case 2:
+            return MandatoryUserLoginTemplate.login();
+            break;
+        case 5:
+            return MandatoryUserLoginTemplate.forgotPassword();
+            break;
+        case 6:
+            return MandatoryUserLoginTemplate.changePassword();
+            break;
+    }
+
+    return '';
+};

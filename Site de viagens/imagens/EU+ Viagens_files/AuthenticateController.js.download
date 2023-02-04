@@ -1,0 +1,96 @@
+﻿function AuthenticateController(params) {
+    var _model = new AuthenticateModel(this);
+    var _this = this;
+
+    this.loginStarting = new Event();
+    this.loginCompleted = new Event();
+    this.logoutStarting = new Event();
+    this.logoutCompleted = new Event();
+    this.forgottenPasswordStarting = new Event();
+    this.forgottenPasswordCompleted = new Event();
+    this.changePasswordStarting = new Event();
+    this.changePasswordCompleted = new Event();
+    this.getUsersByUserResponsibleStarting = new Event();
+    this.getUsersByUserResponsibleCompleted = new Event();
+    this.getSecurityContextStarting = new Event();
+    this.getSecurityContextCompleted = new Event();
+
+
+    this.login = function (request) {
+        _this.loginStarting.notify(request);
+
+        _model.login(request);
+    };
+
+    this.onLoginCompleted = function (response) {
+        _this.loginCompleted.notify(response);
+    };
+
+    this.logout = function (request) {
+        _this.logoutStarting.notify(request);
+
+        _model.logout(request);
+    };
+
+    this.onLogoutCompleted = function (response) {
+        _this.logoutCompleted.notify(response);
+    };
+
+    this.forgottenPassword = function (request) {
+        _this.forgottenPasswordStarting.notify(request);
+
+        _model.forgottenPassword(request);
+    };
+
+    this.onForgottenPasswordCompleted = function (response) {
+        _this.forgottenPasswordCompleted.notify(response);
+    };
+
+    this.changePassword = function (request) {
+        _this.changePasswordStarting.notify(request);
+
+        _model.changePassword(request);
+    };
+
+    this.onChangePasswordCompleted = function (response) {
+        _this.changePasswordCompleted.notify(response);
+    };
+
+    this.getUsersByUserResponsibleId = function (request) {
+        _this.getUsersByUserResponsibleStarting.notify(request);
+
+        _model.getUsersByUserResponsibleId(request);
+    }
+
+    this.onGetUsersByUserResponsibleIdCompleted = function (response) {
+        this.getUsersByUserResponsibleCompleted.notify(response);
+    };
+
+    this.getSecurityContext = function (request) {
+        _this.getSecurityContextStarting.notify(request);
+
+        _model.getSecurityContext(request);
+    };
+
+    this.onGetSecurityContext = function (response) {
+        _this.getSecurityContextCompleted.notify(response);
+    };
+
+    var settings = { "Global": undefined };
+
+    $.extend(true, settings, params || {});
+
+    if (!settings.Global) {
+        if (!Global)
+            Global = {};
+
+        if (!Global.AuthenticateController)
+            Global.AuthenticateController = this;
+
+        return Global.AuthenticateController;
+    }
+    else {
+        params.Global.AuthenticateController = this;
+        return params.Global.AuthenticateController;
+    }
+};

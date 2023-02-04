@@ -1,0 +1,460 @@
+﻿/// <reference path="../Libraries/Util.js" />
+
+(function ($) {
+
+    function Loader() {
+        var thisLoader = this;
+        var component = undefined;
+        var minimized = false;
+
+        var _showed = false;
+
+        var loader = undefined;
+        var settings = {
+            animateTime: 500,
+            dontAttach: false,
+            moreThanOneSearchLoader: false,
+            controllers: {
+                searchController: undefined,
+                checkOutController: undefined,
+                workFlowController: undefined,
+                templateController: undefined,
+                giftListController: undefined,
+                reportController: undefined,
+                travelCardController: undefined,
+                searchControllerInternal: undefined,
+                IntelligenceController: undefined,
+                profileController: undefined,
+                loaderController: undefined
+            },
+            animatePreorder: false,
+            singleBackground: true,
+            insertOnComponent: false,
+            insertOnComponentSettings: {
+                urlLoader: 'Styles/images/mini-loader.gif',
+                css: {
+                    float: 'right',
+                    'margin-top': '6px'
+                }
+            },
+            doMinimize: true,
+            minimizeImage: undefined,
+            showBackground: true,
+            renderImageLoader: true,
+            loadClassName: (location.pathname.contains('masterpricer') || location.pathname.contains('resultado')) ? 'loadMasterpricer' : 'loadPage'
+        }
+
+        function _setControllersEvents(action) {
+            if (settings.moreThanOneSearchLoader) {
+
+                if (settings.controllers.searchController) {
+                    settings.controllers.searchController.searchStarting[action](thisLoader.show);
+                    settings.controllers.searchController.searchUpdated[action](thisLoader.minimize);
+                    settings.controllers.searchController.searchCompleted[action](thisLoader.hide);
+                }
+
+                if (settings.controllers.searchControllerInternal) {
+
+                    settings.controllers.searchControllerInternal.changePackageStarting[action](thisLoader.show);
+                    settings.controllers.searchControllerInternal.changePackageCompleted[action](thisLoader.hide);
+
+                    settings.controllers.searchControllerInternal.hotelDetailsStarting[action](thisLoader.show);
+                    settings.controllers.searchControllerInternal.hotelDetailsCompleted[action](thisLoader.hide);
+
+                    settings.controllers.searchControllerInternal.hotelImagesDetailsStarting[action](thisLoader.show);
+                    settings.controllers.searchControllerInternal.hotelImagesDetailsCompleted[action](thisLoader.hide);
+
+                    settings.controllers.searchControllerInternal.hotelDailyFaresStarting[action](thisLoader.show);
+                    settings.controllers.searchControllerInternal.hotelDailyFaresCompleted[action](thisLoader.hide);
+
+                    settings.controllers.searchControllerInternal.eventDetailsStarting[action](thisLoader.show);
+                    settings.controllers.searchControllerInternal.eventDetailsCompleted[action](thisLoader.hide);
+
+                    settings.controllers.searchControllerInternal.cruiseDetailsStarting[action](thisLoader.show);
+                    settings.controllers.searchControllerInternal.cruiseDetailsCompleted[action](thisLoader.hide);
+                }
+            }
+            else if (settings.controllers.reportController) {
+                settings.controllers.reportController.loadReportStarting[action](thisLoader.show);
+                settings.controllers.reportController.loadReportCompleted[action](thisLoader.hide);
+            }
+            else if (settings.controllers.searchController) {
+                settings.controllers.searchController.searchStarting[action](thisLoader.show);
+                settings.controllers.searchController.searchUpdated[action](thisLoader.minimize);
+                settings.controllers.searchController.searchCompleted[action](thisLoader.hide);
+
+                settings.controllers.searchController.changePackageStarting[action](thisLoader.show);
+                settings.controllers.searchController.changePackageCompleted[action](thisLoader.hide);
+
+                settings.controllers.searchController.hotelDetailsStarting[action](thisLoader.show);
+                settings.controllers.searchController.hotelDetailsCompleted[action](thisLoader.hide);
+
+                settings.controllers.searchController.hotelDailyFaresStarting[action](thisLoader.show);
+                settings.controllers.searchController.hotelDailyFaresCompleted[action](thisLoader.hide);
+
+                settings.controllers.searchController.eventDetailsStarting[action](thisLoader.show);
+                settings.controllers.searchController.eventDetailsCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.IntelligenceController) {
+                settings.controllers.IntelligenceController.SearchHistoryFlight[action](thisLoader.show)
+                settings.controllers.IntelligenceController.SearchHistoryCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.checkOutController) {
+                if (!settings.dontAttach) {
+                    settings.controllers.checkOutController.processOrderStarting[action](thisLoader.show);
+                    settings.controllers.checkOutController.processOrderCompleted[action](thisLoader.hide);
+                }
+
+                if (settings.animatePreorder) {
+                    settings.controllers.checkOutController.preOrderStarting[action](thisLoader.show);
+                    settings.controllers.checkOutController.preOrderCompleted[action](thisLoader.hide);
+                    settings.controllers.checkOutController.preOrderError[action](thisLoader.hide);
+                }
+            }
+
+            if (settings.controllers.workFlowController) {
+                settings.controllers.workFlowController.loginStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.loginCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.processUserStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.processUserCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.loadForeignDeliveryStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.loadForeignDeliveryCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getServiceOrderStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getServiceOrderCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getServiceItemStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getServiceItemCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.processServiceOrderStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.processServiceOrderCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.processServiceItemStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.processServiceItemCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getInterfaceStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getInterfaceCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.changeStatusStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.changeStatusCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.loadAddressStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.loadAddressCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.selectUserStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.selectUserCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.verifyEmailStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.verifyEmailCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getUserStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getUserCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.forgottenPasswordStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.forgottenPasswordCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.cancelStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.cancelCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.mailServiceItemStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.mailServiceItemCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getServiceOrderTemplatesStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getServiceOrderTemplatesCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getServiceItemHistoryStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getServiceItemHistoryCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.removeResponsibilityStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.removeResponsibilityCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.setResponsibilityStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.setResponsibilityCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getHistoryStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getHistoryCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.addAlternativeApprovalStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.addAlternativeApprovalCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getBudgetsInDateStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getBudgetsInDateCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.getHistoryStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.getHistoryCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.searchVendorsStarting[action](thisLoader.hide);
+                settings.controllers.workFlowController.searchVendorsCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.searchCompaniesStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.searchCompaniesCompleted[action](thisLoader.hide);
+
+                settings.controllers.workFlowController.loginStarting[action](thisLoader.show);
+                settings.controllers.workFlowController.loginCompleted[action](thisLoader.hide);
+
+            }
+
+            if (settings.controllers.templateController) {
+                settings.controllers.templateController.printStarting[action](thisLoader.show);
+                settings.controllers.templateController.printCompleted[action](thisLoader.hide);
+
+                settings.controllers.templateController.sendEmailStarting[action](thisLoader.show);
+                settings.controllers.templateController.sendEmailCompleted[action](thisLoader.hide);
+
+                settings.controllers.templateController.printServiceItemStarting[action](thisLoader.show);
+                settings.controllers.templateController.printServiceItemCompleted[action](thisLoader.hide);
+
+                settings.controllers.templateController.sendEmailServiceItemStarting[action](thisLoader.show);
+                settings.controllers.templateController.sendEmailServiceItemCompleted[action](thisLoader.hide);
+
+                settings.controllers.templateController.resendEmailStarting[action](thisLoader.show);
+                settings.controllers.templateController.resendEmailCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.giftListController) {
+                settings.controllers.giftListController.searchStarting[action](thisLoader.show);
+                settings.controllers.giftListController.searchCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.travelCardController) {
+                settings.controllers.travelCardController.searchStarting[action](thisLoader.show);
+                settings.controllers.travelCardController.searchCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.interfaceBuilderController) {
+                settings.controllers.interfaceBuilderController.processRecordStarting[action](thisLoader.show);
+                settings.controllers.interfaceBuilderController.processRecordCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.profileController) {
+                settings.controllers.profileController.getImpersonateUsersAvailableStarting[action](thisLoader.show);
+                settings.controllers.profileController.getImpersonateUsersAvailableCompleted[action](thisLoader.hide);
+                settings.controllers.profileController.signInImpersonatedStarting[action](thisLoader.show);
+                settings.controllers.profileController.signInImpersonatedCompleted[action](thisLoader.hide);
+            }
+
+            if (settings.controllers.loaderController) {
+                settings.controllers.loaderController.onShowLoader[action](thisLoader.show);
+                settings.controllers.loaderController.onHideLoader[action](thisLoader.hide);
+            }
+        }
+
+        function _attachEvents() {
+            _setControllersEvents('attach');            
+        }
+
+        function _dettachEvents() {
+            _setControllersEvents('dettach');
+        }
+
+        this.initialize = function (target, options) {
+
+            $.extend(true, settings, options || {});
+
+            _dettachEvents();
+            _attachEvents();
+
+            component = $(target);
+
+            if (settings.insertOnComponent)
+                _initializeInsertOnComponent();
+            else
+                component.hide();
+        }
+
+        function _initializeInsertOnComponent() {
+            _createLoader();
+            component.append(loader);
+        }
+
+        function _createLoader() {
+            loader = $('<img>');
+
+            loader.addClass('jquery-loader')
+                .attr('src', settings.insertOnComponentSettings.urlLoader)
+                .css('display', 'none');
+
+            for (var prop in settings.insertOnComponentSettings.css) {
+                loader.css(prop, settings.insertOnComponentSettings.css[prop]);
+            }
+        }
+
+        this.setController = function (params) {
+            settings.controllers[params.Name] = params.Controller;
+
+            _dettachEventsDynamically(params.Name);
+            _attachEventsDynamically(params);
+
+        }
+
+        function _attachEventsDynamically(params) {
+            for (var prop in params.Controller) {
+                if (params.Controller[prop] && params.Controller[prop].isEvent) {
+                    if (prop.endsWith('Completed'))
+                        params.Controller[prop].attach(thisLoader.hide);
+                    else if (prop.endsWith('Starting'))
+                        params.Controller[prop].attach(thisLoader.show);
+                }
+            }
+        }
+
+        function _dettachEventsDynamically(controllerName) {
+            if (settings.controllers[controllerName]) {
+                for (var prop in settings.controllers[controllerName]) {
+                    if (settings.controllers[controllerName][prop] && settings.controllers[controllerName][prop].isEvent) {
+                        if (prop.endsWith('Completed'))
+                            settings.controllers[controllerName][prop].dettach(thisLoader.hide);
+                        else if (prop.endsWith('Starting'))
+                            settings.controllers[controllerName][prop].dettach(thisLoader.show);
+                    }
+                }
+            }
+        }
+
+        this.attachSpecificEvent = function (params) {
+            for (var prop in params.Controller) {
+                if (prop.startsWith(params.Event) && params.Controller[prop] && params.Controller[prop].isEvent) {
+                    if (prop.endsWith('Completed'))
+                        params.Controller[prop].attach(thisLoader.hide);
+                    else if (prop.endsWith('Starting'))
+                        params.Controller[prop].attach(thisLoader.show);
+                }
+            }
+        }
+
+        this.dettachSpecificEvent = function (params) {
+            if (settings.controllers[params.Controller]) {
+                for (var prop in settings.controllers[params.Controller]) {
+                    if (prop.startsWith(params.Event) && settings.controllers[params.Controller][prop].isEvent) {
+                        settings.controllers[params.Controller][prop].dettach(thisLoader.hide);
+                        settings.controllers[params.Controller][prop].dettach(thisLoader.show);
+                    }
+                }
+            }
+        }
+
+        this.dettachController = _dettachEventsDynamically;
+
+        this.destroy = function () {
+            _dettachEvents();
+
+            for (var controllerName in settings.controllers)
+                _dettachEventsDynamically(controllerName);
+        }
+
+        this.centralize = function () {
+            var positions = _getScreenSize()
+
+            var width = component.width();
+            var height = component.height();
+
+            positions = {
+                top: positions[1] / 2 - height / 2,
+                left: positions[0] / 2 - width / 2
+            };
+
+            component.animate(positions, settings.animateTime);
+        }
+
+        function _getScreenSize() {
+            var xPosition = 0;
+            var yPosition = 0;
+
+            if (self.innerHeight) {
+                xPosition = self.innerWidth;
+                yPosition = self.innerHeight;
+            }
+            else if (document.documentElement && document.documentElement.clientHeight) {
+                xPosition = document.documentElement.clientWidth;
+                yPosition = document.documentElement.clientHeight;
+            }
+            else if (document.body) {
+                xPosition = document.body.clientWidth;
+                yPosition = document.body.clientHeight;
+            }
+
+            return [xPosition, yPosition];
+        }
+
+        this.minimize = function () {
+
+
+            if (settings.doMinimize && !minimized) {
+
+                if (settings.minimizeImage != undefined)
+                    component.addClass(settings.minimizeImage);
+
+                var positions = _getScreenSize()
+
+                positions = {
+                    top: positions[1] - 100,
+                    left: positions[0] - component.width()
+                };
+
+                component.animate(positions, settings.animateTime);
+
+                minimized = true;
+            }
+        }
+
+        function showFull() {
+            minimized = false;
+            if (settings.singleBackground)
+                Util.CreateHintBoxy(component);
+            else
+                Util.CreateHintBoxy(component, undefined, undefined, undefined, undefined, settings.loadClassName, true, settings.showBackground, settings.renderImageLoader);
+        }
+
+        function showSimple() {
+            loader.show();
+        }
+
+        this.show = function () {
+
+            if (!_showed) {
+
+                if (settings.insertOnComponent)
+                    showSimple();
+                else
+                    showFull();
+
+                _showed = true;
+            }
+        }
+
+        function hideFull() {
+            if (settings.singleBackground)
+                Util.CloseHintBoxy(component);
+            else
+                Util.CloseDoubleHintBoxy(component);
+
+            component.hide();
+        }
+
+        function hideSimple() {
+            loader.hide();
+        }
+
+        this.hide = function () {
+
+            if (_showed) {
+
+                if (settings.insertOnComponent)
+                    hideSimple();
+                else
+                    hideFull();
+
+                _showed = false;
+            }
+        }
+    }
+
+    $.fn.loader = function () {
+        return Util.pluginDefaultBehavior(this, "loader", arguments, function () { return new Loader() });
+    };
+
+})(jQuery);

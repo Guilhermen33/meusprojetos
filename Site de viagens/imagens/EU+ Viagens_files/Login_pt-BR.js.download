@@ -1,0 +1,62 @@
+// This file was automatically generated from Login.soy.
+// Please don't edit this file by hand.
+
+if (typeof Login == 'undefined') { var Login = {}; }
+
+
+Login.login = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<label for="login_form_call" class="login_form_call">Meus <br /> pedidos</label><input id="login_form_call" type="checkbox" name="login_form_call" class="login_form_call"><div class="login_form normal"><h3>Identifique-se</h3><p>Identifique-se para ter acesso ao seu hist&oacute;rico de pedidos</p>');
+  Login.coreLogin(null, output);
+  output.append('</div>');
+  if (!opt_sb) return output.toString();
+};
+
+
+Login.business = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div class="login_form business"><h3>Acesso Empresarial</h3>');
+  Login.coreLogin(null, output);
+  output.append('</div>');
+  if (!opt_sb) return output.toString();
+};
+
+
+Login.coreLogin = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<label class="lblEmail login"><input type="email" placeholder="E-mail:" name="userEmail" id="userEmail" class="email" /></label><label class="lblPassword password"><input type="password" placeholder="Senha:" name="userPassword" id="userPassword" class="password" /></label><a href="#" class="btn enter send" id="userLoginBtn" title="Entrar">Entrar</a><a id="openContainerForgotPassword" href="#" title="Esqueci minha senha" class="forgot">Esqueci minha senha</a>');
+  if (!opt_sb) return output.toString();
+};
+
+
+Login.forgotPassword = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<h3>Esqueci Minha Senha</h3><p>Digite seu e-mail de cadastro e clique em enviar para receber um e-mail com instru&ccedil;&otilde;es sobre como cadastrar uma nova senha.</p><label class="login"><input name="userEmailForgot" placeholder="E-mail:" id="userEmailForgot" type="text" class="email" /></label><a href="#" class="btn send forgot_pass" id="forgotPassword" title="Enviar">Enviar</a><a href="#" id="closeContainerForgotPassword" class="btn close" title="Voltar">Voltar</a>');
+  if (!opt_sb) return output.toString();
+};
+
+
+Login.loggedInUser = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<div class="logged_in"><p>');
+  Resources.translate({code: 'Hello'}, output);
+  output.append(', <strong>', soy.$$escapeHtml(opt_data.User.FullName), '</strong></p>');
+  if (opt_data.User.FidelityInfo) {
+    output.append((opt_data.User.FidelityInfo.SumPoints && opt_data.User.FidelityInfo.PartnerPoints) ? '<p class="total">Seu saldo total é <strong>' + soy.$$escapeHtml(opt_data.User.FidelityInfo.SumPoints) + '</strong></p><p>sendo: <span> ' + soy.$$escapeHtml(opt_data.User.FidelityInfo.PartnerPointsUnit) + '</span> <strong> ' + soy.$$escapeHtml(opt_data.User.FidelityInfo.PartnerPoints) + ' </strong></p><p>e <span> ' + soy.$$escapeHtml(opt_data.User.FidelityInfo.PointsUnit) + ' </span><strong>' + soy.$$escapeHtml(opt_data.User.FidelityInfo.TotalPoints) + ' </strong></p>' : '<p class="total">Seu saldo total de ' + soy.$$escapeHtml(opt_data.User.FidelityInfo.PointsUnit) + ' é <strong>' + soy.$$escapeHtml(opt_data.User.FidelityInfo.TotalPoints) + '</strong></p>', (opt_data.User.FidelityInfo.AdditionalText) ? '<p>' + soy.$$escapeHtml(opt_data.User.FidelityInfo.AdditionalText) + '</p>' : '');
+  } else {
+    output.append('<a href="', soy.$$escapeHtml(opt_data.myOrdersUrl), '" class="my_orders">');
+    Resources.translate({code: 'MyOrders'}, output);
+    output.append('</a>');
+  }
+  output.append('<a href="#" id="logout" class="logout">Sair</a></div>');
+  if (!opt_sb) return output.toString();
+};
+
+
+Login.changePassword = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('<h3>');
+  Resources.translate({code: 'ChangePassword'}, output);
+  output.append('</h3><label class="password new"><input type="password" placeholder="Senha antiga:" name="old_password" id="old_password" /></label><label class="password new"><input type="password" placeholder=" Nova senha:" name="password" id="password" /></label><label class="password new"><input type="password" placeholder=" Confirmação de senha:" name="password_again" id="password_again" /></label><a href="#" class="btn enter send" id="change_password" title="Enviar">Enviar</a>');
+  if (!opt_sb) return output.toString();
+};

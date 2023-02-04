@@ -1,0 +1,326 @@
+﻿// *** Service Calling Proxy Class
+if (typeof Global == 'undefined')
+    Global = {};
+
+function _getBlockInvokeMessage() {
+    var defaultMessage = message = "Uma requisição já está sendo processada, por favor aguarde o término desta solicitação e tente novamente.";
+
+    if (Util && Util.GetInterfaceMessage) {
+        message = Util.GetInterfaceMessage("OnInvoke_BlockProcess");
+
+        if (!message || message == "")
+            message = defaultMessage;
+    }
+
+    return message;
+}
+
+function ServiceCaller(serviceUrl) {
+
+    var _I = this;
+    var TimeOut = 600000;
+    this.BlockInvoke = false;
+
+    this.serviceUrl = serviceUrl;
+
+    // *** Call a wrapped object
+    this.invoke = function (method, data, callback, error, waiting, InvokeTimeOutParameter, blockProcess) {
+
+        function _trySetPointOfEntrance() {
+            try {
+                if (typeof data === "object" && typeof data["req"] === "object") {
+                    if (!data["req"]["PointOfEntrance"] || data["req"]["PointOfEntrance"].length == 0)
+                        data["req"]["PointOfEntrance"] = method;
+                }
+            }
+            catch (e) { }
+        }
+
+        function _considerSendGtagErrorEvent(result) {
+            if (!Util.isTravelGo() && Ide && result.Errors && result.Errors.length) {
+                for (var i = 0; i < result.Errors.length; i++) {
+                    var error = result.Errors[i];
+                    var errorMessage = error.FriendlyMessage || error.ErrorMessage;
+                    var sourceLabelFragment = error.Source ? error.Source + ' - ' : '';
+                    var action = sourceLabelFragment + errorMessage;
+
+                    Util.SendGtagEvent(action, 'Erro', Util.GetRootSystemAccountInfo());
+                }
+            }
+        }
+
+        if (_I.BlockInvoke) {
+            alert(_getBlockInvokeMessage());
+            return;
+        }
+        //Verifica se existe beforeInvoke e se retorna que pode continuar.
+        if (typeof (_I.BeforeInvoke) && typeof (_I.BeforeInvoke) == 'function' && !_I.BeforeInvoke.apply(_I, arguments))
+            return;
+        _I.BlockInvoke = blockProcess;
+
+        //Define o ponto de entrada
+        _trySetPointOfEntrance();
+
+        // *** Convert input data into JSON - REQUIRES Json2.js
+        var json = JSON2.stringifyWcf(data);
+
+
+        var _ajaxSucessFull = function (res) {
+            _I.BlockInvoke = false;
+
+            if (waiting)
+                waiting.hide();
+
+            if (!res || !res.length || !callback) return;
+
+            setTimeout(function () {
+                var result = $.parseJSON(res);
+
+                if (typeof result == "string") {
+                    result = $.parseJSON(result);
+                    result = Util.MinimumJSONDeserialize(result);
+                }
+
+                if (Global.storeServiceCallerCalls) {
+                    if (!Global.serviceCallerCalls)
+                        Global.serviceCallerCalls = [];
+
+                    Global.serviceCallerCalls.push({
+                        method: method,
+                        request: data,
+                        response: result
+                    });
+                }
+
+                _considerSendGtagErrorEvent(result);
+
+                callback(result);
+            }, 0);
+
+            return;
+        }
+
+        // *** The service endpoint URL        
+        var url = _I.serviceUrl + method;
+
+        if (InvokeTimeOutParameter)
+            TimeOut = InvokeTimeOutParameter;
+
+        if (waiting)
+            waiting.show();
+
+        var crossDomain = typeof (undefined) != "undefined" && Global.Crossdomain;
+        var functionName = "";
+
+        if (crossDomain) {
+            url = url + "2?jsonObject=" + json;
+            functionName = ((new Date()).toString() + Math.random(100)).replaceAll(" ", "_");
+        }
+
+        if (crossDomain && window.XDomainRequest) {
+            _I.BlockInvoke = false;
+            request = new window.XDomainRequest();
+            window[functionName] = function () { _ajaxSucessFull(request.responseText); return window[functionName] = undefined; };
+            request.onload = window[functionName];
+            request.open("GET", url, true);
+            return request.send();
+        }
+        else if (crossDomain) {
+            _I.BlockInvoke = false;
+            window[functionName] = function (jsonToParse) { _ajaxSucessFull(jsonToParse); return window[functionName] = undefined; };
+            return $.getJSON(url, null, window[functionName]);
+        }
+        else {
+            return $.ajax({
+                url: url,
+                data: json,
+                type: "POST",
+                processData: false,
+                contentType: "application/json",
+                timeout: TimeOut,
+                dataType: "text",  // not "json" we'll parse
+                success: _ajaxSucessFull,
+                headers: Global.Headers ? Global.Headers : {},
+                error:
+                    function (xhr, textStatus) {
+                        _I.BlockInvoke = false;
+                        try {
+                            var message = undefined;
+
+                            if (textStatus != 'abort') {
+                                if (Global.LoaderController)
+                                    Global.LoaderController.hideLoader();
+
+                                if (waiting)
+                                    waiting.hide();
+
+                                if (textStatus == "timeout")
+                                    message = "Tempo limite se esgotou para a operação.";
+                                else if (xhr.responseText && xhr.responseText.length) {
+
+                                    var ret = {
+                                        IsJSON: false,
+                                        JSONResponse: null,
+                                        HtmlResponse: null
+                                    }
+
+                                    var err;
+
+                                    try {
+                                        err = JSON2.parse(xhr.responseText);
+                                        ret.IsJSON = true;
+                                        ret.JSONResponse = err;
+                                    } catch (e) {
+                                        err = xhr.responseText;
+                                        ret.IsJSON = false;
+                                        ret.HtmlResponse = err;
+                                    }
+
+                                    message = ret;
+                                }
+                                else
+                                    message = "Problemas de processamento";
+
+                                if (error) {
+                                    if (typeof message == 'string')
+                                        error(message);
+                                    else
+                                        error(message, callback);
+                                } else if (Global.MessagesController && typeof message == 'string')
+                                    Global.MessagesController.notifyMessages([message], EnumHelper.MessagesExhibitor.ExhibitionType.Alert);
+                            }
+
+                            return;
+                        }
+                        catch (ex) {
+                            if (Global.LoaderController)
+                                Global.LoaderController.hideLoader();
+
+                            if (error)
+                                error(null);
+                        }
+                    }
+            });
+        }
+
+        // extented functionalities
+        if (typeof (_I.AfterInvoke) && typeof (_I.AfterInvoke) == 'function')
+            _I.AfterInvoke.apply(_I, arguments);
+
+    }
+
+    this.invokeGet = function (method, data, callback, error, waiting, InvokeTimeOutParameter, executeCallbackEvenEmpty) {
+
+        var _ajaxSucessFull = function (res) {
+            if (waiting)
+                waiting.hide();
+
+            if (!executeCallbackEvenEmpty || !callback) {
+                if (!res || !res.length || !callback)
+                    return;
+            }
+
+            setTimeout(function () {
+                var result = res;
+
+                if (typeof result == "string") {
+                    result = $.parseJSON(result);
+                    result = Util.MinimumJSONDeserialize(result);
+                }
+
+                result.reqData = data;
+
+                if (Global.storeServiceCallerCalls) {
+                    if (!Global.serviceCallerCalls)
+                        Global.serviceCallerCalls = [];
+
+                    Global.serviceCallerCalls.push({
+                        method: method,
+                        request: data,
+                        response: result
+                    });
+                }
+
+                callback(result);
+            }, 0);
+
+            return;
+        }
+
+        // *** The service endpoint URL        
+        var url = _I.serviceUrl + method + '?' + data;
+
+        if (waiting)
+            waiting.show();
+
+
+        return $.ajax({
+            url: url,
+            type: "GET",
+            processData: false,
+            contentType: "application/json",
+            timeout: TimeOut,
+            success: _ajaxSucessFull,
+            headers: Global.Headers ? Global.Headers : {},
+            error:
+                function (xhr, textStatus) {
+                    _I.BlockInvoke = false;
+                    try {
+                        var message = undefined;
+
+                        if (textStatus != 'abort') {
+                            if (Global.LoaderController)
+                                Global.LoaderController.hideLoader();
+
+                            if (waiting)
+                                waiting.hide();
+
+                            if (textStatus == "timeout")
+                                message = "Tempo limite se esgotou para a operação.";
+                            else if (xhr.responseText && xhr.responseText.length) {
+
+                                var ret = {
+                                    IsJSON: false,
+                                    JSONResponse: null,
+                                    HtmlResponse: null
+                                }
+
+                                var err;
+
+                                try {
+                                    err = JSON2.parse(xhr.responseText);
+                                    ret.IsJSON = true;
+                                    ret.JSONResponse = err;
+                                } catch (e) {
+                                    err = xhr.responseText;
+                                    ret.IsJSON = false;
+                                    ret.HtmlResponse = err;
+                                }
+
+                                message = ret;
+                            }
+                            else
+                                message = "Problemas de processamento";
+
+                            if (error) {
+                                if (typeof message == 'string')
+                                    error(message);
+                                else
+                                    error(message, callback);
+                            } else if (Global.MessagesController && typeof message == 'string')
+                                Global.MessagesController.notifyMessages([message], EnumHelper.MessagesExhibitor.ExhibitionType.Alert);
+                        }
+
+                        return;
+                    }
+                    catch (ex) {
+                        if (Global.LoaderController)
+                            Global.LoaderController.hideLoader();
+
+                        if (error)
+                            error(null);
+                    }
+                }
+        });
+    }
+}

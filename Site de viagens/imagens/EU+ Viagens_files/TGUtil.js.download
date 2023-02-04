@@ -1,0 +1,212 @@
+﻿if (typeof TravelGo === 'undefined')
+    TravelGo = {
+        Util: {}
+    };
+else if (TravelGo.Util == undefined)
+    TravelGo.Util = {};
+
+TravelGo.Util.getElementsByClass = function (tagName, htmlclassToRetrieve) {
+    if (TravelGo.Util.isStringAndNotEmpty(tagName) && TravelGo.Util.isStringAndNotEmpty(htmlclassToRetrieve)) {
+        return $(tagName).filter('.' + htmlclassToRetrieve);
+    }
+
+    return undefined;
+};
+
+TravelGo.Util.addDropDownOption = function (dropDown, optionText, optionValue, selected) {
+    if (selected == undefined) {
+        selected = false;
+    }
+
+    if (TravelGo.Util.isJQuery(dropDown) && TravelGo.Util.isStringAndNotEmpty(optionText) && optionValue != undefined) {
+        var dropDownOption = dropDown.find('option[value="' + optionValue + '"]');
+        var optionProps = { value: optionValue, text: optionText, selected: selected };
+
+        if (dropDownOption != undefined && dropDownOption.length > 0) {
+            dropDown.find('option[value="' + optionValue + '"]').remove();
+        }
+
+        dropDown.append($('<option>', optionProps));
+    }
+};
+
+TravelGo.Util.addDropDownOptions = function (dropDown, firstValue, lastValue, valueToSelect) {
+    if (TravelGo.Util.isJQuery(dropDown) && TravelGo.Util.isNumber(firstValue) && TravelGo.Util.isNumber(lastValue)) {
+        if (!TravelGo.Util.isNumber(valueToSelect)) {
+            valueToSelect = firstValue;
+        }
+
+        for (var i = firstValue; i <= lastValue; i++) {
+            TravelGo.Util.addDropDownOption(dropDown, i.toString(), i);
+        }
+
+        var options = dropDown.children().toArray();
+        $options = TravelGo.Util.sortDropDownOptionsList(options);
+
+        dropDown.empty().append($options);
+
+        // o Append adiciona selected no último elemento inserido. Por isso é necessário fazer o ajuste do selected depois.
+        dropDown.find('option').removeProp('selected');
+        dropDown.find('option[value="' + valueToSelect.toString() + '"]').prop('selected', true);
+    }
+};
+
+TravelGo.Util.removeDropDownOptions = function (dropDown, valueToRemove, removeAllOptionsBiggerThanValue) {
+    if (TravelGo.Util.isJQuery(dropDown)) {
+        if (removeAllOptionsBiggerThanValue) {
+            dropDown.find('option').filter(function () {
+                return parseInt(this.value) >= valueToRemove;
+            }).remove();
+        } else {
+            dropDown.find('option').filter(function () {
+                return parseInt(this.value) == valueToRemove;
+            }).remove();
+        }
+    }
+};
+
+TravelGo.Util.sortDropDownOptionsList = function (arrayList) {
+    if (TravelGo.Util.isArrayAndNotEmpty(arrayList)) {
+        arrayList.sort(function (a, b) {
+            return parseInt(a.value) > parseInt(b.value);
+        });
+    }
+
+    return arrayList;
+};
+
+TravelGo.Util.leftOneOptionOnly = function (dropDown, value) {
+    if (TravelGo.Util.isJQuery(dropDown)) {
+        if (value == undefined) {
+            value = 0;
+        }
+
+        dropDown.empty().append($('<option>', { value: value, text: value.toString() }));
+    }
+}
+
+TravelGo.Util.isJQuery = function (obj) {
+    return obj != undefined && obj instanceof jQuery;
+};
+
+TravelGo.Util.isJqueryAndHasLength = function (obj) {
+    return TravelGo.Util.isJQuery(obj) && obj.length > 0;
+}
+
+TravelGo.Util.isArray = function (obj) {
+    return obj != undefined && Array.isArray(obj);
+};
+
+TravelGo.Util.isArrayAndNotEmpty = function (obj) {
+    return TravelGo.Util.isArray(obj) && obj.length > 0;
+};
+
+TravelGo.Util.isNumber = function (value) {
+    return value != undefined && !isNaN(value);
+};
+
+TravelGo.Util.isString = function (value) {
+    return value != undefined && Util.isString(value);
+};
+
+TravelGo.Util.isStringAndNotEmpty = function (value) {
+    return TravelGo.Util.isString(value) && value.length > 0;
+};
+
+TravelGo.Util.getUserDataFromAuthCookie = function (authenticationCookieName) {
+    var loginCookie = Util.getCookie(authenticationCookieName);
+
+    //loginCookie != undefined e != null
+    return loginCookie !== undefined ? JSON.parse(unescape(loginCookie)) : undefined;
+};
+
+TravelGo.Util.isUserAuthenticated = function (authenticationCookieName) {
+    if (TravelGo.Util.isStringAndNotEmpty(authenticationCookieName)) {
+        var loginCookie = TravelGo.Util.getUserDataFromAuthCookie(authenticationCookieName);
+
+        if (loginCookie != undefined) {
+            var isSecurityKeyValid = loginCookie.st != undefined && Util.isString(loginCookie.st) && loginCookie.st.length > 0;
+            var isUserNameValid = loginCookie.un != undefined && Util.isString(loginCookie.un) && loginCookie.un.length > 0;
+
+            return isSecurityKeyValid && isUserNameValid;
+        }
+    }
+
+    return false;
+};
+
+TravelGo.Util.GetSetting = function (settingName) {
+    if (TravelGo.Util.isStringAndNotEmpty(settingName)) {
+        if (Global != undefined && Global.Settings != undefined && Global.Settings[settingName] != undefined) {
+            return Global.Settings[settingName];
+        }
+    }
+
+    return undefined;
+};
+
+TravelGo.Util.GetSettingBool = function (settingName) {
+    if (TravelGo.Util.isStringAndNotEmpty(settingName)) {
+        if (Global != undefined && Global.Settings != undefined && Global.Settings[settingName] != undefined) {
+            return Global.Settings[settingName].trim().toUpperCase() == 'TRUE';
+        }
+    }
+
+    return undefined;
+};
+
+TravelGo.Util.GetSettingInt = function (settingName) {
+    var settingValue = TravelGo.Util.GetSetting(settingName);
+
+    if (settingValue != undefined && TravelGo.Util.isNumber(settingValue)) {
+        return parseInt(settingValue);
+    }
+
+    return undefined;
+};
+
+TravelGo.Util.parseRecordsToArray = function (records, skipEmptyRecordFields) {
+    var array = [];
+
+    if (skipEmptyRecordFields == undefined) {
+        skipEmptyRecordFields = true;
+    }
+
+    if (TravelGo.Util.isArrayAndNotEmpty(records)) {
+        for (m = 0; m < records.length; m++) {
+            var record = records[m];
+            var user = {};
+            var isRecordFieldNotEmpty = TravelGo.Util.isArrayAndNotEmpty(record.Fields);
+
+            if (isRecordFieldNotEmpty) {
+                for (n = 0; n < record.Fields.length; n++) {
+                    user[record.Fields[n].Name] = record.Fields[n].Value;
+                }
+            }
+
+            if (isRecordFieldNotEmpty || !skipEmptyRecordFields) {
+                array.push(user);
+            }
+        }
+    }
+
+    return array;
+};
+
+TravelGo.Util.updateKey = function (object, keyToUpdate) {
+    if (object !== undefined && TravelGo.Util.isStringAndNotEmpty(keyToUpdate)) {
+        if (object.hasOwnProperty(keyToUpdate)) {
+            return keyToUpdate;
+        } else {
+            var keys = Object.keys(object);
+
+            for (var keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+                if (keys[keyIndex].toLowerCase() == keyToUpdate) {
+                    return keys[keyIndex];
+                }
+            }
+        }
+    }
+
+    return '';
+};

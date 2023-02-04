@@ -1,0 +1,200 @@
+﻿/// <reference path="WebCommon/Scripts/Libraries/EnumHelper.js" />
+/// <reference path="WebCommon/Scripts/Libraries/Util.js" />
+/// <reference path="WebCommon/Scripts/Libraries/Libraries/Jquery.js" />
+
+if (TravelGo == undefined) {
+    TravelGo = {};
+}
+
+if (TravelGo.Plugin == undefined) {
+    TravelGo.Plugin = {};
+}
+
+TravelGo.Plugin.DropDownManager = function (baseSettings) {
+    var _this = this;
+    var _proxyObj = {
+        updateAllDropDowns: function (maxNumberOfPassengers, qtdOfPassengersSelected) {
+            return _this._updateAllDropDowns.apply(_this, [maxNumberOfPassengers, qtdOfPassengersSelected]);
+        },
+        getSelectedDropDowns: function () {
+            return _this.settings.components.dropDowns;
+        },
+        getClassName: function () {
+            return _this.settings.data.className;
+        },
+        setHotelRoomDropDown: function (hotelRoom) {
+            _this.settings.components.hotelRoomDropDown = hotelRoom;
+        },
+        getSelectedPassengersQtd: function () {
+            return _this._getSelectedPassengersQtd.apply(_this, undefined);
+        },
+    }
+    var _functions = {
+        initialize: function (baseSettings) {
+            return _this._initialize.apply(_this, [baseSettings]);
+        },
+    }
+
+    this.settings = {
+        data: {
+            className: undefined,
+            maxPassengerQtdSettingValue: 0,
+            actualSelectedPassengersQtd: 0,
+            maxOptionValue: 0,
+            minValueOption: 0,
+            areThoseDropDownsNotPassengers: false,
+        },
+        components: {
+            dropDowns: [],
+            hotelRoomDropDown: undefined,
+        },
+        events: {
+            onDropDownChange: undefined,
+        }
+    };
+
+    _functions.initialize(baseSettings);
+
+    return _proxyObj;
+};
+
+TravelGo.Plugin.DropDownManager.prototype = {
+    _getElementsByClass: function () {
+        var dropDowns = TravelGo.Util.getElementsByClass('select', this.settings.data.className);
+
+        if (TravelGo.Util.isJqueryAndHasLength(dropDowns)) {
+            for (var i = 0, len = dropDowns.length; i < len; i++) {
+                this.settings.components.dropDowns.push($(dropDowns[i]));
+            }
+        }
+    },
+    _getHotelRoomIndex: function () {
+        if (TravelGo.Util.isJQuery(this.settings.components.hotelRoomDropDown)) {
+            var dropDownValue = this.settings.components.hotelRoomDropDown.val();
+
+            if (TravelGo.Util.isNumber(dropDownValue)) {
+                return parseInt(dropDownValue);
+            }
+        }
+
+        return 0;
+    },
+    _getSelectedPassengersQtd: function () {
+        var passengersQtd = 0;
+
+        if (!this.settings.data.areThoseDropDownsNotPassengers) {
+            var hotelRoomIndex = this._getHotelRoomIndex();
+
+            for (var i = 0, len = this.settings.components.dropDowns.length; i < len; i++) {
+                var dropDown = this.settings.components.dropDowns[i];
+
+                if (TravelGo.Util.isJQuery(dropDown)) {
+                    if (hotelRoomIndex > 0) {
+                        var dropDownRoomIndex = dropDown.attr('data-roomIndex');
+
+                        if (dropDownRoomIndex != undefined && parseInt(dropDownRoomIndex) > hotelRoomIndex) {
+                            continue;
+                        }
+                    }
+
+                    passengersQtd = passengersQtd + (parseInt(dropDown.val()));
+                }
+            }
+        }
+
+        return passengersQtd;
+    },
+    _maxNumberOfPassengersReached: function () {
+        return this.settings.data.maxPassengerQtdSettingValue <= this.settings.data.actualSelectedPassengersQtd;
+    },
+    _isDropDownFromHigherRoomThanSelected: function (dropDown) {
+        var roomIndex = this._getHotelRoomIndex();
+        var dropDownRoomIndex = dropDown.attr('data-roomIndex');
+
+        return roomIndex > 0 && TravelGo.Util.isNumber(dropDownRoomIndex) && parseInt(dropDownRoomIndex) > roomIndex;
+    },
+    _getMaxPassengerOptionValue: function (dropDown) {
+        var optionSelectedValue = parseInt(dropDown.val());
+        var maxPassengers = this.settings.data.maxPassengerQtdSettingValue;
+        var maxPassengerQtdToSelect = maxPassengers - this.settings.data.actualSelectedPassengersQtd;
+
+        maxPassengerQtdToSelect = maxPassengerQtdToSelect + optionSelectedValue;
+
+        return maxPassengerQtdToSelect < 0 ? 0 : Util.MinValue([maxPassengerQtdToSelect, this.settings.data.maxOptionValue, maxPassengers]);
+    },
+    _defaultUpdateDropDown: function (dropDown) {
+        if (TravelGo.Util.isJQuery(dropDown) && this.settings.data.maxPassengerQtdSettingValue > 0 && this.settings.data.actualSelectedPassengersQtd >= 0) {
+            var optionSelectedValue = parseInt(dropDown.val());
+
+            if (this._isDropDownFromHigherRoomThanSelected(dropDown)) {
+                TravelGo.Util.leftOneOptionOnly(dropDown, this.settings.data.minValueOption);
+
+                return;
+            } else if (this._maxNumberOfPassengersReached()) {
+                if (optionSelectedValue == 0) {
+                    TravelGo.Util.leftOneOptionOnly(dropDown, this.settings.data.minValueOption);
+                } else {
+                    TravelGo.Util.removeDropDownOptions(dropDown, optionSelectedValue + 1, true);
+                }
+            } else {
+                var maxQtdOfPassengerAvailableToSelect = this._getMaxPassengerOptionValue(dropDown);
+
+                dropDown.find('option').remove();
+
+                TravelGo.Util.addDropDownOptions(dropDown, this.settings.data.minValueOption, maxQtdOfPassengerAvailableToSelect, optionSelectedValue);
+            }
+        }
+    },
+    _updateAllDropDowns: function (maxNumberOfPassengers, qtdOfPassengersSelected) {
+        this.settings.data.maxPassengerQtdSettingValue = maxNumberOfPassengers;
+        this.settings.data.actualSelectedPassengersQtd = qtdOfPassengersSelected;
+
+        for (i = 0; i < this.settings.components.dropDowns.length; i++) {
+            this.settings.events.onDropDownChange.apply(this, [this.settings.components.dropDowns[i]]);
+        }
+    },
+    _initialize: function (baseSettings) {
+        if (baseSettings != undefined) {
+            $.extend(this.settings, baseSettings);
+        }
+
+        this._getElementsByClass();
+
+        if (this.settings.events.onDropDownChange == undefined) {
+            this.settings.events.onDropDownChange = this._defaultUpdateDropDown;
+        }
+
+        if (this.settings.data.maxOptionValue > this.settings.data.maxPassengerQtdSettingValue) {
+            this.settings.data.maxOptionValue = this.settings.data.maxPassengerQtdSettingValue;
+        }
+    },
+};
+
+TravelGo.Plugin.HotelRoomDropDownManager = function (baseSettings) {
+    var _this = this;
+
+    function _onDropDownChange(dropDown) {
+        if (TravelGo.Util.isJQuery(dropDown) && this.settings.data.maxPassengerQtdSettingValue > 0 && this.settings.data.actualSelectedPassengersQtd >= 0) {
+            var optionSelectedValue = parseInt(dropDown.val());
+
+            if (this._maxNumberOfPassengersReached()) {
+                TravelGo.Util.removeDropDownOptions(dropDown, optionSelectedValue + 1, true);
+            } else {
+                TravelGo.Util.addDropDownOptions(dropDown, 1, this.settings.data.maxOptionValue, optionSelectedValue);
+            }
+        }
+    }
+
+    if (baseSettings == undefined) {
+        baseSettings = {};
+    }
+
+    if (baseSettings.events == undefined) {
+        baseSettings.events = {
+            onDropDownChange: _onDropDownChange,
+        }
+    }
+
+    // Na prática o return abaixo equivale a $.extend(_this, new TravelGo.Plugin.DropDownManager(baseSettings));
+    return new TravelGo.Plugin.DropDownManager(baseSettings);
+};

@@ -1,0 +1,304 @@
+﻿
+if (typeof (PageManager) === 'undefined') {
+    PageManager = typeof pageManager !== 'undefined' ? new pageManager() : {};
+}
+
+(function ($) {
+    PageManager.Login = function (component) {
+        var _this = this;
+        var _component = component;
+        var _signature = undefined;
+        var _inWidget = _component.selector.contains('widget');
+
+        var _settings = {
+            components: {
+                logout: '#logout',
+                businessAccessForm: "#business-access-form"
+            },
+            loaderClass: 'login',
+            template: function () { }
+        };
+
+        this.destroy = function () {
+            _functions.components.dettachEvents();
+            _functions.controllers.dettachEvents();
+            _plugins.destroy();
+            _component.empty();
+        };
+
+        this.authenticate = function (userName, password, authenticationType) {
+            _component.login("authenticate", {
+                userName: userName,
+                password: password,
+                authenticationType: authenticationType
+            });
+        };
+
+        var _events = {
+            components: {
+                logout: function () {
+                    Global.AuthenticateController.logout();
+                }
+            },
+            controllers: {
+                loginCompleted: function (response) {
+                    if (!response.Errors.length && !response.NeedChangePassword) {
+
+                        if (response.hasOwnProperty("RedirectUrl") && !$.isEmptyObject(response.RedirectUrl)) {
+                            var loginData = _component.login("getData");
+
+                            _settings.components.businessAccessForm.attr("action", response.RedirectUrl);
+                            _settings.components.businessAccessForm.find("[name='userName']").val(loginData.userName);
+                            _settings.components.businessAccessForm.find("[name='authenticationType']").val(loginData.authenticationType);
+                            _settings.components.businessAccessForm.find("[name='st']").val(response.SecurityToken.Key);
+                            _settings.components.businessAccessForm.submit();
+                        }
+                        else {
+                            _functions.setAuthenticatedInfos(response.User, response.SecurityToken);
+                        }
+
+                        if (!_inWidget) {
+                            TravelGo.Functions.ContinueForm.SetAction(Global.ShortCodeParameters.myordersurl);
+                            TravelGo.Functions.ContinueForm.SubmitForm();
+                        }
+
+                        if (Global && Global.MandatoryUserLogin) {
+                            if (typeof (Global.AuthenticateHelper) === 'undefined')
+                                Global.MandatoryUserLogin.validationAfterLogin(response);
+                        }
+
+                    } else if (response.NeedChangePassword) {
+                        _signature = response.User.Email;
+                    }
+                },
+                logoutCompleted: function () {
+                    Util.removeCookie('tg_client', false);
+                    Util.removeCookie('tg_client', false, true);
+                    Util.removeCookie('FidelityUserToken', false);
+                    Util.removeCookie('FidelityUserToken', false, true);
+                    Util.removeCookie('FidelityUserIdentifier', false);
+                    Util.removeCookie('FidelityUserIdentifier', false, true);
+                    Util.removeCookie('FidelityUserInfo', false);
+                    Util.removeCookie('FidelityUserInfo', false, true);
+
+                    if (typeof Global.Headers != 'undefined')
+                        Global.Headers.st = '';
+                },
+                changePasswordStart: function (request) {
+                    if (_signature)
+                        request.Signature = _signature;
+                },
+                getSecurityContextCompleted: function (response) {
+                    if (response && response.SecurityContext && response.SecurityContext.User) {
+                        _functions.setAuthenticatedInfos(response.SecurityContext.User, response.SecurityContext.SecurityToken);
+                    }
+                },
+
+            }
+        };
+
+        var _functions = {
+            hideLoader: function () {
+                Global.LoaderController.hideLoader();
+            },
+            showLoader: function () {
+                Global.LoaderController.showLoader();
+            },
+            loginCompletedHideLoader: function (response) {
+
+                if (!response.Successful) {
+                    _functions.hideLoader();
+                }
+                else {
+                    var authenticationType = _functions.getAuthenticationType();
+
+                    if (authenticationType != EnumHelper.AuthenticationType.BusinessAccess)
+                        _functions.hideLoader();
+                }
+            },
+            getLoggedUser: function () {
+                var userSession = Util.getCookie('tg_client') ? unescape(Util.getCookie('tg_client')) : null;
+                if (userSession) {
+
+                    var cookieContent = JSON.parse(userSession);
+
+                    var ret = { User: { Name: cookieContent.un, Email: cookieContent.em } };
+                    if (Util.getCookie('FidelityUserInfo')) {
+
+                        ret.User.FidelityInfo = JSON2.parse(unescape(Util.getCookie('FidelityUserInfo')));
+
+                        if (ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.any(function (x) { return x.Key == "FidelityUserTotalPoints" }))
+                            ret.User.FidelityInfo.TotalPoints = formatter.currency(ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "FidelityUserTotalPoints" }).Value, false, 0);
+
+                        if (ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.any(function (x) { return x.Key == "PointsUnit" }))
+                            ret.User.FidelityInfo.PointsUnit = ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "PointsUnit" }).Value;
+
+                        if (ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.any(function (x) { return x.Key == "AdditionalText" }))
+                            ret.User.FidelityInfo.AdditionalText = ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "AdditionalText" }).Value;
+
+                        if (ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.any(function (x) { return x.Key == "FidelityUserPartnerPoints" }))
+                            ret.User.FidelityInfo.PartnerPoints = formatter.currency(ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "FidelityUserPartnerPoints" }).Value, false, 0);
+
+                        if (ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.any(function (x) { return x.Key == "FidelityUserPartnerPoints" }))
+                            ret.User.FidelityInfo.SumPoints = formatter.currency(parseFloat(ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "FidelityUserPartnerPoints" }).Value) + parseFloat(ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "FidelityUserTotalPoints" }).Value), false, 0);
+
+                        if (ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.any(function (x) { return x.Key == "PartnerPointsUnit" }))
+                            ret.User.FidelityInfo.PartnerPointsUnit = ret.User.FidelityInfo.AdditionalInfo.KeyValueOfstringstring.first(function (x) { return x.Key == "PartnerPointsUnit" }).Value;
+                    }
+
+                    return ret;
+                }
+            },
+            components: {
+                select: function () {
+                    Util.SelectComponents(_settings.components);
+                },
+                setEvents: function (action) {
+                    if (_settings.components.logout.length)
+                        _settings.components.logout[action]('click', _events.components.logout);
+                },
+                dettachEvents: function () {
+                    _functions.components.setEvents('die');
+                },
+                attachEvents: function () {
+                    _functions.components.setEvents('live');
+                }
+            },
+            controllers: {
+                initialize: function () {
+                    Global.MessagesController = Global.MessagesController = Global.MessagesController || new MessagesController(Global.Options.messagesController);
+                    Global.LoaderController = new LoaderController();
+                    Global.AuthenticateController = new AuthenticateController();
+                },
+                setEvents: function (action) {
+                    Global.AuthenticateController.loginStarting[action](_functions.showLoader);
+                    Global.AuthenticateController.loginCompleted[action](_functions.loginCompletedHideLoader);
+                    Global.AuthenticateController.forgottenPasswordStarting[action](_functions.showLoader);
+                    Global.AuthenticateController.forgottenPasswordCompleted[action](_functions.hideLoader);
+                    Global.AuthenticateController.changePasswordStarting[action](_functions.showLoader);
+                    Global.AuthenticateController.changePasswordCompleted[action](_functions.hideLoader);
+                    Global.AuthenticateController.changePasswordStarting[action](_events.controllers.changePasswordStart);
+                    Global.AuthenticateController.changePasswordCompleted[action](_events.controllers.loginCompleted);
+                    Global.AuthenticateController.loginCompleted[action](_events.controllers.loginCompleted);
+                    Global.AuthenticateController.logoutCompleted[action](_events.controllers.logoutCompleted);
+                    Global.AuthenticateController.getSecurityContextCompleted[action](_events.controllers.getSecurityContextCompleted);
+                },
+                dettachEvents: function () {
+                    _functions.controllers.setEvents('dettach');
+                },
+                attachEvents: function () {
+                    _functions.controllers.setEvents('attach');
+                }
+            },
+            insertLoaderAdditionalClass: function () {
+                Global.LoaderController.insertAdditionalClass(_settings.loaderClass);
+            },
+            removeLoaderAdditionalClass: function () {
+                Global.LoaderController.removeAdditionalClass();
+            },
+            getAuthenticationType: function () {
+                return EnumHelper.AuthenticationType[_component.data("authenticationtype")] || EnumHelper.AuthenticationType.Normal
+            },
+            setAuthenticatedInfos: function (user, securityToken) {
+                var cookieContent = JSON.stringify({
+                    st: securityToken.Key,
+                    un: user.FullName,
+                    cp: user.Cpf,
+                    em: user.Email,
+                    uc: user.Id
+                });
+
+                Util.setCookie('tg_client', cookieContent, 0, false);
+
+                Global.Headers.st = securityToken.Key;
+            }
+        };
+
+        var _plugins = {
+            login: {
+                initialize: function () {
+                    _component.login({
+                        data: _functions.getLoggedUser(),
+                        authenticationType: _functions.getAuthenticationType(),
+                        template: LoginTPL,
+                        needChangePassword: Global.InterfaceEnvelope.ChangePassword,
+                        controllers: {
+                            messagesController: Global.MessagesController,
+                            authenticateController: Global.AuthenticateController
+                        },
+                        components: {
+                            containerForgotPassword: '.login_form',
+                            containerLogin: '.login_form',
+                            userNameForgotPassword: '#userEmailForgot',
+                            changePassword: {
+                                change: '#change_password.send'
+                            }
+                        },
+                        events: {
+                            afterLogin: (!_inWidget) ? function () { } : undefined
+                        }
+                    });
+                },
+                destroy: function () {
+                    _component.login('destroy');
+                }
+            },
+            initialize: function () {
+                _plugins.login.initialize();
+
+                if (typeof (Global.AuthenticateHelper) !== 'undefined') {
+
+                    var loggedUser = _functions.getLoggedUser();
+
+                    if (!loggedUser || !loggedUser.User || loggedUser.User.Email != Global.AuthenticateHelper.userName) {
+
+                        _events.controllers.logoutCompleted();
+
+                        Global.AuthenticateController.getSecurityContext({
+                            Key: Global.AuthenticateHelper.securityToken,
+                            AuthenticationType: Global.AuthenticateHelper.authenticationType,
+                            Signature: Global.AuthenticateHelper.userName,
+                            ReturnsCompany: false,
+                            ReturnsSystemAccount: false,
+                            ReturnsApplicationSettings: false,
+                            ReturnsPermissionGroup: false,
+                            ReturnsCompanyContext: false
+                        });
+
+                        Global.AuthenticateHelper = undefined;
+                    }
+                }
+
+            },
+            destroy: function () {
+                _plugins.login.destroy();
+            }
+        };
+
+        _component.html(_settings.template());
+        _functions.components.select();
+        _functions.components.attachEvents();
+        _functions.controllers.initialize();
+        _functions.controllers.attachEvents();
+        _functions.insertLoaderAdditionalClass();
+        _functions.removeLoaderAdditionalClass();
+        _plugins.initialize();
+
+        return _this;
+    };
+
+    $(document).ready(function () {
+        if (!Global.PageManagers)
+            Global.PageManagers = {};
+
+        var $container = $('#login');
+
+        if (!$container.length)
+            $container = $('#widget_login');
+        else
+            $('#widget_login').remove();
+
+        if (!Global.FidelityEnabled)
+            Global.PageManagers.Login = new PageManager.Login($container);
+    });
+})(jQuery);

@@ -1,0 +1,73 @@
+﻿if (typeof (PageManager) === 'undefined') {
+    PageManager = typeof pageManager !== 'undefined' ? new pageManager() : {};
+}
+
+(function ($) {
+    PageManager.Messages = function (component, context) {
+        var _this = this;
+        var _component = component;
+
+        this.destroy = function () {
+            _plugins.destroy();
+            _component.empty();
+        };
+
+        var _functions = {
+            controllers: {
+                initialize: function () { },
+            },
+            getMessagesController: function () {
+
+                var params = {};
+                $.extend(true, params, Global.Options.messagesController);
+
+                if (context)
+                    params.Global = context;
+
+                if (Global.MessagesController)
+                    return Global.MessagesController;
+                else
+                    return new MessagesController(params)
+            }
+        };
+
+        var _plugins = {
+            messagesExhibitor: {
+                initialize: function () {
+                    _component.messagesExhibitor({
+                        controllers: {
+                            messagesController: _functions.getMessagesController()
+                        },
+                        exhibitionType: EnumHelper.MessagesExhibitor.ExhibitionType.Alert,
+                        type: EnumHelper.MessagesExhibitor.Type.Warning,
+                        addBold: false,
+                        hasTwoBehaviors: false,
+                        clickClear: false,
+                        scrollTo: false
+                    });
+                },
+                destroy: function () {
+                    _component.messagesExhibitor('destroy');
+                }
+            },
+            initialize: function () {
+                _plugins.messagesExhibitor.initialize();
+            },
+            destroy: function () {
+                _plugins.messagesExhibitor.destroy();
+            }
+        };
+
+        _functions.controllers.initialize();
+        _plugins.initialize();
+
+        return _this;
+    };
+
+    $(document).ready(function () {
+        if (!Global.PageManagers)
+            Global.PageManagers = {};
+
+        Global.PageManagers.Messages = new PageManager.Messages($('#messages'));
+    });
+})(jQuery);

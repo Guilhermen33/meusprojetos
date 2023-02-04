@@ -1,0 +1,2014 @@
+﻿/// <reference path="Formatters.js" />
+
+/* ORDENAÇÃO ALFABÉTICA DAS PROTOTYPES. MANTENHAM! */
+
+/* ***** ARRAY PROTOTYPES ****** */
+
+Array.prototype.all = function (test) {
+    var newArgs = Array.prototype.slice.call(arguments, 1);
+
+    for (var i = 0, len = this.length; i < len; i++) {
+        if (!test.apply(this[i], [this[i]].concat(newArgs)))
+            return false;
+    }
+
+    return true;
+};
+
+Array.prototype.Add = Array.prototype.add = function (item) {
+    this.push(item);
+};
+
+Array.prototype.AddRange = Array.prototype.addRange = function (items) {
+
+    return items.reduce(function (poll, item) {
+        poll.push(item);
+        return poll;
+    }, this);
+};
+
+Array.prototype.UpsertRange = Array.prototype.upsertRange = function (items) {
+
+    return items.reduce(function (poll, item) {
+
+        var existentItem = poll.first(function (po) { return po.Key == item.Key });
+
+        if (existentItem)
+            existentItem.Value = item.Value;
+        else
+            poll.push(item);
+
+        return poll;
+    }, this);
+};
+
+Array.prototype.any = function (test) {
+    if (!arguments.length)
+        return !!this.length;
+
+    var args = Array.prototype.slice.call(arguments, 1);
+    var functionTest = typeof test == "function" ? test : function (x) { return x == test; };
+
+    for (var i = 0, len = this.length; i < len; i++)
+        if (functionTest.apply(this[i], [this[i]].concat(args)))
+            return true;
+
+    return false;
+};
+
+Array.prototype.average = function () {
+    return this.Sum() / this.length;
+};
+
+Array.prototype.binarySearch = function binarySearch(find, comparator) {
+    var low = 0, high = this.length - 1, i, comparison;
+    var ret = -1;
+    while (low <= high) {
+        i = parseInt((low + high) / 2, 10);
+        comparison = comparator(this[i], find);
+        if (comparison > 0)
+            low = i + 1;
+        else if (comparison < 0)
+            high = i - 1;
+        else {
+            ret = i;
+            break;
+        }
+    }
+    if (ret < 0)
+        ret = undefined;
+
+    return ret;
+};
+
+Array.prototype.chunk = function (chunkSize) {
+    var response = [];
+
+    var copy = this;
+
+    while (copy.length) {
+        response.push(copy.take(chunkSize));
+        copy = copy.skip(chunkSize);
+    }
+
+    return response;
+};
+
+Array.prototype.clearUndefined = function () {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == undefined) {
+            this.remove(i);
+            i--;
+        }
+    }
+
+    return false;
+};
+
+Array.prototype.clearEmptyString = function () {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == "" || this[i] == null || this[i] == undefined) {
+            this.remove(i);
+            i--;
+        }
+    }
+
+    return false;
+};
+
+Array.prototype.contains = function (value) {
+    return $.inArray(value, this) > -1;
+};
+
+Array.prototype.count = function (test) {
+    var count = 0;
+
+    for (var i = 0, len = this.length; i < len; i++)
+        if (test(this[i]))
+            count++;
+
+    return count;
+};
+
+Array.prototype.equals = function (array) {
+    if (!array)
+        return false;
+
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l = this.length; i < l; i++) {
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            if (!this[i].equals(array[i]))
+                return false;
+        }
+        else if (this[i] != array[i])
+            return false;
+    }
+
+    return true;
+};
+
+Array.prototype.except = function (targetArray) {
+    var newArray = [];
+
+    if (targetArray && targetArray.length && this.length)
+        for (var i = 0, l = this.length; i < l; i++)
+            if (!targetArray.contains(this[i]))
+                newArray.push(this[i]);
+
+    return newArray;
+};
+
+Array.prototype.distinct = function (test) {
+    var elements = {};
+    var resp = [];
+
+    if (!test)
+        test = function (x) { return x; }
+
+    for (var i = 0, len = this.length; i < len; i++) {
+        var result = test(this[i]);
+        if (!elements[result]) {
+            elements[result] = true;
+            resp.push(this[i])
+        }
+    }
+
+    return resp;
+};
+
+Array.prototype.first = function (test) {
+
+    var len = this.length;
+
+    if (!test && len)
+        return this[0];
+
+    for (var i = 0; i < len; i++)
+        if (test(this[i]))
+            return this[i];
+
+    return undefined;
+};
+
+if (Array.prototype.forEach == 'undefined')
+    Array.prototype.forEach = function (exec) {
+        if (!exec) return;
+
+        for (var i = 0, len = this.length; i < len; i++)
+            exec(this[i], i);
+    };
+
+Array.prototype.foreach = Array.prototype.forEach;
+
+Array.prototype.groupBy = function (test) {
+    if (!test) test = function (x) { return x; };
+
+    var resp = {};
+
+    for (var i = 0, len = this.length; i < len; i++) {
+        var con = test(this[i]);
+
+        if (con != undefined) {
+            !resp[con] ? resp[con] = [this[i]] : resp[con].push(this[i]);
+        }
+    }
+
+    return resp;
+};
+
+Array.prototype.groupByWithoutKey = function (test) {
+    var resp = [];
+
+    var grouped = this.groupBy(test);
+
+    for (var i in grouped)
+        if (grouped.hasOwnProperty(i))
+            resp.push(grouped[i]);
+
+    return resp;
+};
+
+Array.prototype.hasCount = function () {
+    return this.length > 0;
+};
+
+Array.prototype.insert = function (index, item) {
+    this.splice(index, 0, item);
+}
+
+var intersectionComparerWrapper = new (function () {
+    var _this = this;
+    this.item = {};
+    this.comparer = function () { };
+    this.exec = function (t) { return _this.comparer(_this.item, t); };
+})();
+
+Array.prototype.intersection = function (array2, comparer) {
+    var intersec = [];
+    comparer = comparer ? comparer : function (x, y) { return x == y; };
+
+    if (!array2 || !array2.length)
+        return intersec;
+
+    intersectionComparerWrapper.comparer = comparer;
+    for (var i = 0; i < this.length; i++) {
+        intersectionComparerWrapper.item = this[i];
+        if (array2.any(intersectionComparerWrapper.exec) && !intersec.any(this[i]))
+            intersec.push(this[i]);
+    }
+
+    return intersec;
+};
+
+Array.prototype.isEmpty = function () {
+    return this.length == 0;
+};
+
+Array.prototype.join = function (separator, selector) {
+
+    var leng = this.length;
+    var resp = "";
+
+    if (leng) {
+        selector = selector || function (x) { return x };
+        resp = selector(this[0]);
+        for (var i = 1; i < leng; i++)
+            resp += separator + selector(this[i]);
+    }
+
+    return resp;
+};
+
+Array.prototype.last = function (test) {
+
+    var thisLen = this.length;
+
+    if (!test && thisLen)
+        return this[this.length - 1];
+
+    for (var i = thisLen - 1; i >= 0; i--)
+        if (test(this[i]))
+            return this[i];
+
+    return undefined;
+};
+
+Array.prototype.max = function (test) {
+
+    if (!test)
+        test = function (x) { return x; };
+
+    var maxValue = undefined;
+
+    for (var i = 0; i < this.length; i++) {
+        var iValue = test(this[i]);
+        if (maxValue === undefined || iValue > maxValue)
+            maxValue = iValue;
+    }
+
+    return maxValue;
+};
+
+Array.prototype.getItemByMax = function (test) {
+
+    if (!test)
+        test = function (x) { return x; };
+
+    var maxValue = undefined;
+
+    for (var i = 0; i < this.length; i++)
+        if (!maxValue || test(this[i]) > test(maxValue))
+            maxValue = this[i];
+
+    return maxValue;
+};
+
+Array.prototype.min = function (test) {
+
+    if (!test)
+        test = function (x) { return x; };
+
+    var minValue = undefined;
+
+    for (var i = 0; i < this.length; i++) {
+        var iValue = test(this[i]);
+        if (minValue === undefined || iValue < minValue)
+            minValue = iValue;
+    }
+
+    return minValue;
+}
+
+Array.prototype.getItemByMin = function (test) {
+    if (!test)
+        test = function (x) { return x; };
+
+    var minValue = undefined;
+
+    for (var i = 0, len = this.length; i < len; i++)
+        if (!minValue || test(this[i]) < test(minValue))
+            minValue = this[i];
+
+    return minValue;
+};
+
+Array.prototype.mostCommon = function () {
+    var count = 0, max = 0, num = 0, mode = 0;
+    this.sort();
+    this.ForEach(function (v) {
+
+        if (num != v) {
+            num = v;
+            count = 1;
+        } else {
+            count++;
+        }
+
+        if (count > max) {
+            max = count;
+            mode = num;
+        }
+    });
+    if (max == 1) { mode = false; }
+    return mode;
+};
+
+Array.prototype.move = function (old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+};
+
+Array.prototype.orderBy = function () {
+    function _simpleSortFunction(a, b) {
+        return (a < b && -1) || (a > b && 1) || 0;
+    }
+
+    function _sortfunction(a, b) {
+        for (var i = 1; a.length == b.length && i < a.length; i++) {
+            var resp = _simpleSortFunction(a[i], b[i]);
+            if (resp)
+                return resp;
+        }
+
+        return 0;
+    }
+
+    if (this.length > 0) {
+
+        var tests = arguments;
+
+        if (!tests.length)
+            tests = [function (x) { return x; }];
+
+        var arrayToSort = this.select(function (o) {
+            var resp = [o];
+
+            for (var i = 0, len = tests.length; i < len; i++) {
+                var value = tests[i](o);
+                if (value && typeof (value) == 'string')
+                    value = value.toLowerCase().removeDiacritics();
+                else if (value && typeof (value) == 'number')
+                    value = parseFloat(parseFloat(value).toFixed(2));
+                resp.push(value);
+            }
+
+            return resp;
+        });
+
+        arrayToSort.sort(_sortfunction);
+
+        for (var i = 0; i < arrayToSort.length; i++)
+            this[i] = arrayToSort[i][0];
+    }
+
+    return this;
+};
+
+Array.prototype.getOrderedBy = function (test) {
+    function _sortfunction(a, b) {
+        if (a[1] < b[1])
+            return -1;
+        else if (a[1] == b[1])
+            return 0;
+        else
+            return 1;
+    }
+
+    if (!test)
+        test = function (x) { return x; };
+
+    var arrayToSort = this.select(function (o) { return [o, test(o)] });
+
+    arrayToSort.sort(_sortfunction);
+
+    var orderedArray = [];
+
+    for (var i = 0; i < arrayToSort.length; i++)
+        orderedArray.push(arrayToSort[i][0]);
+
+    return orderedArray;
+};
+
+Array.prototype.orderByDescending = function (test) {
+    this.orderBy(test);
+    this.reverse();
+
+    return this;
+};
+
+Array.prototype.permute = function (maxLength) {
+
+    maxLength = maxLength || 0;
+
+    var usedChars = [], permArr = [];
+
+    var permute = function (input) {
+        var ch, chars = input.toString().split('');
+        for (var i = 0; i < chars.length; i++) {
+            ch = chars.splice(i, 1);
+            usedChars.push(ch);
+            !chars.length && (permArr[permArr.length] = usedChars.join(""));
+            permute(chars.join(""));
+            chars.splice(i, 0, ch);
+            usedChars.pop();
+        }
+    }
+
+    permute(this.join(""));
+
+    permArr.orderBy();
+
+    if (maxLength) {
+        permArr = permArr.select(function (item) { return item.substring(0, maxLength); });
+    }
+
+    return permArr.distinct();
+};
+
+Array.prototype.remove = function (from, to) {
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+};
+
+Array.prototype.removeItem = function (itemToRemove) {
+    for (var j = 0; j < this.length; j++) {
+        if (this[j] == itemToRemove) {
+            this.splice(j, 1);
+            j--;
+        }
+    }
+}
+
+Array.prototype.removeAll = function (test) {
+    var newArray = [];
+
+    if (test) {
+        var newArgs = Array.prototype.slice.call(arguments, 1);
+        var functionTest = typeof test == "function" ? test : function (x) { return x == test; };
+
+        for (var i = 0; i < this.length; i++) {
+            if (!functionTest.apply(this[i], [this[i]].concat(newArgs)))
+                newArray.push(this[i]);
+        }
+    } else {
+        newArray = this;
+    }
+
+    return newArray;
+};
+
+Array.prototype.removeAt = function (index) {
+    var newArray = [];
+
+    if (index != undefined && index != null) {
+        for (var i = 0; i < this.length; i++) {
+            if (i != index) {
+                newArray.push(this[i]);
+            }
+        }
+    }
+
+    return newArray;
+};
+
+Array.prototype.select = function (selector) {
+    var isFunction = typeof (selector) === 'function';
+
+    var resp = [];
+
+    for (var i = 0, len = this.length; i < len; i++) {
+        var item = null;
+        if (isFunction)
+            item = selector(this[i], i);
+        else
+            item = this[i][selector];
+
+        if (item != null)
+            resp.push(item);
+    }
+
+    return resp;
+};
+
+Array.prototype.selectMany = function (selector) {
+    var resp = [];
+
+    for (var i = 0, len = this.length; i < len; i++)
+        resp.addRange(selector(this[i], i));
+
+    return resp;
+};
+
+Array.prototype.getRange = function (startIndex, length) {
+    return this.slice(startIndex, startIndex + length);
+};
+
+Array.prototype.sum = function (func) {
+
+    if (func == undefined)
+        func = function (r) { return r; };
+
+    var sumValues = 0;
+
+    for (var i = 0; i < this.length; i++) {
+        sumValues += func(this[i]);
+    }
+
+    return sumValues;
+};
+
+Array.prototype.toDictionary = function (test) {
+    if (!test) test = function (x) { return x; };
+
+    var resp = {};
+
+    for (var i = 0, len = this.length; i < len; i++) {
+        var con = test(this[i]);
+
+        if (con != undefined)
+            resp[con] = this[i];
+    }
+
+    return resp;
+}
+
+Array.prototype.toString = function () {
+    return this.join("");
+};
+
+Array.prototype.where = function (test) {
+    var resp = [];
+
+    for (var i = 0, len = this.length; i < len; i++)
+        if (test(this[i]))
+            resp.push(this[i]);
+
+    return resp;
+};
+
+Array.prototype.firstIndexOf = function (func) {
+
+    var functionTest = typeof func == "function" ? func : function (x) { return x == func; };
+
+    var resp = -1;
+    for (var i = 0, len = this.length; i < len; i++) {
+        if (functionTest(this[i])) {
+            resp = i;
+            break;
+        }
+    }
+
+    return resp;
+
+};
+
+Array.prototype.lastIndexOf = function (func) {
+
+    var functionTest = typeof func == "function" ? func : function (x) { return x == func; };
+
+    var resp = -1;
+    for (var i = 0, len = this.length; i < len; i++)
+        if (functionTest(this[i]))
+            resp = i;
+
+    return resp;
+
+};
+
+Array.prototype.take = function (i) {
+    return this.slice(0, i);
+};
+
+Array.prototype.skip = function (i) {
+    return this.slice(i, this.length);
+};
+
+if (!Array.prototype.push) {
+    Array.prototype.push = function (x) {
+        this[this.length] = x;
+        return true;
+    }
+};
+
+if (!Array.prototype.pop) {
+    Array.prototype.pop = function () {
+        var response = this[this.length - 1];
+        this.length--;
+        return response;
+    }
+};
+
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (obj, start) {
+        for (var i = (start || 0), j = this.length; i < j; i++) {
+            if (this[i] === obj) { return i; }
+        }
+        return -1;
+    }
+};
+
+if (!Array.prototype.hasCount) {
+    Array.prototype.hasCount = function () {
+        return (this && this.length && this.length > 0);
+    };
+}
+
+/* ***** DATE PROTOTYPES ******** */
+
+var dateFormat = function () {
+    var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
+		timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
+		timezoneClip = /[^-+\dA-Z]/g,
+		pad = function (val, len) {
+		    val = String(val);
+		    len = len || 2;
+		    while (val.length < len) val = "0" + val;
+		    return val;
+		};
+
+    // Regexes and supporting functions are cached through closure
+    return function (date, mask, utc) {
+        var dF = dateFormat;
+
+        // You can't provide utc if you skip other args (use the "UTC:" mask prefix)
+        if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
+            mask = date;
+            date = undefined;
+        }
+
+        // Passing date through Date applies Date.parse, if necessary
+        date = date ? new Date(date) : new Date;
+        if (isNaN(date)) throw SyntaxError("invalid date");
+
+        mask = String(dF.masks[mask] || mask || dF.masks["default"]);
+
+        // Allow setting the utc argument via the mask
+        if (mask.slice(0, 4) == "UTC:") {
+            mask = mask.slice(4);
+            utc = true;
+        }
+
+        var _ = utc ? "getUTC" : "get",
+			d = date[_ + "Date"](),
+			D = date[_ + "Day"](),
+			m = date[_ + "Month"](),
+			y = date[_ + "FullYear"](),
+			H = date[_ + "Hours"](),
+			M = date[_ + "Minutes"](),
+			s = date[_ + "Seconds"](),
+			L = date[_ + "Milliseconds"](),
+			o = utc ? 0 : date.getTimezoneOffset(),
+			flags = {
+			    d: d,
+			    dd: pad(d),
+			    ddd: dF.i18n.dayNames[D],
+			    dddd: dF.i18n.dayNames[D + 7],
+			    m: m + 1,
+			    mm: pad(m + 1),
+			    mmm: dF.i18n.monthNames[m],
+			    mmmm: dF.i18n.monthNames[m + 12],
+			    yy: String(y).slice(2),
+			    yyyy: y,
+			    h: H % 12 || 12,
+			    hh: pad(H % 12 || 12),
+			    H: H,
+			    HH: pad(H),
+			    M: M,
+			    MM: pad(M),
+			    s: s,
+			    ss: pad(s),
+			    l: pad(L, 3),
+			    L: pad(L > 99 ? Math.round(L / 10) : L),
+			    t: H < 12 ? "a" : "p",
+			    tt: H < 12 ? "am" : "pm",
+			    T: H < 12 ? "A" : "P",
+			    TT: H < 12 ? "AM" : "PM",
+			    Z: utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
+			    o: (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
+			    S: ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+			};
+
+        return mask.replace(token, function ($0) {
+            return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
+        });
+    };
+};
+
+// Some common format strings
+dateFormat.masks = {
+    "default": "ddd mmm dd yyyy HH:MM:ss",
+    shortDate: "m/d/yy",
+    commonDate: "mm/dd/yyyy",
+    mediumDate: "mmm d, yyyy",
+    longDate: "mmmm d, yyyy",
+    fullDate: "dddd, mmmm d, yyyy",
+    shortTime: "h:MM TT",
+    mediumTime: "h:MM:ss TT",
+    longTime: "h:MM:ss TT Z",
+    isoDate: "yyyy-mm-dd",
+    isoTime: "HH:MM:ss",
+    isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
+    isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+};
+
+// Internationalization strings
+dateFormat.i18n = {
+    dayNames: [
+		"dom", "seg", "ter", "qua", "qui", "sex", "sab",
+		"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"
+    ],
+    monthNames: [
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+		"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ]
+};
+
+numberOfDays = function (month, year) {
+    if ((month < 8 && month % 2 == 1) || (month > 7 && month % 2 == 0)) return 31;
+    if (month != 2) return 30;
+    if (year % 4 == 0) return 29;
+    return 28;
+}
+
+Date.prototype.dateDiff = function (strInterval, dtEnd) {
+    var dtStart = this;
+    switch (strInterval) {
+        case 's': return Math.round((dtEnd - dtStart) / 1000);
+        case 'm': return Math.round((dtEnd - dtStart) / 60000);
+        case 'h': return Math.round((dtEnd - dtStart) / 3600000);
+        case 'd': return Math.round((dtEnd - dtStart) / 86400000);
+        case 'w': return Math.round((dtEnd - dtStart) / (86400000 * 7));
+        case 'm': return (dtEnd.getMonth() + 1) + ((dtEnd.getFullYear() - dtStart.getFullYear()) * 12) - (dtStart.getMonth() + 1);
+        case 'y': return dtEnd.getFullYear() - dtStart.getFullYear();
+    }
+}
+
+Date.prototype.isSameDate = function (otherDate) {
+    return this.getDate() == otherDate.getDate()
+        && this.getMonth() == otherDate.getMonth()
+        && this.getFullYear() == otherDate.getFullYear();
+}
+
+Date.prototype.addDays = function (days) {
+
+    if (isNaN(days))
+        return this;
+    else if (typeof (days) == 'string')
+        days = parseInt(days, 10);
+
+    var day = this.getDate() + days;
+    var month = this.getMonth() + 1;
+    var year = this.getFullYear();
+
+    var _numberOfDays = function (month, year) {
+        if ((month < 8 && month % 2 == 1) || (month > 7 && month % 2 == 0)) return 31;
+        if (month != 2) return 30;
+        if (year % 4 == 0) return 29;
+        return 28;
+    }
+
+    var numberOfDays = _numberOfDays(month, year);
+
+    while (day > numberOfDays) {
+        day -= _numberOfDays(month, year);
+        month++;
+
+        if (month > 12) {
+            month = 1;
+            year++;
+        }
+    }
+
+
+    return (new Date(year, (month - 1), day, this.getHours()));
+}
+
+Date.prototype.getDaysInMonth = function () {
+    var _numberOfDays = function (month, year) {
+        if ((month < 8 && month % 2 == 1) || (month > 7 && month % 2 == 0)) return 31;
+        if (month != 2) return 30;
+        if (year % 4 == 0) return 29;
+        return 28;
+    }
+
+    return _numberOfDays(this.getMonth() + 1, this.getFullYear());
+}
+
+Date.prototype.addDaysSafe = function (days) {
+
+    if (isNaN(days))
+        return this;
+
+    if (typeof (days) == 'string')
+        days = parseInt(days, 10);
+
+    this.setDate(this.getDate() + days);
+
+    return this;
+};
+
+Date.prototype.addMinutes = function (minutes) {
+    return new Date(this.getTime() + minutes * 60000);
+};
+
+Date.prototype.decreaseMinutes = function (minutes) {
+    return new Date(this.getTime() - minutes * 60000);
+};
+
+Date.prototype.addYears = function (years) {
+    return (new Date(this.getFullYear() + years, this.getMonth(), this.getDate(), this.getHours()));
+}
+
+Date.prototype.dayBreaks = function (date) {
+    var days = this.completeUntilInDays(date);
+
+    var exactly = parseInt(days);
+
+    if ((this.getHours() + (24 * (days - exactly))) > 24)
+        exactly++;
+
+    return exactly;
+};
+
+Date.prototype.format = function (mask, utc) {
+    return dateFormat(this, mask, utc);
+};
+
+Date.prototype.completeUntilInDays = function (date) {
+    return (date - this) / (24 * 60 * 60 * 1000);
+}
+
+Date.prototype.untilInDays = function (date) {
+    return this.completeUntilInDays(date).toFixed(0);
+};
+
+Date.prototype.untilInYears = function (date) {
+    date = date || new Date();
+
+    var age = date.getFullYear() - this.getFullYear();
+    var m = date.getMonth() - this.getMonth();
+
+    if (m < 0 || (m === 0 && date.getDate() < this.getDate()))
+        age--;
+
+    return age;
+};
+
+Date.prototype.toDateValues = function () {
+    return { Year: this.getFullYear(), Month: this.getMonth() + 1, Day: this.getDate(), Hour: this.getHours(), Minutes: this.getMinutes(), Seconds: this.getSeconds(), isValid: true, DayOfWeek: this.getDay() };
+}
+
+Date.prototype.isAdult = function () {
+    var TwelveYearsAgo = new Date().addYears(-12);
+
+    if (TwelveYearsAgo.untilInDays(this) < 0)
+        return true;
+    else
+        return false;
+}
+
+Date.prototype.isChild = function (hasInfant) {
+    var TwelveYearsAgo = new Date().addYears(-12);
+    var TwoYearsAgo = new Date().addYears(-2);
+
+    var ret = false;
+
+    if (hasInfant)
+        if (TwoYearsAgo.untilInDays(this) < 0)
+            ret = true;
+
+    ret = TwelveYearsAgo.untilInDays(this) >= 0;
+
+    return ret;
+}
+
+Date.prototype.isInfant = function () {
+    var TwoYearsAgo = new Date().addYears(-2);
+
+    return this <= TwoYearsAgo;
+};
+
+Date.prototype.min = function (secondDate) {
+    if (this <= secondDate)
+        return this;
+
+    return secondDate;
+};
+
+Date.prototype.max = function (secondDate) {
+    if (this >= secondDate)
+        return this;
+
+    return secondDate;
+};
+
+
+/* ***** DATE VALUES PROTOTYPES ****** */
+
+
+/* ***** NUMBER PROTOTYPES ****** */
+Number.prototype.calculateFlightDuration = function () {
+    var res = "";
+    var hs = "";
+    var min = this;
+
+    if (min > 60) {
+        hs = parseInt(min / 60);
+        min = min % 60;
+
+        res += hs + (hs > 1 ? " hs " : " h ");
+
+        res += (min > 9 ? "" : "0") + min + " min";
+    }
+    else {
+        res = min + " min";
+    }
+
+    return res;
+};
+
+Number.prototype.containedIn = function (arr) {
+    if (!$.isArray(arr)) {
+        for (var i = 0; i < arguments.length; i++)
+            if (arguments[i] == this)
+                return true;
+
+        return false;
+    }
+    else
+        return arr.any(this);
+};
+
+Number.prototype.formatCurrency = function () {
+
+    if (formatter)
+        return formatter.currency(this);
+
+    var i = parseFloat(this);
+
+    if (isNaN(i)) { i = 0.00; }
+    var minus = '';
+    if (i < 0) { minus = '-'; }
+    i = Math.abs(i);
+    i = parseInt((i + .005) * 100);
+    i = i / 100;
+    var str = new String(i);
+    var indexOfDot = str.indexOf('.');
+    if (indexOfDot < 0) { str += '.00'; }
+    if (indexOfDot == (str.length - 2)) { str += '0'; }
+    str = minus + str;
+
+    return str.replace(".", ",");
+};
+
+Number.prototype.formatMinutesInHourMinuteLong = function () {
+
+    if (formatter)
+        return formatter.timeValuesLong(this);
+
+    var rest = this % 60;
+    var hours = (this - rest) / 60;
+
+    var hoursString = hours.toString();
+    var minutesString = rest.toString();
+
+    return (hours > 0 ? hoursString + (hours > 1 ? " horas" : " hora") : "") + (rest > 0 ? minutesString + (rest > 1 ? " minutos" : " minuto") : "");
+};
+
+Number.prototype.formatMinutesInHourMinuteShort = function () {
+    var rest = this % 60;
+    var hours = (this - rest) / 60;
+
+    var hoursString = hours.toString();
+    var minutesString = Math.round(rest).toString();
+
+    return (hours < 10 ? "0" : "") + hoursString + ":" + (rest < 10 ? "0" : "") + minutesString;
+};
+
+Number.prototype.formatTimeSlider = function () {
+    var hr = Math.round(this).toString();
+    var res = "";
+    var Hour;
+    var Minute;
+
+    if (hr.length == 4) {
+        Hour = hr.substr(0, 2);
+        Minute = hr.substr(2, 2);
+    }
+    else if (hr.length == 3) {
+        Hour = hr.substr(0, 1);
+        Minute = hr.substr(1, 2);
+    }
+    else if (hr.length == 2) {
+        Hour = 0;
+        Minute = hr;
+    }
+
+    if (Hour > 24)
+        Hour = 24;
+
+    if (Minute > 59)
+        Minute = 59;
+
+    if (isNaN(Hour))
+        Hour = 0;
+
+    if (isNaN(Minute))
+        Minute = 0;
+
+    return Hour + ":" + Minute;
+};
+
+Number.prototype.normalize = function () {
+    return parseFloat(parseFloat(this.toFixed(3)).toFixed(2));
+};
+
+Number.prototype.normalizeUp = function () {
+    var stringNumber = this.toString().split(".")[1];
+
+    if (stringNumber && stringNumber.length > 2) {
+        if (parseInt(stringNumber.charAt(2)) == 5)
+            return parseFloat((this + 0.005).toFixed(2));
+        else
+            return parseFloat(this.toFixed(2));
+    }
+    else
+        return parseFloat(this);
+};
+
+Number.prototype.integerPart = function () {
+    return '' + ((this < 0) ? Math.ceil(this) : Math.floor(this));
+}
+
+Number.prototype.precision = function () {
+    var value = this.toString();
+    var precision = 0;
+
+    if (value.split('.').length > 1) {
+        var decimalPart = value.split('.')[1];
+
+        precision = decimalPart.length;
+    }
+
+    return precision;
+}
+
+
+
+/* ***** OBJECT PROTOTYPES ******* */
+//if (false || !!document.documentMode) {
+//    Object.prototype.assign = function (target, origin) {
+//        var objs = [{ Name: "ABC" }, { Roll: 123 }],
+//         result = objs.reduce(function (r, o) {
+//             Object.keys(o).forEach(function (k) {
+//                 r[k] = o[k];
+//             });
+//             return r;
+//         }, {});
+
+//        return result;
+//    };
+//}
+
+if (!Object.assign) {
+    Object.defineProperty(Object, 'assign', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function (target) {
+            'use strict';
+            if (target === undefined || target === null) {
+                throw new TypeError('Cannot convert first argument to object');
+            }
+
+            var to = Object(target);
+            for (var i = 1; i < arguments.length; i++) {
+                var nextSource = arguments[i];
+                if (nextSource === undefined || nextSource === null) {
+                    continue;
+                }
+                nextSource = Object(nextSource);
+
+                var keysArray = Object.keys(Object(nextSource));
+                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                    var nextKey = keysArray[nextIndex];
+                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                    if (desc !== undefined && desc.enumerable) {
+                        to[nextKey] = nextSource[nextKey];
+                    }
+                }
+            }
+            return to;
+        }
+    });
+}
+
+if (typeof Object.keys == 'undefined') {
+    Object.keys = function (obj) {
+        var retKeys = [];
+        for (p in obj) {
+            retKeys.push(p);
+        }
+        return retKeys;
+    }
+}
+
+/* ***** STRING PROTOTYPES ******* */
+String.prototype.adjustIATA = function () {
+    return this.replaceAll("---", ")").replaceAll("--", "(");
+};
+
+String.prototype.capitalize = function (maintaingRestOf) {
+    return this.replace(/\S+/g, function (a) {
+        return a.charAt(0).toUpperCase() + (maintaingRestOf ? a.slice(1) : a.slice(1).toLowerCase());
+    });
+};
+
+String.prototype.contains = function (str) {
+    return str ? this.indexOf(str) != -1 : false;
+};
+
+String.prototype.endsWith = function (str) {
+    return (this.match(str + "$") == str);
+};
+
+String.prototype.format = function () {
+    var formatted = this;
+
+    var values = [];
+
+    if (arguments.length > 0 && arguments[0].length)
+        arguments = arguments[0];
+
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{' + i + '\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};
+
+String.prototype.justDigits = function () {
+    for (var i = 0, len = this.length; i < len; i++) {
+        var char = this.charAt(i);
+        if (!(char >= "0" && char <= "9"))
+            return false;
+    }
+
+    return true;
+};
+
+String.prototype.isIn = function (arr) {
+    return arr && this.length && arr.any(this);
+};
+
+String.prototype.isCNPJ = function () {
+    var cnpj = "";
+
+    for (iCont = 0; iCont < this.length; iCont++) {
+        if (this.charAt(iCont) != '.' && this.charAt(iCont) != '-' && this.charAt(iCont) != '/') {
+            cnpj += this.charAt(iCont);
+        }
+    }
+
+    cnpj = cnpj.trim().replace(/[^0-9]/g, '');
+
+    if (cnpj == "" || cnpj.length < 14) {
+        return false;
+    }
+
+    var numeros, digitos, soma, i, resultado, pos, tamanho, digitos_iguais;
+    digitos_iguais = 1;
+    if (cnpj.length < 14 && cnpj.length < 15)
+        return false;
+    for (i = 0; i < cnpj.length - 1; i++)
+        if (cnpj.charAt(i) != cnpj.charAt(i + 1)) {
+            digitos_iguais = 0;
+            break;
+        }
+    if (!digitos_iguais) {
+        tamanho = cnpj.length - 2
+        numeros = cnpj.substring(0, tamanho);
+        digitos = cnpj.substring(tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0))
+            return false;
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0, tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(1))
+            return false;
+        return true;
+    }
+    else
+        return false;
+}
+
+String.prototype.isCPF = function () {
+
+    var cpf = "";
+
+    for (iCont = 0; iCont < this.length; iCont++) {
+        if (this.charAt(iCont) != '.' && this.charAt(iCont) != '-' && this.charAt(iCont) != '/') {
+            cpf += this.charAt(iCont);
+        }
+    }
+
+    cpf = cpf.trim().replace(/[^0-9]/g, '');
+
+    if (cpf == "") {
+        return false;
+    }
+    if (((cpf.length == 11) && (cpf == 11111111111) || (cpf == 22222222222) || (cpf == 33333333333) || (cpf == 44444444444) || (cpf == 55555555555) || (cpf == 66666666666) || (cpf == 77777777777) || (cpf == 88888888888) || (cpf == 99999999999) || (cpf == 00000000000))) {
+        return false;
+    }
+
+    if (!((cpf.length == 11) || (cpf.length == 14))) {
+        return false;
+    }
+
+    var checkOK = "0123456789";
+    var checkStr = cpf;
+    var allValid = true;
+    var allNum = "";
+    for (i = 0; i < checkStr.length; i++) {
+        ch = checkStr.charAt(i);
+        for (j = 0; j < checkOK.length; j++)
+            if (ch == checkOK.charAt(j))
+                break;
+        if (j == checkOK.length) {
+            allValid = false;
+            break;
+        }
+        allNum += ch;
+    }
+
+    if (!allValid) {
+        return (false);
+    }
+
+    var chkVal = allNum;
+    var prsVal = parseFloat(allNum);
+    if (chkVal != "" && !(prsVal > "0")) {
+        return (false);
+    }
+
+    if (cpf.length == 11) {
+        var tot = 0;
+
+        for (i = 2; i <= 10; i++)
+            tot += i * parseFloat(checkStr.charAt(10 - i));
+
+        if ((tot * 10 % 11 % 10) != parseFloat(checkStr.charAt(9))) {
+            return (false);
+        }
+
+        tot = 0;
+
+        for (i = 2; i <= 11; i++)
+            tot += i * parseFloat(checkStr.charAt(11 - i));
+
+        if ((tot * 10 % 11 % 10) != parseFloat(checkStr.charAt(10))) {
+            return (false);
+        }
+    }
+    else {
+        var tot = 0;
+        var peso = 2;
+
+        for (i = 0; i <= 11; i++) {
+            tot += peso * parseFloat(checkStr.charAt(11 - i));
+            peso++;
+            if (peso == 10) {
+                peso = 2;
+            }
+        }
+
+        if ((tot * 10 % 11 % 10) != parseFloat(checkStr.charAt(12))) {
+            return (false);
+        }
+
+        tot = 0;
+        peso = 2;
+
+        for (i = 0; i <= 12; i++) {
+            tot += peso * parseFloat(checkStr.charAt(12 - i));
+            peso++;
+            if (peso == 10) {
+                peso = 2;
+            }
+        }
+
+        if ((tot * 10 % 11 % 10) != parseFloat(checkStr.charAt(13))) {
+            return (false);
+        }
+    }
+    return (true);
+
+};
+
+String.prototype.isDateYY = function () {
+    var valid = true;
+
+    var regex = /^((0[1-9]|[12]\d)\/(0[1-9]|1[0-2])|30\/(0[13-9]|1[0-2])|31\/(0[13578]|1[02]))\/\d{2}$/; /*29/02/10*/
+
+    var values = this.split("/");
+
+    if (values.length == 3) {
+        var day = values[0];
+        var month = values[1];
+        var year = values[2];
+
+        /*Valida ano Bissexto*/
+        if (month == 2)
+            if (!((year % 4 == 0) || (year % 100 == 0) || (year % 400 == 0)))
+                if (day == 29)
+                    valid = false;
+    }
+
+    return valid && regex.test(this);
+};
+
+String.prototype.isDate = function () {
+    var valid = true;
+
+    var regexNormal = formatter.dateFormatRegularExpression('pt-br');/*29/02/2010*/
+    var regexInverted = formatter.dateFormatRegularExpression('en-us');/*08/17/2015*/
+
+    var isInvertDayByMonth = formatter.culture.contains("en");
+    var regex = (isInvertDayByMonth) ? regexInverted : regexNormal;
+
+    var values = this.split("/");
+
+    if (values.length == 3) {
+        var day = (isInvertDayByMonth) ? values[1] : values[0];
+        var month = (isInvertDayByMonth) ? values[0] : values[1];
+        var year = values[2];
+
+        /*Valida ano Bissexto*/
+        if (month == 2)
+            if (!((year % 4 == 0) || (year % 100 == 0) || (year % 400 == 0)))
+                if (day == 29)
+                    valid = false;
+    }
+
+    return valid && regex.test(this);
+};
+
+String.prototype.isDNI = function () {
+
+    // ?? checks if the code is the right length, needs to be 8 chars long, or 9 if there is an extra W
+    if (this.length == 9 || this.length == 10) {
+
+        var letter = this.charAt(this.length - 1).toUpperCase();
+
+        try {
+            var numbers = parseInt(this.substring(0, 8), 10);
+
+            var modulus = numbers % 23;
+
+            return letter == ["T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"][modulus];
+        }
+        catch (err) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+String.prototype.isEmail = function () {
+    var emailDetector = new RegExp(/^[\d\w_.+-]+@([\d\w_-]+\.){1,}[\w\d]+$/);
+    return emailDetector.test(this);
+};
+
+String.prototype.isAlpha = function () {
+    var alphaDetect = new RegExp(/[^A-Z a-z]/);
+    return !alphaDetect.test(this);
+};
+
+String.prototype.isAlphaWihtAccentuation = function () {
+    var alphaDetect = new RegExp(/[^a-zA-ZâÂãÃáÁàÀêÊéÉèÈíÍìÌîÎôÔõÕóÓòÒúÚùÙûÛçÇ\s]/);
+    return !alphaDetect.test(this);
+};
+
+String.prototype.isAlphaWihtAccentuationOrNumber = function () {
+    var alphaDetect = new RegExp(/[^a-zA-Z0-9âÂãÃáÁàÀêÊéÉèÈíÍìÌîÎôÔõÕóÓòÒúÚùÙûÛçÇ\s]/);
+    return !alphaDetect.test(this);
+};
+
+String.prototype.isAlphaWihtAccentuationOrNumberOrPoint = function () {
+    var alphaDetect = new RegExp(/[^a-zA-Z0-9âÂãÃáÁàÀêÊéÉèÈíÍìÌîÎôÔõÕóÓòÒúÚùÙûÛçÇ.,\s]/);
+    return !alphaDetect.test(this);
+};
+
+String.prototype.isEmpty = function () {
+    return this.length == 0;
+};
+
+String.prototype.isNumber = function () {
+    var regex = /^\d+$/;
+
+    return regex.test(this);
+};
+
+String.prototype.isPassword = function () {
+    var regex = /(?=^.{8,}$)(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[~!@#$%^&*()_\-+=\.<>{}\[\];:,\\/|])(?!.*\s).*$/;
+
+    return regex.test(this);
+};
+
+String.prototype.isWeakPassword = function () {
+    var validWeakPassword = new RegExp(/^(.^|[\S]){4,8}$/);
+    return validWeakPassword.test(this);
+};
+
+String.prototype.isPhone = function (culture) {
+    var regex = {
+        //'pt-br': /^(\d{4}|\d{5})-\d{4}$/,
+        'pt-br': /^((\d{4}|\d{5})-\d{4})|(\d{8}|\d{9})$/,
+        'en-us': /^(\d{4}|\d{5})\d{4}$/,
+        'es-ve': /^[2-9]{3}-[0-9]{2}-[2-9]{2}$/
+    };
+
+    return regex[culture && culture.trim().length > 0 ? culture.toLowerCase() : 'pt-br'].test(this);
+};
+
+String.prototype.isMonth = function () {
+    var regex = /^(0?[1-9]|1[0-2])$/;
+
+    return regex.test(this);
+};
+
+String.prototype.isCompletePhone = function (culture) {
+    var regex = {
+        'pt-br': /^\(10|[1-9][1-9]\) ([2-9][0-9]{4}|[2-9][0-9]{3})-([0-9]{4}|[0-9]{5})$/,
+        'en-us': /^\(10|[1-9][1-9]\) ([2-9][0-9]{4}|[2-9][0-9]{3})-([0-9]{4}|[0-9]{5})$/,
+        'es-ve': /^\([0-9]{3}\) [0-9]{3}-[0-9]{2}-[0-9]{2}$/
+    };
+
+    return regex[culture && culture.trim().length > 0 ? culture.toLowerCase() : 'pt-br'].test(this);
+};
+
+String.prototype.isNotNullOrWhiteSpace = function () {
+    var stringToCheck = this;
+
+    if (stringToCheck != undefined && typeof stringToCheck === 'string') {
+        var trimmedString = stringToCheck.trim();
+
+        if (trimmedString.length > 0) {
+            return trimmedString.replace(' ', '').length > 0;
+        }
+    }
+
+    return false;
+};
+
+//Ex: 2019-01-01
+String.prototype.isISODate = function () {
+    var stringToValidate = this;
+    var isStringValid = stringToValidate.isNotNullOrWhiteSpace();
+    var stringMatchLength = isStringValid && stringToValidate.length == 10;
+
+    if (stringMatchLength) {
+        var splittedStr = stringToValidate.trim().split('-');
+
+        if (splittedStr.length == 3) {
+            var date = new Date(splittedStr[0], splittedStr[1], splittedStr[2]);
+
+            return date != undefined && date.Year != undefined;
+        }
+    }
+
+    return false;
+};
+
+String.prototype.hashCode = function () {
+    var value = this.toString();
+    var hash = 0;
+    if (value.length == 0) return hash;
+
+    for (i = 0; i < value.length; i++) {
+        char = value.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
+
+String.prototype.precision = function () {
+    var value = this.toString();
+    var precision = 0;
+
+    var splitted = this.split('.');
+
+    if (splitted.length > 1) {
+        precision = splitted[1].length;
+    }
+
+    return precision;
+}
+
+String.prototype.toJquery = function () {
+    return $ && $(this.toString()) || this.toString();
+};
+
+String.prototype.leftTrim = function () {
+    var str = this;
+    l = new Number(str.length);
+    if (l > 0) {
+        while (str.charAt(0) == " " || str.charAt(0) == "\t")
+            str = str.substr(1, l - 1);
+    }
+
+    return str;
+};
+
+String.prototype.toValidNumberFormat = function () {
+    var value = this;
+    if (isNaN(value)) {
+        // Vai cair aqui se for "," como separador de milhar e "." como separador de centavos ex: 1,000.00
+        if (value.contains(',') && value.indexOf(',') < value.indexOf('.'))
+        {
+            value = value.toString().replaceAll(',', '');
+        }
+        else
+        {
+            value = value.toString().replaceAll('.', '');
+            value = value.replaceAll(',', '.');
+        }
+
+        if (isNaN(value))
+            value = "NaN";
+    }
+
+    return value;
+};
+
+String.prototype.toTimeValues = function () {
+    var values = this.split(':');
+
+    if (values.length < 2)
+        return undefined;
+
+    var timeValues = {
+        Hour: values[0],
+        Minutes: values[1]
+    };
+
+    return timeValues;
+};
+
+String.prototype.normalize = function () {
+    return this.replaceAll(' ', '').removeDiacritics().toLowerCase();
+};
+
+String.prototype.normalizedContains = function (str) {
+    return this.length && str.length && this.normalize().contains(str.normalize());
+};
+
+String.prototype.normalizedEquals = function (str) {
+    return this.length && str && str.length && this.normalize() == str.normalize();
+};
+
+String.prototype.removeDiacritics = function () {
+    var Acentos = "áàãââÁÀÃÂéêÉÊíÍóõôÓÔÕúüÚÜçÇabcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVXWYZñòîÎ";
+    var Traducao = "aaaaaAAAAeeEEiIoooOOOuuUUcCabcdefghijklmnopqrstuvxwyzABCDEFGHIJKLMNOPQRSTUVXWYZnoiI";
+    var Posic, Carac;
+    var TempLog = "";
+    var value = this;
+
+    for (var i = 0, len = this.length; i < len; i++) {
+
+        Carac = value.charAt(i);
+        Posic = Acentos.indexOf(Carac);
+
+        TempLog += Posic > -1 ? Traducao.charAt(Posic) : Carac;
+    }
+
+    return TempLog;
+}
+
+String.prototype.removeSpecialCharacter = function () {
+    return this.replace(/[^A-Z0-9a-z]/gim, '');
+};
+
+String.prototype.replaceAll = function (find, replace) {
+    if (!replace)
+        replace = "";
+
+    if (find instanceof RegExp)
+        return this.replace(find, replace);
+    else
+        return this.replace(new RegExp(find.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'), 'g'), replace);
+};
+
+String.prototype.reverse = function () {
+    var str = "";
+
+    for (var i = this.length - 1; i >= 0; i--)
+        str += this.charAt(i);
+
+    return str;
+};
+
+String.prototype.rightTrim = function () {
+    var str = this;
+    l = new Number(str.length);
+    if (l > 0) {
+        while (str.charAt(l - 1) == " " || str.charAt(l - 1) == "\t") {
+            str = str.substr(0, l - 1);
+            l = str.length;
+        }
+    }
+
+    return str;
+};
+
+String.prototype.startsWith = function (str) {
+    return this.indexOf(str) == 0;
+};
+
+String.prototype.trim = function () {
+    return (this == undefined || this == null) ? "" : this.replace(/^\s+|\s+$/g, "");
+};
+
+
+String.prototype.toDateValues = function (language) {
+    var whiteSpaceIndex = this.indexOf(' ');
+
+    var splitted = [];
+
+    var separator = this.indexOf("-") > -1 ? "-" : "/";
+
+    if (whiteSpaceIndex == -1)
+        splitted = this.split(separator);
+    else
+        splitted = this.substr(0, whiteSpaceIndex).split(separator);
+
+    var firstValue = splitted[0];
+    var secondValue = splitted[1];
+    var thirdValue = splitted[2];
+    var globalLanguage = (Global && Global.Culture) ? Global.Culture.substr(0, 2) : "pt";
+    var isInvertedDayByMonth = ((language && language.toLowerCase().contains("en")) || (!language && (globalLanguage.toLowerCase().contains("en"))));
+
+    var date = {};
+    if (Global && Global.Culture)
+        date.Culture = Global.Culture;
+
+    String.prototype.parseDate(date, whiteSpaceIndex, splitted, firstValue, secondValue, thirdValue, isInvertedDayByMonth);
+
+    if (whiteSpaceIndex >= 0) {
+        var hourPart = this.substr(whiteSpaceIndex, this.length - 1).split(":");
+
+        if (hourPart.length > 1)
+            String.prototype.parseDateTime(date, hourPart[0], hourPart[1], hourPart[2]);
+    }
+
+    return date;
+};
+
+String.prototype.parseDate = function (date, whiteSpaceIndex, splitted, firstValue, secondValue, thirdValue, isInvertedDayByMonth) {
+    if (splitted.length == 3 && !(isNaN(parseInt(thirdValue)) && isNaN(parseInt(secondValue)) && isNaN(parseInt(firstValue)))) {
+        var day = (isInvertedDayByMonth) ? parseInt(secondValue) : parseInt(firstValue);
+        var month = (isInvertedDayByMonth) ? parseInt(firstValue) : parseInt(secondValue);
+        var year = parseInt(thirdValue);
+
+        var isValid = !((day > 31 || day < 0) || (month < 0 || month > 12) || (month == 2 && day > 30));
+
+        date.Year = year;
+        date.Month = month;
+        date.Day = day;
+        date.isValid = isValid;
+    }
+    else {
+        date.Year = 1;
+        date.Month = 1;
+        date.Day = 1;
+        date.isValid = false;
+    }
+};
+
+String.prototype.parseDateTime = function (date, firstValue, secondValue, thirdValue) {
+    if (isNaN(parseInt(secondValue)))
+        secondValue = "0";
+
+    if (isNaN(parseInt(firstValue)))
+        firstValue = "0";
+
+    if (isNaN(parseInt(thirdValue)))
+        thirdValue = "0";
+
+    var hour = parseInt(firstValue);
+    var minutes = parseInt(secondValue);
+    var seconds = parseInt(thirdValue);
+
+    var isValid = hour > -1 && hour < 24 && minutes < 60 && minutes > -1;
+
+    date.Minutes = minutes;
+    date.Hour = hour;
+    date.Seconds = seconds
+    date.isValid = (typeof (date.isValid) == 'undefined' || date.isValid) && isValid;
+};
+
+String.prototype.toDateTime = function () {
+    var splitted = this.split("/");
+    var date = new Date();
+
+    if (splitted.length == 3 && !(isNaN(parseInt(splitted[2])) && isNaN(parseInt(splitted[1])) && isNaN(parseInt(splitted[0])))) {
+        date = new Date(splitted[2], splitted[1] - 1, splitted[0], 0, 0, 0, 0);
+    }
+
+    return date;
+};
+
+String.prototype.toArray = function () {
+    var arr = [];
+
+    for (var i = 0; i < this.length; i++)
+        arr.push(this[i]);
+
+    return arr;
+};
+
+
+//Funcao auxiliar para funcionamento do padStart no Internet Explorer
+// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+if (!String.prototype.padStart) {
+    String.prototype.padStart = function padStart(targetLength, padString) {
+        targetLength = targetLength >> 0; //truncate if number or convert non-number to 0;
+        padString = String((typeof padString !== 'undefined' ? padString : ' '));
+        if (this.length > targetLength) {
+            return String(this);
+        }
+        else {
+            targetLength = targetLength - this.length;
+            if (targetLength > padString.length) {
+                padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
+            }
+            return padString.slice(0, targetLength) + String(this);
+        }
+    };
+};
+
+(function ($) {
+    $.fn.getSelector = function () {
+        var selector = $(this).parents()
+                .map(function () { return this.tagName; })
+        .get().reverse().join(" ");
+
+        if (selector) {
+            selector += " " + $(this)[0].nodeName;
+        }
+
+        var id = $(this).attr("id");
+        if (id) {
+            selector += "#" + id;
+        }
+
+        var classNames = $(this).attr("class");
+        if (classNames) {
+            selector += "." + $.trim(classNames).replace(/\s/gi, ".");
+        }
+
+        return selector;
+    }
+
+
+
+    $.fn.enableOrDisable = function () {
+        var enable = arguments[0];
+
+        if (enable)
+            this.enable();
+        else
+            this.disable();
+    }
+
+    $.fn.enable = function () {
+        return this.each(function () {
+            $(this).removeAttr('disabled').removeClass("disable");
+        });
+    }
+
+    $.fn.disable = function () {
+        return this.each(function () {
+            $(this).attr('disabled', 'disabled').addClass("disable");
+        });
+    }
+
+    $.fn.getAttributes = function () {
+        var _this = this;
+        var attributes = [];
+
+        if (_this.length) $.each(_this.get(0).attributes, function (v, n) {
+            n = n.nodeName || n.name;
+            v = _this.attr(n); // relay on $.fn.attr, it makes some filtering and checks
+            if (v != undefined && v !== false)
+                attributes.push({ name: n, value: v });
+        })
+
+        return attributes
+    }
+
+    $.fn.getPeriod = function () {
+        var $component = $(this);
+        var rs = {
+            StartTime: 0, EndTime: 0
+        };
+        var isCustomElement = $component.hasClass("multi_options") ? true : false;
+        var componentValue = isCustomElement ? $component.getSelectedValue() : $component.val();
+
+        if (!componentValue) {
+            return rs;
+        }
+
+        var timeValues = {
+            Morning: {
+                StartTime: 6, EndTime: 12
+            },
+            Afternoon: {
+                StartTime: 12, EndTime: 18
+            },
+            Night: {
+                StartTime: 18, EndTime: 24
+            },
+            Dawn: {
+                StartTime: 0, EndTime: 6
+            }
+        };
+
+        switch (componentValue) {
+            case "Morning":
+            case "Afternoon":
+            case "Night":
+            case "Dawn":
+                rs = timeValues[componentValue];
+                break;
+            case "0":
+                rs.StartTime = 0;
+                rs.EndTime = 1;
+                break;
+            default:
+                componentValue = parseInt(componentValue);
+                rs.StartTime = componentValue - 1;
+                rs.EndTime = componentValue + 1;
+        }
+        return rs;
+    };
+
+    $.fn.outerHTML = function (s) {
+        return s
+            ? this.before(s).remove()
+            : jQuery("<p>").append(this.eq(0).clone()).html();
+    };
+
+
+    $.expr[':'].startWith = function (obj, index, meta) {
+
+        var text = meta[3].toLowerCase();
+        var objText = $(obj).text();
+        var isValid = false;
+        if (objText.length >= text.length) {
+            if (objText.toLowerCase().substring(0, text.length) == text)
+                isValid = true;
+        }
+
+        return isValid;
+
+    }
+
+    $.expr[':'].containsInvariantCase = function (obj, index, meta) {
+
+        var text = meta[3].toLowerCase();
+        var objText = $(obj).text().toLowerCase();
+        var isValid = false;
+        if (objText.length >= text.length)
+            isValid = objText.contains(text);
+
+        return isValid;
+    }
+
+    $.fn.isBound = function (type, fn) {
+        var events = this.data('events');
+        if (!events)
+            return false;
+
+        var data = events[type];
+
+        if (data === undefined || data.length === 0) {
+            return false;
+        }
+
+        var handlers = data.select(function (i) { return i.handler; });
+        return (-1 !== $.inArray(fn, handlers ));
+    };
+
+    $.fn.attachOnce = function (type, fn) {
+        if (!this.isBound(type, fn))
+            this['on'](type, fn);
+    };
+
+    $.fn.attachOnceGeneral = function (type, fn) {
+        this.off(type).on(type, fn);
+    };
+
+    $.fn.isFocused = function () {
+        return document.activeElement === this;
+    };
+
+    $.fn.showWithCssClass = function () {
+        var hideClass = 'hide';
+        this.removeClass(hideClass);
+    }
+
+    $.fn.hideWithCssClass = function () {
+        var hideClass = 'hide';
+        this
+            .removeClass(hideClass)
+            .addClass(hideClass);
+    }
+})(jQuery);
+

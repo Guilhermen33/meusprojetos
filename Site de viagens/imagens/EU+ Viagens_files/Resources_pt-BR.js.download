@@ -1,0 +1,6191 @@
+// This file was automatically generated from Resources.soy.
+// Please don't edit this file by hand.
+
+if (typeof Resources == 'undefined') { var Resources = {}; }
+
+
+Resources.translate = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  switch (opt_data.code) {
+    case 'AdditionalTaxes':
+      output.append('Taxas adicionais');
+      break;
+    case 'busCompany':
+    case 'BusCompany':
+      output.append('Cia de Ônibus');
+      break;
+    case 'busStops':
+    case 'BusStops':
+      output.append('Trocas de Ônibus');
+      break;
+    case 'FerryTaxes':
+      output.append('Taxa de balsa');
+      break;
+    case 'Hide When Booked':
+      output.append('Esconder Quando Booked');
+      break;
+    case 'InsuranceTaxes':
+      output.append('Taxa de seguro');
+      break;
+    case 'Stretches':
+      output.append('Trechos');
+      break;
+    case 'TollTaxes':
+      output.append('Taxa de pedágio');
+      break;
+    case 'TravelNumber':
+      output.append('Número da Viagem');
+      break;
+    case 'TravelStatus':
+      output.append('Status da Viagem');
+      break;
+    case 'DiningOption':
+      output.append('Turno de Jantar');
+      break;
+    case 'FullPnrEdit':
+      output.append('Reserva Completa');
+      break;
+    case 'DontShareText':
+      output.append('Não Dividir');
+      break;
+    case 'HotelSpecialInformationText':
+      output.append('Informações especiais para o Hotel');
+      break;
+    case 'above':
+      output.append('acima de');
+      break;
+    case 'Account':
+      output.append('Conta');
+      break;
+    case 'account':
+      output.append('conta');
+      break;
+    case 'address':
+      output.append('Endereço');
+      break;
+    case 'Addresses':
+      output.append('Endereços');
+      break;
+    case 'AddressType':
+      output.append('Tipo do Endereço');
+      break;
+    case 'add':
+      output.append('adicionar');
+      break;
+    case 'Add':
+      output.append('Adicionar');
+      break;
+    case 'Add another person':
+      output.append('Adicionar outra pessoa');
+      break;
+    case 'CarRateCode':
+      output.append('Rate Code do Veículo');
+      break;
+    case 'CarRental':
+      output.append('Locadora de Veículo');
+      break;
+    case 'CarPickUpDate':
+      output.append('Data de Retirada do Veiculo');
+      break;
+    case 'CarReturnDate':
+      output.append('Data de Devolução do Veiculo');
+      break;
+    case 'CarPickUpPlace':
+      output.append('Local de Retirada do Veiculo');
+      break;
+    case 'CarReturnPlace':
+      output.append('Local de Devolução do Veiculo');
+      break;
+    case 'Petrol':
+      output.append('Gasolina');
+      break;
+    case 'FullyQualified':
+      output.append('Totalmente Qualificado');
+      break;
+    case 'PartlyQualified':
+      output.append('Parcialmente Qualificado ');
+      break;
+    case 'OtherRates':
+      output.append('Outras Taxas');
+      break;
+    case 'WithAirConditioning':
+      output.append('Com Ar Condicionado');
+      break;
+    case 'WithoutAirConditioning':
+      output.append('Sem Ar Condicionado');
+      break;
+    case 'Administrator':
+      output.append('Administrador');
+      break;
+    case 'Add segment':
+      output.append('Adição de segmento');
+      break;
+    case 'Associated Persons':
+      output.append('Pessoas Associadas');
+      break;
+    case 'Exchange segments':
+      output.append('Troca de segmentos');
+      break;
+    case 'Adult':
+      output.append('Adulto');
+      break;
+    case 'Adults':
+      output.append('Adultos');
+      break;
+    case 'Advanced':
+      output.append('Adiantamento');
+      break;
+    case 'advance':
+      output.append('Sinal');
+      break;
+    case 'afternoon':
+    case 'Afternoon':
+      output.append('Tarde');
+      break;
+    case 'airport':
+    case 'Airport':
+      output.append('Aeroporto');
+      break;
+    case 'airCompany':
+    case 'AirCompany':
+      output.append('Cia Aérea');
+      break;
+    case 'AirCompanies':
+      output.append('Cias Aéreas');
+      break;
+    case 'Air':
+      output.append('Aéreo');
+      break;
+    case 'BankAccounts':
+      output.append('Contas Bancárias');
+      break;
+    case 'Identifier':
+      output.append('Identificador');
+      break;
+    case 'BankName':
+      output.append('Nome do Banco');
+      break;
+    case 'AgencyNumber':
+      output.append('Agência');
+      break;
+    case 'AccountNumber':
+      output.append('Conta');
+      break;
+    case 'air':
+      output.append('Aéreo');
+      break;
+    case 'Cruise':
+      output.append('Cruzeiro');
+      break;
+    case 'cruise':
+      output.append('Cruzeiro');
+      break;
+    case 'AirBook':
+      output.append('Reserva de Aéreo');
+      break;
+    case 'allAirCias':
+      output.append('Todas as Cias Aéreas');
+      break;
+    case 'allPeriod':
+      output.append('Qualquer Período');
+      break;
+    case 'Alter':
+      output.append('Alterar');
+      break;
+    case 'Any':
+      output.append('Qualquer');
+      break;
+    case 'any':
+      output.append('qualquer');
+      break;
+    case 'and':
+      output.append('e');
+      break;
+    case 'Agency':
+      output.append('Agência');
+      break;
+    case 'as':
+      output.append('como');
+      break;
+    case 'Address':
+      output.append('Endereço');
+      break;
+    case 'Arrival':
+      output.append('Chegada');
+      break;
+    case 'ArrivalDate':
+      output.append('Data da chegada');
+      break;
+    case 'AssessFareBestPrice':
+      output.append('Tarifar Melhor Preço');
+      break;
+    case 'AssessFareAll':
+      output.append('Tarifar Tudo');
+      break;
+    case 'AssessFare':
+      output.append('Tarifar');
+      break;
+    case 'Associated':
+      output.append('Associada');
+      break;
+    case 'approvers':
+      output.append('Aprovadores');
+      break;
+    case 'Approver':
+      output.append('Aprovador');
+      break;
+    case 'AssociatedItens':
+      output.append('Itens Associados');
+      break;
+    case 'Benefits':
+      output.append('Benefícios');
+      break;
+    case 'beneficiaries':
+    case 'Beneficiaries':
+      output.append('Beneficiários');
+      break;
+    case 'BookWithPointsSuccess':
+      output.append('Solicitação de troca em processamento');
+      break;
+    case 'Buyer':
+      output.append('Contratante');
+      break;
+    case 'Creator':
+      output.append('Criador');
+      break;
+    case 'Cruising Speed':
+      output.append('Velocidade de cruzeiro');
+      break;
+    case 'Max Beam':
+      output.append('Largura máxima do casco');
+      break;
+    case 'Draft':
+      output.append('Calado');
+      break;
+    case 'Width':
+      output.append('Largura');
+      break;
+    case 'Height':
+      output.append('Altura');
+      break;
+    case 'Length':
+      output.append('Comprimento');
+      break;
+    case 'Gross Tonnage':
+      output.append('Tonelagem Bruta');
+      break;
+    case 'Ship Informations':
+      output.append('Informações do Navio');
+      break;
+    case 'Cruise':
+      output.append('Cruzeiro');
+      break;
+    case 'Cruising':
+    case 'cruising':
+      output.append('Navegando');
+      break;
+    case 'ClosingInvoiceDay':
+      output.append('Dia de Fechamento da Fatura');
+      break;
+    case 'MaturityInvoiceDay':
+      output.append('Dia de Vencimento da Fatura');
+      break;
+    case 'Consultant':
+      output.append('Consultor');
+      break;
+    case 'CommissionRole':
+      output.append('Função do Comissionado');
+      break;
+    case 'CommissionedName':
+      output.append('Nome Comissionado');
+      break;
+    case 'CommissionGroupName':
+      output.append('Grupo de Comissão');
+      break;
+    case 'CommissionRangePercent':
+      output.append('Porcentagem de Comissão');
+      break;
+    case 'Commission':
+      output.append('Comissão');
+      break;
+    case 'AutomaticCancellationDate':
+      output.append('Data Limite');
+      break;
+    case 'AutomaticCancellationDates':
+      output.append('Prazo de Cancelamento no Broker');
+      break;
+    case 'ApprovedBySystem':
+      output.append('Aprovado pelo Sistema');
+      break;
+    case 'Baby':
+      output.append('Bebê');
+      break;
+    case 'Babies':
+      output.append('Bebês');
+      break;
+    case 'basic':
+    case 'Basic':
+      output.append('Básico');
+      break;
+    case 'BalancetoPay':
+      output.append('Saldo à Pagar');
+      break;
+    case 'bedType':
+      output.append('Tipo cama');
+      break;
+    case 'BedType':
+      output.append('Tipo cama');
+      break;
+    case 'bestFare':
+      output.append('Melhor Tarifa');
+      break;
+    case 'bestPrice':
+      output.append('Melhor Preço');
+      break;
+    case 'BillingAddress':
+      output.append('Endereço de Cobrança');
+      break;
+    case 'birth':
+      output.append('nascimento');
+      break;
+    case 'Birth':
+      output.append('Nascimento');
+      break;
+    case 'BirthDate':
+      output.append('Data de Nascimento');
+      break;
+    case 'Board':
+      output.append('Regime');
+      break;
+    case 'BoardingTax':
+      output.append('Taxa de Embarque');
+      break;
+    case 'book':
+      output.append('reserva');
+      break;
+    case 'Book':
+      output.append('Reserva');
+      break;
+    case 'Booked':
+      output.append('Reservado');
+      break;
+    case 'BookPending':
+      output.append('Reserva Pendente');
+      break;
+    case 'CancelBook':
+      output.append('Cancelar Reserva');
+      break;
+    case 'Queued':
+      output.append('Em fila de espera');
+      break;
+    case 'PendingCancellation':
+      output.append('Cancelamento Pendente');
+      break;
+    case 'Rejected':
+      output.append('Rejeitado');
+      break;
+    case 'TechnicalProblem':
+      output.append('Problema Técnico');
+      break;
+    case 'advance-payment':
+      output.append('Sinal');
+      break;
+    case 'BookInformations':
+      output.append('Informações da Reserva');
+      break;
+    case 'ItineraryInformations':
+      output.append('Informações do Roteiro');
+      break;
+    case 'bookExpirationDate':
+      output.append('Prazo Reserva');
+      break;
+    case 'Booked':
+      output.append('Reservado');
+      break;
+    case 'BookCreateDate':
+      output.append('Data de criação da reserva');
+      break;
+    case 'BookNumber':
+      output.append('Número da Reserva');
+      break;
+    case 'Budget':
+      output.append('Orçamento');
+      break;
+    case 'Bus':
+      output.append('Ônibus');
+      break;
+    case 'budget':
+      output.append('orçamento');
+      break;
+    case 'byPerson':
+      output.append('por Pessoa');
+      break;
+    case 'byperson':
+      output.append('por pessoa');
+      break;
+    case 'BrokenPolicy':
+      output.append('Política Quebrada');
+      break;
+    case 'cabin':
+      output.append('cabine');
+      break;
+    case 'Cabin':
+      output.append('Cabine');
+      break;
+    case 'CabinFare':
+      output.append('Valor da cabine');
+      break;
+    case 'CabinType':
+      output.append('Tipo de cabine');
+      break;
+    case 'CancelationCode':
+      output.append('Número do Cancelamento');
+      break;
+    case 'CloseDetails':
+      output.append('Fechar Detalhes');
+      break;
+    case 'CNPJOrCPF':
+      output.append('CNPJ ou CPF');
+      break;
+    case 'Equipment':
+      output.append('Equipamento');
+      break;
+    case 'ExchangedCabinFare':
+      output.append('Valor da cabine (R$)');
+      break;
+    case 'Quayage':
+      output.append('Taxa portuária');
+      break;
+    case 'ExchangedQuayage':
+      output.append('Taxa portuária (R$)');
+      break;
+    case 'ServiceTaxesAmount':
+      output.append('Taxa de serviço');
+      break;
+    case 'ExchangedServiceTaxesAmount':
+      output.append('Taxa de serviço (R$)');
+      break;
+    case 'GovernamentalTaxesAmount':
+      output.append('Taxa governamental');
+      break;
+    case 'ExchangedGovernamentalTaxesAmount':
+      output.append('Taxa governamental (R$)');
+      break;
+    case 'AmbientalTaxesAmount':
+      output.append('Taxa ambiental');
+      break;
+    case 'ExchangedAmbientalTaxesAmount':
+      output.append('Taxa ambiental (R$)');
+      break;
+    case 'Cancel':
+      output.append('Cancelar');
+      break;
+    case 'cancel':
+      output.append('cancelar');
+      break;
+    case 'Canceled':
+    case 'Cancelled':
+      output.append('Cancelado');
+      break;
+    case 'canceled':
+    case 'cancelled':
+      output.append('cancelado');
+      break;
+    case 'CancellationRules':
+      output.append('Regras de cancelamento');
+      break;
+    case 'Car':
+      output.append('Carro');
+      break;
+    case 'CarBook':
+      output.append('Reserva de Carro');
+      break;
+    case 'CarCategory':
+      output.append('Categoria do Carro');
+      break;
+    case 'car':
+      output.append('carro');
+      break;
+    case 'Category':
+      output.append('Categoria');
+      break;
+    case 'carType':
+      output.append('Tipo de carro');
+      break;
+    case 'cellphone':
+    case 'CellPhone':
+      output.append('Celular');
+      break;
+    case 'cep':
+    case 'CEP':
+      output.append('CEP');
+      break;
+    case 'certificate':
+    case 'Certificate':
+      output.append('Certificado');
+      break;
+    case 'chainCode':
+      output.append('Código da Cadeia');
+      break;
+    case 'Chain':
+      output.append('Cadeia');
+      break;
+    case 'Children':
+      output.append('Crianças');
+      break;
+    case 'Child':
+      output.append('Criança');
+      break;
+    case 'checkInDate':
+      output.append('Data Ida');
+      break;
+    case 'checkOutDate':
+      output.append('Data Volta');
+      break;
+    case 'CheckInDate':
+      output.append('Check In');
+      break;
+    case 'CheckOutDate':
+      output.append('Check Out');
+      break;
+    case 'CheckInTime':
+      output.append('Horário CheckIn');
+      break;
+    case 'CheckOutTime':
+      output.append('Horário CheckOut');
+      break;
+    case 'city':
+      output.append('cidade');
+      break;
+    case 'City':
+      output.append('Cidade');
+      break;
+    case 'Close':
+      output.append('Fechar');
+      break;
+    case 'Client':
+      output.append('Cliente');
+      break;
+    case 'client':
+      output.append('cliente');
+      break;
+    case 'ClientArea':
+      output.append('Área do Cliente');
+      break;
+    case 'ClientType':
+      output.append('Tipo do Cliente');
+      break;
+    case 'ConcatenatedPassportNumbers':
+      output.append('Passportes');
+      break;
+    case 'Contact':
+      output.append('Contato');
+      break;
+    case 'contact':
+      output.append('contato');
+      break;
+    case 'contactInformation':
+      output.append('Informações de contato');
+      break;
+    case 'corporate':
+      output.append('Pessoa Jurídica');
+      break;
+    case 'ConfirmBeforeExclude':
+      output.append('Deseja realmente excluir este registro?');
+      break;
+    case 'Copy':
+      output.append('Copiar');
+      break;
+    case 'Copy to my account':
+      output.append('Copiar Para Minha Conta');
+      break;
+    case 'currency':
+      output.append('Moeda');
+      break;
+    case 'code':
+      output.append('Código');
+      break;
+    case 'Currency':
+      output.append('Moeda');
+      break;
+    case 'currency':
+      output.append('moeda');
+      break;
+    case 'Comments':
+      output.append('Comentários');
+      break;
+    case 'CommercialAgrement':
+      output.append('Acordo Comercial');
+      break;
+    case 'InsuranceCompany':
+      output.append('Seguradora');
+      break;
+    case 'Company':
+      output.append('Empresa');
+      break;
+    case 'company':
+      output.append('empresa');
+      break;
+    case 'companyContext':
+      output.append('Contexto da companhia');
+      break;
+    case 'CompanyDirectory':
+      output.append('Diretória da Empresa');
+      break;
+    case 'Complement':
+      output.append('Complemento');
+      break;
+    case 'ConfirmationDate':
+      output.append('Data da confirmação');
+      break;
+    case 'Consolidator(fem)':
+      output.append('Consolidadora');
+      break;
+    case 'consolidator(fem)':
+      output.append('consolidadora');
+      break;
+    case 'ContactName':
+      output.append('Nome para contato');
+      break;
+    case 'Context':
+      output.append('Contexto');
+      break;
+    case 'CostCenter':
+      output.append('Centro de Custo');
+      break;
+    case 'Costcenter':
+      output.append('Centro de custo');
+      break;
+    case 'Corporate':
+      output.append('Corporativo');
+      break;
+    case 'Country':
+      output.append('País');
+      break;
+    case 'couple':
+      output.append('Casal');
+      break;
+    case 'Create':
+      output.append('Criar');
+      break;
+    case 'create':
+      output.append('criar');
+      break;
+    case 'CreateInsurancePolicy':
+      output.append('Gerar Apólice');
+      break;
+    case 'daily':
+      output.append('Diária');
+      break;
+    case 'Dailies':
+      output.append('Diárias');
+      break;
+    case 'DailyFare':
+      output.append('Diária');
+      break;
+    case 'DailyFares':
+      output.append('Diárias');
+      break;
+    case 'DailyTax':
+      output.append('Taxa');
+      break;
+    case 'DailyTaxes':
+      output.append('Taxas');
+      break;
+    case 'Day':
+      output.append('Dia');
+      break;
+    case 'Days':
+      output.append('Dias');
+      break;
+    case 'Debark':
+    case 'debark':
+      output.append('Desembarque');
+      break;
+    case 'DaysCount':
+      output.append('Qtd. de Diárias');
+      break;
+    case 'DeckNumber':
+      output.append('Número do deck');
+      break;
+    case 'Description':
+      output.append('Descrição');
+      break;
+    case 'dawn':
+    case 'Dawn':
+      output.append('Madrugada');
+      break;
+    case 'DelayInformation':
+      output.append('Info. Atrasos');
+      break;
+    case 'deleteAll':
+      output.append('Deletar todos');
+      break;
+    case 'Departure':
+      output.append('Saída');
+      break;
+    case 'Destination':
+      output.append('Destino');
+      break;
+    case 'destination':
+      output.append('destino');
+      break;
+    case 'Destinations':
+      output.append('Destinos');
+      break;
+    case 'Details':
+      output.append('Detalhes');
+      break;
+    case 'devolution':
+      output.append('Devolução');
+      break;
+    case 'Devolution':
+      output.append('Devolução');
+      break;
+    case 'devolutionCity':
+      output.append('Cidade de Devolução');
+      break;
+    case 'DevolutionCity':
+      output.append('Cidade de Devolução');
+      break;
+    case 'devolutionDate':
+      output.append('Data Devolução');
+      break;
+    case 'DevolutionDate':
+      output.append('Data Devolução');
+      break;
+    case 'devolutionSpot':
+      output.append('Local de Devolução');
+      break;
+    case 'DevolutionSpot':
+      output.append('Local de Devolução');
+      break;
+    case 'devolutionPeriod':
+      output.append('Período Devolução');
+      break;
+    case 'DevolutionPeriod':
+      output.append('Período Devolução');
+      break;
+    case 'directFligth':
+      output.append('Voo Direto');
+      break;
+    case 'Discount':
+    case 'discount':
+      output.append('Desconto');
+      break;
+    case 'DiscountCoupon':
+      output.append('Desconto');
+      break;
+    case 'discountCoupon':
+      output.append('Desconto');
+      break;
+    case 'discountcoupon':
+      output.append('Desconto');
+      break;
+    case 'district':
+    case 'District':
+      output.append('Bairro');
+      break;
+    case 'doubleBed':
+      output.append('Casal');
+      break;
+    case 'Docked':
+    case 'docked':
+      output.append('Ancorado');
+      break;
+    case 'Du':
+      output.append('Rep. a terceiros');
+      break;
+    case 'Duration':
+      output.append('Duração');
+      break;
+    case 'DynamicPackage':
+      output.append('Pacotes');
+      break;
+    case 'Economic':
+    case 'economic':
+      output.append('Econômica');
+      break;
+    case 'EconomicCar':
+    case 'economicCar':
+      output.append('Econômico');
+      break;
+    case 'PremiumEconomy':
+      output.append('Econômica Premium');
+      break;
+    case 'edit':
+      output.append('editar');
+      break;
+    case 'Edit':
+    case 'Edit ':
+      output.append('Editar');
+      break;
+    case 'EmergencyContactDDD':
+    case 'emergencycontactDDD':
+      output.append('DDD do contato de emergência');
+      break;
+    case 'EmergencyContactName':
+    case 'emergencycontactname':
+      output.append('Nome do contato de emergência');
+      break;
+    case 'EmergencyContactPhoneNumber':
+    case 'emergencycontactphonenumber':
+      output.append('Telefone do contato de emergência');
+      break;
+    case 'EmissionDate':
+    case 'emissiondate ':
+      output.append('Data de emissão');
+      break;
+    case 'Embark':
+    case 'embark':
+      output.append('Embarque');
+      break;
+    case 'eTicket':
+      output.append('E-ticket');
+      break;
+    case 'EventualTraveller':
+      output.append('Viajante Eventual');
+      break;
+    case 'save':
+      output.append('salvar');
+      break;
+    case 'Save':
+      output.append('Salvar');
+      break;
+    case 'Exchange':
+      output.append('Permuta');
+      break;
+    case 'ExchangeCurrency':
+      output.append('Câmbio');
+      break;
+    case 'ExchangeRate':
+      output.append('Valor câmbio');
+      break;
+    case 'ExchangeRate':
+      output.append('Valor convertido');
+      break;
+    case 'Exclude':
+      output.append('Excluir');
+      break;
+    case 'exclude':
+      output.append('excluir');
+      break;
+    case 'Executive':
+      output.append('Executiva ***');
+      break;
+    case 'Business_Class':
+      output.append('Business');
+      break;
+    case 'executive':
+      output.append('executiva');
+      break;
+    case 'ExecutiveCar':
+    case 'executiveCar':
+      output.append('Executivo');
+      break;
+    case 'external':
+      output.append('externo');
+      break;
+    case 'External':
+      output.append('Externo');
+      break;
+    case 'ExternalId':
+      output.append('Id Externo');
+      break;
+    case 'fare':
+      output.append('tarifa');
+      break;
+    case 'Fare':
+      output.append('Tarifa');
+      break;
+    case 'FareDetails':
+      output.append('Detalhes das Tarifa');
+      break;
+    case 'fares':
+      output.append('tarifa');
+      break;
+    case 'Fares':
+      output.append('Tarifa');
+      break;
+    case 'female':
+      output.append('feminino');
+      break;
+    case 'Female':
+      output.append('Feminino');
+      break;
+    case 'FileName':
+      output.append('Nome Arquivo');
+      break;
+    case 'FiltersApplied':
+      output.append('Filtros Aplicados');
+      break;
+    case 'Finalize':
+      output.append('Finalizar');
+      break;
+    case 'First':
+      output.append('Primeiro');
+      break;
+    case 'First(fem)':
+      output.append('Primeira');
+      break;
+    case 'FirstClass':
+    case 'firstClass':
+      output.append('1ª Classe');
+      break;
+    case 'FirstName':
+    case 'firstName':
+      output.append('Nome');
+      break;
+    case 'Flights':
+      output.append('Voos');
+      break;
+    case 'Flight':
+      output.append('Voo');
+      break;
+    case 'FlightNumber':
+      output.append('Número Voo');
+      break;
+    case 'flightSelected':
+      output.append('voo selecionado');
+      break;
+    case 'flightsSelecteds':
+      output.append('voos selecionados');
+      break;
+    case 'FlightStop':
+      output.append('Escala');
+      break;
+    case 'FlightStops':
+      output.append('Escalas');
+      break;
+    case 'FlightTicket':
+      output.append('Passagem Aérea');
+      break;
+    case 'Franchised(fem)':
+      output.append('Franquiada');
+      break;
+    case 'FreeNightPromoCodes':
+      output.append('Códigos de FreeNight');
+      break;
+    case 'FrequentFlyerCards':
+      output.append('Programa de milhagem');
+      break;
+    case 'from':
+      output.append('de');
+      break;
+    case 'From':
+      output.append('De');
+      break;
+    case 'Gender':
+      output.append('Sexo');
+      break;
+    case 'Gear':
+      output.append('Equipamento');
+      break;
+    case 'Getpayments':
+      output.append('Buscar pagamentos');
+      break;
+    case 'GetPaymentForms':
+      output.append('Buscar formas de pagamento');
+      break;
+    case 'going':
+      output.append('Ida');
+      break;
+    case 'Guarantee':
+      output.append('Garantia');
+      break;
+    case 'Guests':
+      output.append('Hóspedes');
+      break;
+    case 'guests':
+      output.append('hóspedes');
+      break;
+    case 'Guest':
+      output.append('Hóspede');
+      break;
+    case 'guest':
+      output.append('hóspede');
+      break;
+    case 'oftheguest':
+      output.append(' do hóspede ');
+      break;
+    case 'hasVip':
+      output.append('Possui Passageiro Vip');
+      break;
+    case 'Hide':
+      output.append('Esconder');
+      break;
+    case 'HideRooms':
+      output.append('Esconder Quartos');
+      break;
+    case 'horizontalPlural':
+      output.append('Horizontais');
+      break;
+    case 'hotel':
+      output.append('hotel');
+      break;
+    case 'Hotel':
+      output.append('Hotel');
+      break;
+    case 'HotelBook':
+      output.append('Reserva de Hotel');
+      break;
+    case 'Hotels':
+      output.append('Hotéis');
+      break;
+    case 'hotelName':
+      output.append('Nome do Hotel');
+      break;
+    case 'hotelGuarantee':
+      output.append('Tipo Garantia');
+      break;
+    case 'Id':
+    case 'id':
+      output.append('Id');
+      break;
+    case 'Identificator':
+      output.append('Identificador');
+      break;
+    case 'Inbound terminal':
+      output.append('Terminal de chegada');
+      break;
+    case 'IncludedIn':
+      output.append('Incluído');
+      break;
+    case 'IncludeSelectedInsurance':
+      output.append('Incluir este seguro na reserva');
+      break;
+    case 'individual':
+      output.append('Pessoa Física');
+      break;
+    case 'individuallPlural':
+      output.append('Individuais');
+      break;
+    case 'integrationProperties':
+    case 'IntegrationProperties':
+      output.append('Dados de Integração');
+      break;
+    case 'intermediary':
+    case 'Intermediary':
+      output.append('Intermediário');
+      break;
+    case 'Insert':
+      output.append('Inserir');
+      break;
+    case 'insurance':
+    case 'Insurance':
+      output.append('Seguro');
+      break;
+    case 'map':
+    case 'Map':
+      output.append('Mapa');
+      break;
+    case 'calendar':
+    case 'Calendar':
+      output.append('Calendário');
+      break;
+    case 'Issued':
+    case 'issued':
+      output.append('Emitido');
+      break;
+    case 'Refunded':
+    case 'refunded':
+      output.append('Reembolsado');
+      break;
+    case 'Flown':
+    case 'flown':
+      output.append('Voado');
+      break;
+    case 'Item':
+      output.append('Item');
+      break;
+    case 'Last':
+      output.append('Último');
+      break;
+    case 'Last(fem)':
+      output.append('Última');
+      break;
+    case 'LastInterationDate':
+      output.append('Data Última Interação');
+      break;
+    case 'AssignedTo':
+      output.append('Atribuido à');
+      break;
+    case 'Interations':
+      output.append('Interações');
+      break;
+    case 'Priority':
+      output.append('Prioridade');
+      break;
+    case 'ActivityPriority_Emergency':
+      output.append('Emergencial');
+      break;
+    case 'ActivityPriority_High':
+      output.append('Alto');
+      break;
+    case 'ActivityPriority_Medium':
+      output.append('Médio');
+      break;
+    case 'ActivityPriority_Low':
+      output.append('Baixo');
+      break;
+    case 'DeadLine':
+      output.append('Prazo');
+      break;
+    case 'EndedDate':
+      output.append('Finalizado Em');
+      break;
+    case 'LastName':
+      output.append('Último Nome');
+      break;
+    case 'BookingName':
+      output.append('Nome da Reserva no Fornecedor');
+      break;
+    case 'level':
+      output.append('Nível');
+      break;
+    case 'Loading':
+      output.append('Carregando');
+      break;
+    case 'male':
+      output.append('masculino');
+      break;
+    case 'Male':
+      output.append('Masculino');
+      break;
+    case 'MaritalStatus':
+    case 'maritalstatus':
+      output.append('Estado civil');
+      break;
+    case 'MealPlan':
+      output.append('Plano de refeição');
+      break;
+    case 'ManagementFields':
+      output.append('Campos Gerenciais');
+      break;
+    case 'ManagementFields_NotFound':
+      output.append('Campos Gerenciais não encontrados!');
+      break;
+    case 'Mstr':
+      output.append('Sr');
+      break;
+    case 'Miss':
+    case 'MISS':
+      output.append('Srta');
+      break;
+    case 'middlename':
+      output.append('nome do meio');
+      break;
+    case 'Middlename':
+    case 'MiddleName':
+      output.append('Nome do meio');
+      break;
+    case 'monthlyincome':
+    case 'MonthlyIncome':
+      output.append('Renda mensal');
+      break;
+    case 'mr':
+    case 'MR':
+      output.append('Sr');
+      break;
+    case 'mrs':
+    case 'MRS':
+      output.append('Sra');
+      break;
+    case 'moreFlights':
+      output.append('Mais Voos');
+      break;
+    case 'morning':
+    case 'Morning':
+      output.append('Manhã');
+      break;
+    case 'MyOrders':
+      output.append('Meus Pedidos');
+      break;
+    case 'OrderNumber':
+      output.append('Número do pedido');
+      break;
+    case 'Name':
+      output.append('Nome');
+      break;
+    case 'Neighborhood':
+      output.append('Bairro');
+      break;
+    case 'Next':
+      output.append('Próximo');
+      break;
+    case 'Next(fem)':
+      output.append('Próxima');
+      break;
+    case 'next':
+      output.append('próximo');
+      break;
+    case 'NewServiceItem':
+      output.append('Novo item de serviço');
+      break;
+    case 'night':
+    case 'Night':
+      output.append('Noite');
+      break;
+    case 'DoNoGroup':
+      output.append('Não Agrupar');
+      break;
+    case 'NoHotelSelected':
+      output.append('Nenhum hotel selecionado');
+      break;
+    case 'Not':
+      output.append('Não');
+      break;
+    case 'NotInformed':
+      output.append('Não Informado');
+      break;
+    case 'noSelection':
+      output.append('Nenhuma Seleção');
+      break;
+    case 'NoFlightSelected':
+      output.append('Nenhum voo selecionado');
+      break;
+    case 'notChoiceMyair':
+      output.append('NÃO QUERO ESCOLHER MEU VOO');
+      break;
+    case 'notChoiceMyhotel':
+      output.append('NÃO QUERO ESCOLHER MEU HOTEL');
+      break;
+    case 'notChoiceMyFlight':
+      output.append('NÃO QUERO ESCOLHER MEU VOO');
+      break;
+    case 'NotIncluded':
+      output.append('Não incluído');
+      break;
+    case 'NotFound':
+      output.append('Nenhum resultado encontrado');
+      break;
+    case 'Number':
+    case 'number':
+      output.append('Número');
+      break;
+    case 'NumberSymbol':
+      output.append('Nº');
+      break;
+    case 'NumberOfStops':
+      output.append('Escalas');
+      break;
+    case 'NumberOfDays':
+      output.append('Noites');
+      break;
+    case 'NoPaymentAutomaticCancellationDate':
+      output.append('Sem Pagamentos');
+      break;
+    case 'NoStops':
+      output.append('Sem Escalas');
+      break;
+    case 'Observation':
+      output.append('Observação');
+      break;
+    case 'Observations':
+      output.append('Observações');
+      break;
+    case 'occupation':
+    case 'Occupation':
+      output.append('Profissão');
+      break;
+    case 'of':
+      output.append('de');
+      break;
+    case 'years':
+      output.append('anos');
+      break;
+    case 'ofthe(fem)':
+      output.append('da');
+      break;
+    case 'onlyDirectFlights':
+      output.append('Somente voos diretos');
+      break;
+    case 'OpenRooms':
+      output.append('Ver quartos');
+      break;
+    case 'Operator':
+      output.append('Operador(a)');
+      break;
+    case 'orderBy':
+      output.append('ordenar Por');
+      break;
+    case 'OrderBy':
+      output.append('Ordenar Por');
+      break;
+    case 'OrderDetails':
+      output.append('Detalhes do Pedido');
+      break;
+    case 'Origin':
+      output.append('Origem');
+      break;
+    case 'origin':
+      output.append('origem');
+      break;
+    case 'Other':
+      output.append('Outro');
+      break;
+    case 'other':
+      output.append('outro');
+      break;
+    case 'Other options':
+      output.append('Outras opções');
+      break;
+    case 'ofthepassenger':
+      output.append(' do passageiro ');
+      break;
+    case 'Outbound terminal':
+      output.append('Terminal de saída');
+      break;
+    case 'Package':
+      output.append('Pacote');
+      break;
+    case 'Pages':
+      output.append('Páginas');
+      break;
+    case 'passenger':
+      output.append('passageiro');
+      break;
+    case 'Passenger':
+      output.append('Passageiro');
+      break;
+    case 'Passengers':
+      output.append('Passageiros');
+      break;
+    case 'passengerAdditionalData':
+      output.append('Informações dos Passageiros');
+      break;
+    case 'Password':
+      output.append('Senha');
+      break;
+    case 'Pasture':
+      output.append('Logradouro');
+      break;
+    case 'Payment':
+      output.append('Pagamento');
+      break;
+    case 'payment':
+      output.append('pagamento');
+      break;
+    case 'Payments':
+      output.append('Pagamentos');
+      break;
+    case 'payment':
+      output.append('pagamentos');
+      break;
+    case 'passengers':
+      output.append('passageiros');
+      break;
+    case 'period':
+      output.append('período');
+      break;
+    case 'Period':
+      output.append('Período');
+      break;
+    case 'PermissionGroup':
+      output.append('Grupo de Permissão');
+      break;
+    case 'PendingPayment':
+    case 'pendingPayment':
+    case 'pendingpayment':
+      output.append('Pagamento Pendente');
+      break;
+    case 'Person':
+      output.append('Pessoa');
+      break;
+    case 'People':
+      output.append('Pessoas');
+      break;
+    case 'Phone':
+      output.append('Telefone');
+      break;
+    case 'phone':
+      output.append('telefone');
+      break;
+    case 'Plan':
+      output.append('Plano');
+      break;
+    case 'plan':
+      output.append('Plano');
+      break;
+    case 'Prefered':
+      output.append('Preferencial');
+      break;
+    case 'Previous':
+      output.append('Anterior');
+      break;
+    case 'previous':
+      output.append('anterior');
+      break;
+    case 'Time':
+      output.append('Horário');
+      break;
+    case 'Price':
+      output.append('Preço');
+      break;
+    case 'PriceByPerson':
+      output.append('Preço por Pessoa');
+      break;
+    case 'Search price':
+    case 'Search Price':
+      output.append('Buscar Preço');
+      break;
+    case 'Print':
+      output.append('Imprimir');
+      break;
+    case 'ViewPrint':
+      output.append('Visualizar Impressão');
+      break;
+    case 'print':
+      output.append('imprimir');
+      break;
+    case 'Policy':
+      output.append('Política');
+      break;
+    case 'PolicyId':
+      output.append('Identificador da Política');
+      break;
+    case 'PolicyCode':
+      output.append('Código da Política');
+      break;
+    case 'PolicyName':
+      output.append('Nome da Política');
+      break;
+    case 'PolicyDescription':
+      output.append('Descrição da Política');
+      break;
+    case 'PolicyIdentification':
+      output.append('Apólice de seguro');
+      break;
+    case 'PolicyReasonDescription':
+      output.append('Descrição da Justificativa');
+      break;
+    case 'ProductCode':
+      output.append('Código do Produto');
+      break;
+    case 'ProductName':
+      output.append('Nome do produto');
+      break;
+    case 'Quotation':
+      output.append('Cotação');
+      break;
+    case 'quotation':
+      output.append('cotação');
+      break;
+    case 'qtdofparcels':
+    case 'QtdOfParcels':
+      output.append('Qtde. de parcelas');
+      break;
+    case 'ReassessFare':
+      output.append('Retarifar');
+      break;
+    case 'Reason':
+      output.append('Justificativa');
+      break;
+    case 'ReasonCodeId':
+      output.append('Identificador da Justificativa');
+      break;
+    case 'Record':
+      output.append('Cadastro');
+      break;
+    case 'RemoveFile':
+      output.append('Remover Arquivo');
+      break;
+    case 'Request':
+      output.append('Solicitar');
+      break;
+    case 'Requester':
+      output.append('Solicitante');
+      break;
+    case 'requester':
+      output.append('solicitante');
+      break;
+    case 'Register':
+      output.append('Cadastrar');
+      break;
+    case 'RegisteredTraveller':
+      output.append('Viajante Cadastrado');
+      break;
+    case 'removal':
+      output.append('Retirada');
+      break;
+    case 'removalCity':
+      output.append('Cidade de Retirada');
+      break;
+    case 'RemovalCity':
+      output.append('Cidade de Retirada');
+      break;
+    case 'removalDate':
+      output.append('Data Retirada');
+      break;
+    case 'RemovalDate':
+      output.append('Data Retirada');
+      break;
+    case 'removalSpot':
+      output.append('Local de Retirada');
+      break;
+    case 'RemovalSpot':
+      output.append('Local de Retirada');
+      break;
+    case 'removalPeriod':
+      output.append('Período Retirada');
+      break;
+    case 'replaced':
+    case 'Replaced':
+      output.append('Substituído');
+      break;
+    case 'rental':
+      output.append('locadora');
+      break;
+    case 'RentalName':
+      output.append('Nome Locadora');
+      break;
+    case 'Rental':
+      output.append('Locadora');
+      break;
+    case 'Resolve':
+      output.append('Resolver');
+      break;
+    case 'Responsible':
+      output.append('Responsável');
+      break;
+    case 'ResultType':
+      output.append('Tipo de Resultado');
+      break;
+    case 'RetainedCommission':
+      output.append('Comissão Retida');
+      break;
+    case 'Retract':
+      output.append('Recolher');
+      break;
+    case 'FranchiseDiscount':
+      output.append('Desconto Franquia');
+      break;
+    case 'franchisediscount':
+      output.append('Desconto Franquia');
+      break;
+    case 'LetterOfCredit':
+      output.append('Carta de crédito');
+      break;
+    case 'letterOfCredit':
+      output.append('Carta de crédito');
+      break;
+    case 'PaymentLink':
+      output.append('Link de Pagamento');
+      break;
+    case 'paymentLink':
+      output.append('Link de Pagamento');
+      break;
+    case 'paymentlink':
+      output.append('Link de Pagamento');
+      break;
+    case 'PayPal':
+      output.append('PayPal');
+      break;
+    case 'paypal':
+      output.append('PayPal');
+      break;
+    case 'payPal':
+      output.append('PayPal');
+      break;
+    case 'RIF':
+      output.append('RIF');
+      break;
+    case 'Rooms':
+      output.append('Quartos');
+      break;
+    case 'rooms':
+      output.append('quartos');
+      break;
+    case 'room':
+      output.append('quarto');
+      break;
+    case 'Room':
+      output.append('Quarto');
+      break;
+    case 'RoomType':
+      output.append('Tipo de quarto');
+      break;
+    case 'RoomDescription':
+      output.append('Descrição do Quarto');
+      break;
+    case 'RoomGuarantee':
+      output.append('Garantia do Quarto');
+      break;
+    case 'RoundPoints':
+      output.append('Arredondar pontos');
+      break;
+    case 'Save':
+      output.append('Salvar');
+      break;
+    case 'searchByPrice':
+      output.append('Pesquisar por preço');
+      break;
+    case 'Seat':
+      output.append('Assento');
+      break;
+    case 'selectPaymentForm':
+      output.append('Selecionar forma de pagamento');
+      break;
+    case 'selectAdditionalPaymentForm':
+      output.append('Selecionar a forma de pagamento complementar da Substituição');
+      break;
+    case 'PaymentForm':
+      output.append('Forma de Pagamento');
+      break;
+    case 'Send':
+      output.append('Enviar');
+      break;
+    case 'sendByEmail':
+      output.append('Enviar por e-mail');
+      break;
+    case 'SendEmailPassword':
+      output.append('Enviar senha por e-mail');
+      break;
+    case 'OptionSelect':
+      output.append('Selecione');
+      break;
+    case 'Select':
+      output.append('Selecionar');
+      break;
+    case 'select':
+      output.append('selecionar');
+      break;
+    case 'Selected':
+      output.append('Selecionado');
+      break;
+    case 'selected':
+      output.append('selecionado');
+      break;
+    case 'SelectedsFem':
+      output.append('Selecionadas');
+      break;
+    case 'selectMyFlight':
+      output.append('SELECIONAR MEU VOO');
+      break;
+    case 'select':
+      output.append('selecionar');
+      break;
+    case 'ServiceTax':
+      output.append('Taxa de Serviço');
+      break;
+    case 'serviceItem':
+      output.append('Item de serviço');
+      break;
+    case 'sex':
+    case 'Sex':
+      output.append('Sexo');
+      break;
+    case 'ShowFile':
+      output.append('Abrir Arquivo');
+      break;
+    case 'ShowMore':
+      output.append('Veja mais');
+      break;
+    case 'ShowMoreRooms':
+      output.append('Mostrar mais quartos');
+      break;
+    case 'single':
+      output.append('Solteiro');
+      break;
+    case 'singleRoom':
+      output.append('1 Viajante');
+      break;
+    case 'doubleRoom':
+      output.append('2 Viajantes');
+      break;
+    case 'tripleRoom':
+      output.append('3 Viajantes');
+      break;
+    case 'SplitPayments':
+      output.append('Dividir Pagamento');
+      break;
+    case 'Street':
+      output.append('Logradouro');
+      break;
+    case 'street':
+      output.append('logradouro');
+      break;
+    case 'stretchAdd':
+      output.append('Adicionar trecho');
+      break;
+    case 'stretchMultiDestination':
+      output.append('Multi-Trechos');
+      break;
+    case 'Multidestination':
+      output.append('Multitrechos');
+      break;
+    case 'MultiDestination':
+      output.append('Multitrechos');
+      break;
+    case 'stretchOneWay':
+      output.append('Somente Ida');
+      break;
+    case 'stretchRoundTrip':
+      output.append('Ida e Volta');
+      break;
+    case 'stretchRemove':
+      output.append('Remover trecho');
+      break;
+    case 'Stop':
+      output.append('Parada');
+      break;
+    case 'Stops':
+      output.append('Paradas');
+      break;
+    case 'store':
+    case 'Store':
+      output.append('Loja');
+      break;
+    case 'Surname':
+      output.append('Sobrenome');
+      break;
+    case 'superior':
+    case 'Superior':
+      output.append('Superior');
+      break;
+    case 'SearchOf':
+      output.append('Pesquisa de');
+      break;
+    case 'ServiceItem':
+      output.append('Item de Serviço');
+      break;
+    case 'ServiceOrder':
+      output.append('Ordem de Serviço');
+      break;
+    case 'Services':
+      output.append('Serviços');
+      break;
+    case 'services':
+      output.append('serviços');
+      break;
+    case 'selectedHotel':
+      output.append('hotel selecionado');
+      break;
+    case 'selectedsHotels':
+      output.append('hoteis selecionados');
+      break;
+    case 'SettingName':
+      output.append('Nome Setting');
+      break;
+    case 'SettingValue':
+      output.append('Valor Setting');
+      break;
+    case 'Source':
+      output.append('Sistema');
+      break;
+    case 'Spreadsheet':
+      output.append('Planilha');
+      break;
+    case 'ShipName':
+      output.append('Nome do navio');
+      break;
+    case 'ShowRooms':
+      output.append('Mostrar Quartos');
+      break;
+    case 'SystemAccount':
+      output.append('Conta de Sistema');
+      break;
+    case 'SystemAccount_Sucessfull_Create':
+      output.append('Conta de Sistema Criada com Sucesso');
+      break;
+    case 'Taxes':
+      output.append('Taxas');
+      break;
+    case 'taxes':
+      output.append('taxas');
+      break;
+    case 'Taxes and Rates':
+      output.append('Impostos e Taxas');
+      break;
+    case 'TaxAmount':
+      output.append('Taxa');
+      break;
+    case 'TaxAmountExchanged':
+      output.append('Taxa equivalente');
+      break;
+    case 'taxesToPay':
+      output.append('Taxas a pagar');
+      break;
+    case 'TemplateTester_ViewData':
+      output.append('Visualizar Dados');
+      break;
+    case 'TemplateTester_IdServiceItem_Label':
+      output.append('Id do Item de Serviço');
+      break;
+    case 'TemplateTester_ViewTemplate':
+      output.append('Testar Template');
+      break;
+    case 'Tendered':
+    case 'tendered':
+      output.append('Barco Auxiliar');
+      break;
+    case 'ticketNumber':
+    case 'Número do Bilhete':
+      output.append('Número do Bilhete');
+      break;
+    case 'ticketStatus':
+      output.append('Status do Bilhete');
+      break;
+    case 'tickettype':
+    case 'TicketType':
+    case 'ticketType':
+    case 'Tickettype':
+      output.append('Tipo (Ingresso)');
+      break;
+    case 'TrainTicketType':
+      output.append('Tipo de ingresso (Trem)');
+      break;
+    case 'Type':
+      output.append('Tipo');
+      break;
+    case 'to':
+      output.append('para');
+      break;
+    case 'To':
+      output.append('Para');
+      break;
+    case 'ToBook':
+      output.append('Reservar');
+      break;
+    case 'totalInAdvanced':
+      output.append('Total Adiantado');
+      break;
+    case 'total':
+      output.append('total');
+      break;
+    case 'Total':
+      output.append('Total');
+      break;
+    case 'TotalPayedValue':
+      output.append('Total Pago no Fornecedor');
+      break;
+    case 'TravelInsurance':
+      output.append('Seguro Viagem');
+      break;
+    case 'TotalAmount':
+      output.append('Total');
+      break;
+    case 'TotalAmountExchanged':
+      output.append('Total equivalente');
+      break;
+    case 'TotalMarkupAmount':
+      output.append('Total de Margem');
+      break;
+    case 'TotalFares':
+      output.append('Tarifa Total');
+      break;
+    case 'TotalTaxes':
+      output.append('Total de Taxas');
+      break;
+    case 'Tour':
+      output.append('Circuito');
+      break;
+    case 'tour':
+      output.append('circuito');
+      break;
+    case 'Tours':
+      output.append('Circuitos');
+      break;
+    case 'tours':
+      output.append('circuitos');
+      break;
+    case 'TourName':
+      output.append('Nome do circuito');
+      break;
+    case 'TravelReason':
+      output.append('Motivo de Viagem');
+      break;
+    case 'NewTraveller':
+      output.append('Novo Viajante...');
+      break;
+    case 'Traveller':
+      output.append('Viajante');
+      break;
+    case 'Travellers':
+      output.append('Viajantes');
+      break;
+    case 'twinBed':
+      output.append('Solteiro');
+      break;
+    case 'Terms And Conditions':
+      output.append('Termos e Condições');
+      break;
+    case 'until':
+      output.append('até');
+      break;
+    case 'update':
+      output.append('atualizar');
+      break;
+    case 'Update':
+      output.append('Atualizar');
+      break;
+    case 'UpdatingFare':
+      output.append('Atualizando Tarifa');
+      break;
+    case 'up_to':
+      output.append('até');
+      break;
+    case 'User':
+      output.append('Usuário');
+      break;
+    case 'UserName':
+      output.append('Nome de usuário');
+      break;
+    case 'userRequester':
+      output.append('Usuário Solicitante');
+      break;
+    case 'Validated':
+      output.append('Validado');
+      break;
+    case 'Validate':
+      output.append('Validade');
+      break;
+    case 'Value':
+      output.append('Valor');
+      break;
+    case 'Valuepay':
+      output.append('Valor pago');
+      break;
+    case 'valueToPay':
+      output.append('Valor a pagar');
+      break;
+    case 'verticallPlural':
+      output.append('Verticais');
+      break;
+    case 'vipHeader':
+      output.append('Vip');
+      break;
+    case 'Visualization':
+      output.append('Visualização');
+      break;
+    case 'visualization':
+      output.append('visualização');
+      break;
+    case 'View':
+      output.append('Visualizar');
+      break;
+    case 'Wait':
+      output.append('Aguarde');
+      break;
+    case 'WaitingNumber':
+    case 'waitingNumber':
+    case 'waitingnumber':
+      output.append('Aguardando Númeração');
+      break;
+    case 'windows':
+      output.append('janelas');
+      break;
+    case 'Windows':
+      output.append('Janelas');
+      break;
+    case 'Without':
+      output.append('Sem');
+      break;
+    case 'WorkGroup':
+      output.append('Grupo de Atendimento');
+      break;
+    case 'WithoutMeal':
+      output.append('Sem Refeição');
+      break;
+    case 'year':
+      output.append('ano');
+      break;
+    case 'years':
+      output.append('anos');
+      break;
+    case 'ZipCode':
+      output.append('Cep');
+      break;
+    case 'TicketsPendings':
+      output.append('Bilhetes Pendentes');
+      break;
+    case 'TicketsInfo':
+      output.append('Informações de Bilhetes');
+      break;
+    case 'MCOInfo':
+      output.append('Informações do EMD');
+      break;
+    case 'TicketPayment':
+      output.append('Pagamento do Bilhete');
+      break;
+    case 'SummaryIssue':
+      output.append('Resumo da Emissão');
+      break;
+    case 'NotCharged':
+      output.append('Não cobrado');
+      break;
+    case 'Charged':
+      output.append('Cobrado');
+      break;
+    case 'Exempted':
+      output.append('Isento');
+      break;
+    case 'ChargedBack':
+      output.append('Cancelado');
+      break;
+    case 'Cartão Fidelidade':
+      output.append('Cartão Fidelidade');
+      break;
+    case 'CreditCard':
+    case 'creditcard':
+    case 'Cartão de Crédito':
+    case 'CreditCardPayment':
+      output.append('Cartão de crédito');
+      break;
+    case 'Invoice':
+    case 'invoice':
+      output.append('Faturado');
+      break;
+    case 'invoice':
+    case 'replacement':
+      output.append('Substituição');
+      break;
+    case 'RefundPayment':
+    case 'refundpayment':
+      output.append('Reembolso');
+      break;
+    case 'SupplierCreditPayment':
+    case 'suppliercreditpayment':
+      output.append('Crédito no Fornecedor');
+      break;
+    case 'CreditCardInvoice':
+    case 'creditcardinvoice':
+      output.append('Faturado + Cartão');
+      break;
+    case 'GovernmentAgency':
+    case 'governmentagency':
+      output.append('Agência governamental');
+      break;
+    case 'CreditCardRegistered':
+    case 'creditcardregistered':
+      output.append('Cartões de crédito cadastrados');
+      break;
+    case 'reimbursement':
+      output.append('reembolso');
+      break;
+    case 'Reimbursement':
+      output.append('Reembolso');
+      break;
+    case 'InvoicePayment':
+    case 'invoicepayment':
+      output.append('Pagamento Faturado');
+      break;
+    case 'AirSeatBook':
+    case 'airseatBook':
+      output.append('Assento');
+      break;
+    case 'Pago':
+    case 'pago':
+      output.append('Pago');
+      break;
+    case 'Processing':
+    case 'InWorking':
+      output.append('Processando');
+      break;
+    case 'Completed':
+    case 'Complete':
+      output.append('Completo');
+      break;
+    case 'CompletedWithError':
+    case 'CompleteWithError':
+      output.append('Completo com erros');
+      break;
+    case 'Concierge':
+      output.append('Concierge');
+      break;
+    case 'blockedPolicy':
+      output.append('A quebra desta política não permite a finalização da requisição.');
+      break;
+    case 'Points':
+      output.append('Fidelidade');
+      break;
+    case 'points':
+      output.append('Fidelidade');
+      break;
+    case 'InsufficientFunds':
+      output.append('Saldo insuficiente');
+      break;
+    case 'InsufficientFundsPartialPaymentPossible':
+      output.append('Saldo insuficiente para pagamento total. É possível apenas o pagamento parcial');
+      break;
+    case 'CPFNotFound':
+      output.append('CPF não encontrado');
+      break;
+    case 'PointsConvertionFailedError':
+      output.append('Não foi possível calcular o pagamento em pontos');
+      break;
+    case 'credit':
+      output.append('Crédito');
+      break;
+    case 'Credit':
+      output.append('Crédito');
+      break;
+    case 'Penalty':
+      output.append('Multa');
+      break;
+    case 'Proposal':
+      output.append('Orçamento');
+      break;
+    case 'ProposalOption':
+      output.append('Opção do Orçamento');
+      break;
+    case 'CreditValue':
+      output.append('Crédito');
+      break;
+    case 'Pending':
+      output.append('Pendente');
+      break;
+    case 'PreAuthorized':
+      output.append('Pré-Autorizado');
+      break;
+    case 'Active':
+      output.append('Ativo');
+      break;
+    case 'hotelname':
+      output.append('nome do hotel');
+      break;
+    case 'HotelName':
+      output.append('Nome do Hotel');
+      break;
+    case 'BrokerStatus':
+      output.append('Status da Reserva');
+      break;
+    case 'SavePayment':
+      output.append('Adicionar Pagamento');
+      break;
+    case 'SO':
+      output.append('OS');
+      break;
+    case 'Advanced':
+      output.append('Adiantamento');
+      break;
+    case 'OrderInfo':
+      output.append('Informações do Pedido');
+      break;
+    case 'DepartureDate':
+      output.append('Data de Saída');
+      break;
+    case 'Yes':
+      output.append('Sim');
+      break;
+    case 'No':
+      output.append('Não');
+      break;
+    case 'FlightNumber':
+      output.append('Nº do Voo');
+      break;
+    case 'Class':
+      output.append('Classe');
+      break;
+    case 'Classes':
+      output.append('Classes');
+      break;
+    case 'Connection':
+      output.append('Conexão');
+      break;
+    case 'Status':
+      output.append('Status');
+      break;
+    case 'OBFeeFull':
+      output.append('Taxas do Cartão (Cobráveis em caso de emissão com essa forma de pagamento)');
+      break;
+    case 'OBFee':
+      output.append('Taxa do Cartão');
+      break;
+    case 'DUTaxes':
+      output.append('Taxas DU');
+      break;
+    case 'NonStop':
+      output.append('Voo Direto');
+      break;
+    case 'SeeDetails':
+      output.append('Ver Detalhes');
+      break;
+    case 'ExpiresOn':
+      output.append('Expira em');
+      break;
+    case 'ExpireMonth':
+      output.append('Mês de Expiração');
+      break;
+    case 'ExpireYear':
+      output.append('Ano de Expiração');
+      break;
+    case 'Segments':
+      output.append('Segmentos');
+      break;
+    case 'FlightStatus':
+      output.append('Status do Voo');
+      break;
+    case 'ExternalLoc':
+      output.append('Localizadores Externos');
+      break;
+    case 'Loc':
+    case 'Localizador':
+    case 'Locator':
+    case 'ServiceLocator':
+      output.append('Localizador');
+      break;
+    case 'Locs':
+    case 'Localizadores':
+    case 'Locators':
+    case 'ServiceLocators':
+      output.append('Localizadores');
+      break;
+    case 'GeneratedLoc':
+    case 'Localizador gerado':
+    case 'Generated Locator':
+    case 'GeneratedServiceLocator':
+      output.append('Localizador gerado');
+      break;
+    case 'GeneratedLocs':
+    case 'Localizadores gerados':
+    case 'Generated Locators':
+    case 'GeneratedServiceLocators':
+      output.append('Localizadores gerados');
+      break;
+    case 'Location':
+      output.append('Localização');
+      break;
+    case 'ExpirationDate':
+      output.append('Data Expiração');
+      break;
+    case 'IssuerCia':
+      output.append('Companhia Emissora');
+      break;
+    case 'OperatedBy':
+      output.append('Operado Por');
+      break;
+    case 'PassiveLocator':
+      output.append('Loc Passivo');
+      break;
+    case 'FaresTaxes':
+      output.append('Tarifas e taxas');
+      break;
+    case 'PaxType':
+      output.append('Tipo Passageiro');
+      break;
+    case 'Quantity':
+      output.append('Quantidade');
+      break;
+    case 'EquivalentFare':
+      output.append('Tarifa Equivalente');
+      break;
+    case 'FareBasis':
+      output.append('Base Tarifária');
+      break;
+    case 'Markup':
+      output.append('Markup');
+      break;
+    case 'ExchangeRate':
+      output.append('Câmbio');
+      break;
+    case 'ExchangeDate':
+      output.append('Data Câmbio');
+      break;
+    case 'Totals':
+      output.append('Totais');
+      break;
+    case 'Gender':
+      output.append('Gênero');
+      break;
+    case 'Issue':
+      output.append('Emissão');
+      break;
+    case 'RegisteredPayments':
+      output.append('Pagamentos cadastrados');
+      break;
+    case 'RegisterPerson':
+      output.append('Cadastrar Pessoa');
+      break;
+    case 'Exporting':
+      output.append('Em exportação');
+      break;
+    case 'Exported':
+      output.append('Exportado');
+      break;
+    case 'Canceling':
+      output.append('Em cancelamento');
+      break;
+    case 'RailwayStation':
+      output.append('Estação de Trem');
+      break;
+    case 'Port':
+      output.append('Porto / Balsa');
+      break;
+    case 'None':
+      output.append('Nenhum');
+      break;
+    case 'FareExpired_InformationDate':
+      output.append('Tarifa(s) válida(s) em ');
+      break;
+    case 'FareExpired_Exception':
+      output.append(', favor retarifar antes de realizar a emissão');
+      break;
+    case 'PhoneNumber':
+      output.append('Número de Telefone');
+      break;
+    case 'ReplacementPayment':
+    case 'Replacement':
+      output.append('Substituição');
+      break;
+    case 'LocExpirationDate':
+      output.append('Reservado até');
+      break;
+    case 'Meal':
+      output.append('Refeição');
+      break;
+    case 'notBoard':
+      output.append('Não possui refeição incluída');
+      break;
+    case 'UnavailableExchangeRate':
+      output.append('Não foi possível recuperar o valor do câmbio aplicado no momento da reserva');
+      break;
+    case 'roomService':
+      output.append('Serviços do quarto');
+      break;
+    case 'LOC':
+      output.append('LOC');
+      break;
+    case 'ciaLoc':
+      output.append('LOC Cia');
+      break;
+    case 'AddSegment':
+      output.append('Adicionar Segmento');
+      break;
+    case 'Save':
+      output.append('Salvar');
+      break;
+    case 'Ignore':
+      output.append('Ignorar');
+      break;
+    case 'SeatMap':
+      output.append('Mapa de Assentos');
+      break;
+    case 'Class':
+      output.append('Classe');
+      break;
+    case 'Classes':
+      output.append('Classes');
+      break;
+    case 'State':
+      output.append('Estado');
+      break;
+    case 'Status':
+      output.append('Status');
+      break;
+    case 'NoStatus':
+      output.append('Sem Status');
+      break;
+    case 'F':
+      output.append('Assento');
+      break;
+    case 'Time':
+      output.append('Horário');
+      break;
+    case 'Price':
+      output.append('Preço');
+      break;
+    case 'notService':
+      output.append('Nenhum Serviço informado');
+      break;
+    case 'Subject':
+      output.append('Assunto');
+      break;
+    case 'Message':
+      output.append('Mensagem');
+      break;
+    case 'Mode':
+      output.append('Modo');
+      break;
+    case 'OtherFem':
+      output.append('Outra');
+      break;
+    case 'OthersFem':
+      output.append('Outras');
+      break;
+    case 'Suggestions':
+      output.append('Sugestões');
+      break;
+    case 'Existent Payments In Service Order':
+      output.append('Pagamentos Existentes na OS');
+      break;
+    case 'ExitOf':
+      output.append('Sair do');
+      break;
+    case 'Clear':
+      output.append('Limpar');
+      break;
+    case 'Selection':
+      output.append('Seleção');
+      break;
+    case 'Others':
+      output.append('Outros');
+      break;
+    case 'MoreDetails':
+      output.append('Mais detalhes');
+      break;
+    case 'CreatedBy':
+      output.append('Criado por');
+      break;
+    case 'CreatedOn':
+      output.append('Criado em');
+      break;
+    case 'SONumber':
+      output.append('Número da ordem de serviço');
+      break;
+    case 'RequestWithVipTraveller':
+      output.append('Requisição possui viajantes Vip');
+      break;
+    case 'NoRecordFound':
+      output.append('Nenhuma requisição encontrada');
+      break;
+    case 'AddAlternativeApproval':
+      output.append('Incluir Aprovador Alternativo');
+      break;
+    case 'ChangeStatus':
+      output.append('Alterar Status');
+      break;
+    case 'Place':
+      output.append('Local');
+      break;
+    case 'ExpiresOn':
+      output.append('Expira em');
+      break;
+    case 'TotalInAdvance':
+      output.append('Total Solicitado');
+      break;
+    case 'TotalSpent':
+      output.append('Total Gasto');
+      break;
+    case 'VoucherNumber':
+      output.append('Número do Voucher');
+      break;
+    case 'VoucherDate':
+      output.append('Data do Voucher');
+      break;
+    case 'TotalCounterFare':
+      output.append('Total Tarifa Balcão');
+      break;
+    case 'Payed':
+      output.append('Pago');
+      break;
+    case 'Not payed':
+      output.append('Não pago');
+      break;
+    case 'NewSO':
+      output.append('Nova OS');
+      break;
+    case 'NoFlightDelayInfo':
+      output.append('Não há informações de atraso sobre esse voo.');
+      break;
+    case 'ToIssue':
+      output.append('Emitir');
+      break;
+    case 'Full':
+      output.append('À Vista');
+      break;
+    case 'Usesamepaymentasticket':
+      output.append('Utilizar as mesmas formas de pagamento do bilhete');
+      break;
+    case 'Reallycancelticket':
+      output.append('Deseja realmente cancelar este bilhete?');
+      break;
+    case 'ActionHistory':
+      output.append('Histórico de Ações');
+      break;
+    case 'ExternalPnr':
+      output.append('Reserva Externa');
+      break;
+    case 'InvalidServiceOrderId':
+      output.append('Id inválido.');
+      break;
+    case 'SupplierPayment':
+      output.append('Pagamento de fornecedor.');
+      break;
+    case 'SupplierCredit':
+      output.append('Crédito no fornecedor');
+      break;
+    case 'Option':
+      output.append('Opção');
+      break;
+    case 'Options':
+      output.append('Opções');
+      break;
+    case 'AppliedPenalty':
+      output.append('Multa Aplicada');
+      break;
+    case 'SameAddress':
+      output.append('Mesmo endereço');
+      break;
+    case 'Title':
+      output.append('Título');
+      break;
+    case 'Stars':
+      output.append('Estrelas');
+      break;
+    case 'StartDate':
+      output.append('Data inicial');
+      break;
+    case 'EndDate':
+      output.append('Data final');
+      break;
+    case 'StartHour':
+      output.append('Hora inicial');
+      break;
+    case 'EndHour':
+      output.append('Hora final');
+      break;
+    case 'StartAge':
+      output.append('Idade inicial');
+      break;
+    case 'SSRs':
+      output.append('SSRs');
+      break;
+    case 'SSRCode':
+      output.append('Código');
+      break;
+    case 'SSRDescription':
+      output.append('Descrição');
+      break;
+    case 'EndAge':
+      output.append('Idade final');
+      break;
+    case 'Dates':
+      output.append('Datas');
+      break;
+    case 'Date':
+      output.append('Data');
+      break;
+    case 'ServiceName':
+      output.append('Nome do serviço');
+      break;
+    case 'ServiceSupplierName':
+      output.append('Nome do fornecedor');
+      break;
+    case 'Small':
+    case 'small':
+      output.append('Pequeno');
+      break;
+    case 'Large':
+    case 'large':
+      output.append('Grande');
+      break;
+    case 'Traditional':
+    case 'traditional':
+      output.append('Tradicional');
+      break;
+    case 'Open':
+    case 'open':
+      output.append('Aberto');
+      break;
+    case 'Undecided':
+    case 'undecided':
+      output.append('Incerto');
+      break;
+    case 'ApartBoth':
+      output.append('Camas Separadas');
+      break;
+    case 'BothTogether':
+      output.append('Camas Juntas');
+      break;
+    case 'Unknown':
+    case 'unknown':
+      output.append('Desconhecido');
+      break;
+    case 'Cruise Informations':
+      output.append('Informações de Cruzeiro');
+      break;
+    case 'Cabin Informations':
+      output.append('Informações da Cabine');
+      break;
+    case 'Cruise Taxes':
+      output.append('Tarifas de Cruzeiro');
+      break;
+    case 'ServiceDescription':
+      output.append('Descrição');
+      break;
+    case 'ServiceCategory':
+      output.append('Categoria do Serviço');
+      break;
+    case 'IsFreeSale':
+      output.append('Venda livre');
+      break;
+    case 'FareType':
+      output.append('Tipo de tarifa');
+      break;
+    case 'SaleType':
+      output.append('Tipo de venda');
+      break;
+    case 'TransferInformation':
+      output.append('Informações do transfer');
+      break;
+    case 'VoucherInfo':
+      output.append('Informações de voucher');
+      break;
+    case 'CancellationPolicy':
+      output.append('Política de cancelamento');
+      break;
+    case 'BookingFares':
+      output.append('Tarifas da reserva');
+      break;
+    case 'Car description':
+      output.append('Descrição do carro');
+      break;
+    case 'Model':
+      output.append('Modelo');
+      break;
+    case 'Acriss':
+      output.append('Acriss');
+      break;
+    case 'Transmission':
+      output.append('Transmissão');
+      break;
+    case 'Fuel':
+      output.append('Combustível');
+      break;
+    case 'HasAirConditioning':
+      output.append('Ar condicionado');
+      break;
+    case 'NumberOfPassengers':
+      output.append('Número de passageiros');
+      break;
+    case 'NumberOfBags':
+      output.append('Número de bagagens');
+      break;
+    case 'NumberOfDoors':
+      output.append('Número de portas');
+      break;
+    case 'Pickup Information':
+      output.append('Local de retirada');
+      break;
+    case 'Pickup Date':
+      output.append('Data de retirada');
+      break;
+    case 'Dropoff Information':
+      output.append('Local de devolução');
+      break;
+    case 'Dropoff Date':
+      output.append('Data de devolução');
+      break;
+    case 'Mileage':
+      output.append('Milhagem');
+      break;
+    case 'MileageTerm':
+      output.append('% de Online');
+      break;
+    case 'Free Mileage':
+      output.append('livre');
+      break;
+    case 'Extra Hour Is Free Mileage':
+      output.append('Hora extra inclui');
+      break;
+    case 'Extra Day Is Free Mileage':
+      output.append('Dia extra inclui');
+      break;
+    case 'Miles/Kms Included':
+      output.append('inclusos');
+      break;
+    case 'Agreement Details':
+      output.append('Detalhes do Acordo');
+      break;
+    case 'Corporate Discount Number':
+      output.append('Código Corporativo');
+      break;
+    case 'Agreement Code':
+      output.append('Código Acordo');
+      break;
+    case 'Promotion Code':
+      output.append('Código Promoção');
+      break;
+    case 'Inclusions':
+      output.append('Inclusões');
+      break;
+    case 'IncludedInBase':
+      output.append('Incluso');
+      break;
+    case 'IncludedInTotal':
+      output.append('Incluso');
+      break;
+    case 'PerDay':
+      output.append('Por dia');
+      break;
+    case 'Percent':
+      output.append('Por cento (%)');
+      break;
+    case 'per':
+      output.append('por');
+      break;
+    case 'Extra Amount':
+      output.append('Valor adicional');
+      break;
+    case 'Extra Hour Amount':
+      output.append('Valor adicional por hora');
+      break;
+    case 'Extra Day Amount':
+      output.append('Valor adicional por day');
+      break;
+    case 'Special Equipments':
+      output.append('Equipamentos especiais');
+      break;
+    case 'EstimatedPrice':
+      output.append('Valor estimado');
+      break;
+    case 'PricePlan':
+      output.append('Plano');
+      break;
+    case 'Rate Code':
+      output.append('Rate Code');
+      break;
+    case 'Route':
+      output.append('Roteiro');
+      break;
+    case 'Exchange Rate':
+      output.append('Câmbio');
+      break;
+    case 'MarkupedFare':
+      output.append('Tarifa + Markup');
+      break;
+    case 'FareAmount':
+      output.append('Valor da tarifa');
+      break;
+    case 'SaleFareAmount':
+      output.append('Valor da venda');
+      break;
+    case 'AgencyMarkup':
+      output.append('Markup da Agência');
+      break;
+    case 'Fare Amount':
+      output.append('Valor da tarifa');
+      break;
+    case 'DailyFare Amount':
+      output.append('Valor médio da diária');
+      break;
+    case 'FareAmountExchanged':
+      output.append('Tarifa equivalente');
+      break;
+    case 'Fare Type':
+      output.append('Tipo da tarifa');
+      break;
+    case 'Estimated Total Fare':
+      output.append('Valor Total Estimado');
+      break;
+    case 'Unspecified':
+      output.append('Não informado');
+      break;
+    case 'Keyword':
+      output.append('Palavra-chave');
+      break;
+    case 'Kilometer':
+      output.append('Kilometragem');
+      break;
+    case 'Miles':
+      output.append('MilhagensTarifas');
+      break;
+    case 'PayDate':
+      output.append('Vencimento');
+      break;
+    case 'VenueInfo':
+      output.append('Local e setor');
+      break;
+    case 'VenueName':
+      output.append('Nome');
+      break;
+    case 'VenueSector':
+      output.append('Setor');
+      break;
+    case 'SetupName':
+      output.append('Configuração');
+      break;
+    case 'VenuePhoneNumber':
+      output.append('Telefone');
+      break;
+    case 'LotId':
+      output.append('Lote');
+      break;
+    case 'ExchangedAmount':
+      output.append('Valor Convertido');
+      break;
+    case 'SecurityCode':
+      output.append('Código de Segurança');
+      break;
+    case 'SupplierInfo':
+      output.append('Fornecedor');
+      break;
+    case 'SupplierName':
+      output.append('Nome');
+      break;
+    case 'SupplierEmail':
+      output.append('Email');
+      break;
+    case 'Periodic':
+      output.append('Periodico');
+      break;
+    case 'Daily':
+      output.append('Diário');
+      break;
+    case 'Inventory':
+      output.append('Controle de inventário');
+      break;
+    case 'UponRequest':
+      output.append('Sob consulta');
+      break;
+    case 'FreeSale':
+      output.append('Venda livre');
+      break;
+    case 'True':
+      output.append('Sim');
+      break;
+    case 'False':
+      output.append('Não');
+      break;
+    case 'TwoOrThreeDoors':
+      output.append('Duas ou três portas');
+      break;
+    case 'TwoOrFourDoors':
+      output.append('Duas ou quatro portas');
+      break;
+    case 'FourOrFiveDoors':
+      output.append('Quatro ou cinco portas');
+      break;
+    case 'Coupe':
+      output.append('Coupé');
+      break;
+    case 'Suv':
+      output.append('SUV');
+      break;
+    case 'ServiceDetails':
+      output.append('Informações do serviço');
+      break;
+    case 'Crossover':
+      output.append('Crossover');
+      break;
+    case 'CruiseCategory':
+      output.append('Categoria');
+      break;
+    case 'Motorhome':
+      output.append('Motorhome');
+      break;
+    case 'OpenairAllTerrain':
+      output.append('Off-road');
+      break;
+    case 'CommercialVanOrTruck':
+      output.append('Comercial, van ou caminhão');
+      break;
+    case 'Limousine':
+      output.append('Limusine');
+      break;
+    case 'Monospace':
+      output.append('Monospace');
+      break;
+    case 'Roadster':
+      output.append('Roadster');
+      break;
+    case 'PickupRegularCab':
+      output.append('Pickup');
+      break;
+    case 'PickupExtendedCab':
+      output.append('Puckup com cabine extendida');
+      break;
+    case 'RecreationalVehicle':
+      output.append('Veículo de passeio');
+      break;
+    case 'Sport':
+      output.append('Esporte');
+      break;
+    case 'Convertible':
+      output.append('Conversível');
+      break;
+    case 'PassengerVan':
+      output.append('Van');
+      break;
+    case 'WagonOrEstate':
+      output.append('Wagon');
+      break;
+    case 'Special':
+      output.append('Especial');
+      break;
+    case 'TwoWheelVehicle':
+      output.append('Duas rodas');
+      break;
+    case 'SpecialOfferCar':
+      output.append('Oferta especial');
+      break;
+    case 'Hourly':
+      output.append('Por hora');
+      break;
+    case 'Monthly':
+      output.append('Mensalmente');
+      break;
+    case 'Weekend':
+      output.append('Final de semana');
+      break;
+    case 'Weekly':
+      output.append('Semanal');
+      break;
+    case 'Manual':
+      output.append('Manual');
+      break;
+    case 'Automatic':
+      output.append('Automático');
+      break;
+    case 'Economy':
+      output.append('Econômico');
+      break;
+    case 'Intermediate':
+      output.append('Intermediário');
+      break;
+    case 'Standard':
+      output.append('Padrão');
+      break;
+    case 'Fullsize':
+      output.append('Sedan');
+      break;
+    case 'Premium':
+      output.append('Premium');
+      break;
+    case 'Luxury':
+      output.append('Luxo');
+      break;
+    case 'Mini':
+      output.append('Mini');
+      break;
+    case 'Compact':
+      output.append('Compacto');
+      break;
+    case 'EconomyElite':
+      output.append('Econômico Elite');
+      break;
+    case 'IntermediateElite':
+      output.append('Intermediário Elite');
+      break;
+    case 'StandardElite':
+      output.append('Padrão Elite');
+      break;
+    case 'FullsizeElite':
+      output.append('Sedan Elite');
+      break;
+    case 'PremiumElite':
+      output.append('Premium Elite');
+      break;
+    case 'LuxuryElite':
+      output.append('Luxo Elite');
+      break;
+    case 'MiniElite':
+      output.append('Mini Elite');
+      break;
+    case 'CompactElite':
+      output.append('Compacto Elite');
+      break;
+    case 'navigational system':
+      output.append('Sistema de navegação GPS');
+      break;
+    case 'child seat/infant':
+      output.append('Assento especial para bebê');
+      break;
+    case 'child seat/toddler':
+      output.append('Assento especial para criança');
+      break;
+    case 'child seat/booster':
+      output.append('Assento de elevação para criança');
+      break;
+    case 'querybuilder:equal to':
+      output.append('igual a');
+      break;
+    case 'querybuilder:different':
+      output.append('diferente de');
+      break;
+    case 'querybuilder:greater than':
+      output.append('maior que');
+      break;
+    case 'querybuilder:less than':
+      output.append('menor que');
+      break;
+    case 'querybuilder:less than':
+      output.append('menor que');
+      break;
+    case 'querybuilder:greater than or equal to':
+      output.append('maior ou igual a');
+      break;
+    case 'querybuilder:less than or equal to':
+      output.append('menor ou igual a');
+      break;
+    case 'querybuilder:contains':
+      output.append('contém');
+      break;
+    case 'querybuilder:starts with':
+      output.append('começa com');
+      break;
+    case 'querybuilder:ends with':
+      output.append('termina com');
+      break;
+    case 'querybuilder:is null':
+      output.append('é nulo');
+      break;
+    case 'querybuilder:is not null':
+      output.append('não é nulo');
+      break;
+    case 'CallCenter':
+      output.append('Central de Atendimento');
+      break;
+    case 'ImmediateCharge':
+      output.append('Este item obriga o pagamento imediato de todos os itens da compra.');
+      break;
+    case 'ContactInformations':
+      output.append('Contatos');
+      break;
+    case 'ContactPhoneType':
+      output.append('Tipo');
+      break;
+    case 'Business':
+      output.append('Trabalho');
+      break;
+    case 'Home':
+      output.append('Casa');
+      break;
+    case 'Mobile':
+      output.append('Celular');
+      break;
+    case 'Prefix':
+      output.append('Prefixo');
+      break;
+    case 'PhoneNumber':
+      output.append('Telefone');
+      break;
+    case 'Email':
+      output.append('Email');
+      break;
+    case 'Cash':
+      output.append('Dinheiro');
+      break;
+    case 'cash':
+      output.append('Dinheiro');
+      break;
+    case 'Billet':
+      output.append('Boleto');
+      break;
+    case 'billet':
+      output.append('Boleto');
+      break;
+    case 'Check':
+      output.append('Cheque');
+      break;
+    case 'check':
+      output.append('Cheque');
+      break;
+    case 'Identity':
+      output.append('RG');
+      break;
+    case 'Passport':
+    case 'Passaporte':
+      output.append('Passaporte');
+      break;
+    case 'PassportFullName':
+      output.append('Nome no Passaporte');
+      break;
+    case 'PassportNumber':
+      output.append('Número do Passaporte');
+      break;
+    case 'PassportExpireDate':
+      output.append('Data de Expiração');
+      break;
+    case 'SeatPreference':
+      output.append('Preferência de Assento');
+      break;
+    case 'SeatRegionPreference':
+      output.append('Região do Assento');
+      break;
+    case 'DriverLicense':
+      output.append('CNH');
+      break;
+    case 'CPF':
+      output.append('CPF');
+      break;
+    case 'OnRequest':
+      output.append('Sob solicitação');
+      break;
+    case 'Allotment':
+      output.append('Bloqueio');
+      break;
+    case 'Online':
+      output.append('Online');
+      break;
+    case 'HotelProviderInfo':
+      output.append('Informações do fornecedor');
+      break;
+    case 'Culture':
+      output.append('Cultura');
+      break;
+    case 'ContactNumber':
+      output.append('Número de contato');
+      break;
+    case 'FareObservation':
+      output.append('Observação da tarifa');
+      break;
+    case 'Original Currency':
+      output.append('Moeda Original');
+      break;
+    case 'YouWillLostUnsavedDataMessage':
+      output.append('Suas informações que, por ventura, não foram salvas serão perdidas.');
+      break;
+    case 'OutdateScriptsReloadMessage':
+      output.append('É necessário atualizar o sistema para obter a última versão. <a href=\'\'>CLIQUE AQUI</a> para atualizar.');
+      break;
+    case 'HotelRoom':
+      output.append('Quarto');
+      break;
+    case 'ManagementFields':
+      output.append('Campos Gerenciais');
+      break;
+    case 'ManagementFields_NotFound':
+      output.append('Campos Gerenciais não encontrados!');
+      break;
+    case 'InList':
+      output.append('Em fila de espera');
+      break;
+    case 'Confirmed':
+      output.append('Confirmado');
+      break;
+    case 'Reimbursed':
+      output.append('Reembolsado');
+      break;
+    case 'ReimbursementRequested':
+      output.append('Reembolso Solicitado');
+      break;
+    case 'Confirm':
+      output.append('Confirmar');
+      break;
+    case 'SamePrice':
+      output.append('Mesmo preço');
+      break;
+    case 'moreexpensive':
+      output.append('mais caro');
+      break;
+    case 'morecheaper':
+      output.append('mais barato');
+      break;
+    case 'Subject':
+      output.append('Assunto');
+      break;
+    case 'Message':
+      output.append('Mensagem');
+      break;
+    case 'Mode':
+      output.append('Modo');
+      break;
+    case 'OtherFem':
+      output.append('Outra');
+      break;
+    case 'OthersFem':
+      output.append('Outras');
+      break;
+    case 'Suggestions':
+      output.append('Sugestões');
+      break;
+    case 'ExitOf':
+      output.append('Sair do');
+      break;
+    case 'Clear':
+      output.append('Limpar');
+      break;
+    case 'FullFare':
+      output.append('Cheia');
+      break;
+    case 'AgreementFare':
+      output.append('Acordo');
+      break;
+    case 'BalconyFare':
+      output.append('Balcão');
+      break;
+    case 'NetFare':
+      output.append('Net');
+      break;
+    case 'PackageFare':
+      output.append('Pacote');
+      break;
+    case 'Selection':
+      output.append('Seleção');
+      break;
+    case 'GridPayment.Waiting':
+      output.append('Aguardando Pagamento');
+      break;
+    case 'GridPayment.InAnalysis':
+      output.append('Em Análise');
+      break;
+    case 'GridPayment.Paid':
+      output.append('Pago');
+      break;
+    case 'GridPayment.Reversed':
+      output.append('Estornado');
+      break;
+    case 'GridPayment.ErrorPayment':
+      output.append('Erro no Pagamento');
+      break;
+    case 'GridPayment.ErrorReversal':
+      output.append('Erro no Estorno');
+      break;
+    case 'BatchAction_AnonymousSearch':
+      output.append('Cotação Anônima');
+      break;
+    case 'BatchAction_Search':
+      output.append('Cotação Nomeada');
+      break;
+    case 'BatchAction_Issue':
+      output.append('Emissão');
+      break;
+    case 'BatchAction_Book':
+      output.append('Reserva');
+      break;
+    case 'BatchAction_SearchNBook':
+      output.append('Reserva');
+      break;
+    case 'BatchAction_Retrieve':
+      output.append('Retrieve');
+      break;
+    case 'BatchAction_RevalidatePNR':
+      output.append('Revalidação');
+      break;
+    case 'CreditCardNumber':
+      output.append('Número do cartão');
+      break;
+    case 'CreditCardProvider':
+      output.append('Bandeira');
+      break;
+    case 'CreditCardOwner':
+      output.append('Nome no Cartão de Crédito');
+      break;
+    case 'AuthorizationCode':
+      output.append('Código de autorização');
+      break;
+    case 'Error':
+      output.append('Erro');
+      break;
+    case 'hotelAdditionalData':
+      output.append('Informações Adicionais para Hotel');
+      break;
+    case 'Confimation Number':
+      output.append('Número de confirmação');
+      break;
+    case 'SelectPayment':
+      output.append('Selecionar Pagamento');
+      break;
+    case 'CancelPayment':
+      output.append('Cancelar Pagamento');
+      break;
+    case 'PaymentInfo':
+      output.append('Informações de pagamento');
+      break;
+    case 'SystemAccounts':
+      output.append('Contas de Sistema');
+      break;
+    case 'ExhibitionAll':
+      output.append('Exibindo todos os');
+      break;
+    case 'ExhibitionPage':
+      output.append('Exibindo página');
+      break;
+    case 'RegisterTotal':
+      output.append('Total de registros');
+      break;
+    case 'registers':
+      output.append('registros');
+      break;
+    case 'Administration':
+      output.append('Administração');
+      break;
+    case 'Data de Expiração':
+      output.append('Data de Expiração');
+      break;
+    case 'interest':
+      output.append('juros de');
+      break;
+    case 'withoutinterest':
+      output.append('sem juros');
+      break;
+    case 'a.m.':
+      output.append('a.m.');
+      break;
+    case 'AgeRange':
+      output.append('Intervalo de idade');
+      break;
+    case 'DocumentType':
+    case 'Document Type':
+    case 'documenttype':
+    case 'document type':
+      output.append('Tipo do documento');
+      break;
+    case 'DocumentNumber':
+      output.append('Número do documento');
+      break;
+    case 'DocumentFullName':
+      output.append('Nome no documento');
+      break;
+    case 'DocumentCountry':
+      output.append('País no documento');
+      break;
+    case 'DocumentExpireDate':
+      output.append('Data de expiração do documento');
+      break;
+    case 'Document':
+      output.append('Documento');
+      break;
+    case 'ConcatenatedDocumentNumbers':
+      output.append('Documentos');
+      break;
+    case 'PassportValidate':
+      output.append('Validade do passaporte');
+      break;
+    case 'PassportCountry':
+      output.append('País de emissão');
+      break;
+    case 'NationalPassaport':
+      output.append('Passaporte nacional');
+      break;
+    case 'InternationalPassaport':
+      output.append('Passaporte internacional');
+      break;
+    case 'NationalIdentity':
+      output.append('Identidade nacional');
+      break;
+    case 'InternationalIdentity':
+      output.append('Identidate internacional');
+      break;
+    case 'CreditCardMaxValue':
+      output.append('Valor máximo no cartão');
+      break;
+    case 'CreditCardMinValue':
+      output.append('Valor mínimo no cartão');
+      break;
+    case 'TotalValue':
+      output.append('Valor total');
+      break;
+    case 'DirectPayment':
+      output.append('Pagamento direto');
+      break;
+    case 'directpayment':
+      output.append('Pagamento direto');
+      break;
+    case 'BankTransfer':
+      output.append('Transferência bancária');
+      break;
+    case 'banktransfer':
+      output.append('Transferência bancária');
+      break;
+    case 'PointOfSale':
+      output.append('Ponto de venda');
+      break;
+    case 'pointofsale':
+      output.append('Ponto de venda');
+      break;
+    case 'AirHotel':
+      output.append('Aéreo + Hotel');
+      break;
+    case 'airhotel':
+      output.append('Aéreo + Hotel');
+      break;
+    case 'Service':
+      output.append('Serviço');
+      break;
+    case 'service':
+      output.append('Serviço');
+      break;
+    case 'Stelo':
+      output.append('Stelo');
+      break;
+    case 'stelo':
+      output.append('Stelo');
+      break;
+    case 'DebitNote':
+      output.append('Nota de Débito');
+      break;
+    case 'debitnote':
+      output.append('Nota de Débito');
+      break;
+    case 'debit':
+      output.append('débito');
+      break;
+    case 'Debit':
+      output.append('Débito');
+      break;
+    case 'credit':
+      output.append('crédito');
+      break;
+    case 'Credit':
+      output.append('Crédito');
+      break;
+    case 'GuaranteeReservation':
+      output.append('Garantia de Reserva');
+      break;
+    case 'guaranteereservation':
+      output.append('Garantia de Reserva');
+      break;
+    case 'ValueTransfer':
+      output.append('Transferência de Valores');
+      break;
+    case 'valuetransfer':
+      output.append('Transferência de Valores');
+      break;
+    case 'RetainedCommission':
+      output.append('Comissão Retida');
+      break;
+    case 'FranchiseDiscount':
+      output.append('Desconto Franquia');
+      break;
+    case 'franchisediscount':
+      output.append('Desconto Franquia');
+      break;
+    case 'retainedcommission':
+      output.append('Comissão Retida');
+      break;
+    case 'Exchange':
+      output.append('Permuta');
+      break;
+    case 'exchange':
+      output.append('Permuta');
+      break;
+    case 'RemoveSegment':
+      output.append('Deseja realmente remover o(s) trecho(s)?');
+      break;
+    case 'ExchangeSegmentsConfirm':
+      output.append('Deseja realmente trocar o(s) trecho(s)?');
+      break;
+    case 'RemoveFare':
+      output.append('Deseja realmente remover esta tarifa?');
+      break;
+    case 'RemoveCommission':
+      output.append('Deseja realmente remover esta comissão?');
+      break;
+    case 'AdvancedSearch':
+      output.append('Pesquisa Avançada');
+      break;
+    case 'Reports':
+      output.append('Relatórios');
+      break;
+    case 'ProviderDefaultWarning':
+      output.append('A empresa selecionada não possui um fornecedor padrão, e por isso não é possível alterar o contexto. Entre em contato com o administrador');
+      break;
+    case 'FareRules':
+      output.append('Regras Tarifárias');
+      break;
+    case 'EmptyFareRules':
+      output.append('Não existe regras tarifárias cadastradas para esse voo.');
+      break;
+    case 'MustSelectHotelWarning':
+      output.append('Por favor, selecione um hotel antes de continuar.');
+      break;
+    case 'MustSelectServiceWarning':
+      output.append('Por favor, selecione um serviço antes de continuar.');
+      break;
+    case 'EditFeeValue':
+      output.append('Editar valor do Fee');
+      break;
+    case 'EditRavValue':
+      output.append('Editar valor da Rav');
+      break;
+    case 'ValueToIncrementFee':
+      output.append('Valor para acrescentar ao Fee');
+      break;
+    case 'Fee':
+      output.append('Fee');
+      break;
+    case ' a ':
+      output.append(' a ');
+      break;
+    case 'all_age':
+      output.append('Todas as idades');
+      break;
+    case 'need_save_actual_register':
+      output.append('É necessário salvar o registro atual');
+      break;
+    case 'need_save':
+      output.append('É necessário cadastrar');
+      break;
+    case 'the_field':
+      output.append('O campo');
+      break;
+    case 'is_required':
+      output.append('é obrigatório');
+      break;
+    case 'wait_load_file':
+      output.append('Aguarde o carregamento do arquivo.');
+      break;
+    case 'total_rows':
+      output.append('Total de linhas');
+      break;
+    case 'total_rows_processed':
+      output.append('Total de linhas processadas');
+      break;
+    case 'Percentage':
+      output.append('Percentage');
+      break;
+    case 'Import_Date':
+      output.append('Data da Importação');
+      break;
+    case 'Occurred_error':
+      output.append('Ocorreu um erro');
+      break;
+    case 'Error_load_page':
+      output.append('Erro ao carregar a página');
+      break;
+    case 'Contains':
+      output.append('Contém');
+      break;
+    case 'Start_with':
+      output.append('Começa com');
+      break;
+    case 'End_with':
+      output.append('Termina com');
+      break;
+    case 'History_Changes':
+      output.append('Histórico de Alterações');
+      break;
+    case 'not_accept_number':
+      output.append('não aceita números.');
+      break;
+    case 'not_fill_correctly':
+      output.append('não está preenchido corretamente.');
+      break;
+    case 'The_value_minimum':
+      output.append('O valor mínimo para o campo');
+      break;
+    case 'The_value_maximum':
+      output.append('O valor mínimo para o campo');
+      break;
+    case 'should_have_minimum':
+      output.append('deve ter ao menos');
+      break;
+    case 'characters':
+      output.append('caracteres.');
+      break;
+    case 'is':
+      output.append('é');
+      break;
+    case 'All':
+      output.append('Todos');
+      break;
+    case 'Parcelas':
+      output.append('Parcelas');
+      break;
+    case 'Primeira Parcela COMBO':
+      output.append('1ª');
+      break;
+    case 'Entrada COMBO':
+      output.append('Entrada de');
+      break;
+    case 'ResumedFare':
+      output.append('Tar');
+      break;
+    case 'ResumedTax':
+      output.append('Tax');
+      break;
+    case 'ResumedMarkup':
+      output.append('Mar');
+      break;
+    case 'ResumedDU':
+      output.append('DU');
+      break;
+    case 'ResumedPenalty':
+      output.append('Mul');
+      break;
+    case 'TarTaxDUMar':
+    case 'Tar + Tax + DU + Mar':
+      output.append('Tar + Tax + DU + Mar');
+      break;
+    case 'TarTaxDU':
+    case 'Tar + Tax + DU':
+      output.append('Tar + Tax + DU');
+      break;
+    case 'TicketPaymentInformation':
+      output.append('Informações de pagamento do bilhete');
+      break;
+    case 'Voo':
+      output.append('Voo');
+      break;
+    case 'Complete':
+      output.append('Completo');
+      break;
+    case 'PaymentReceipt':
+      output.append('Recibo de Pagamento');
+      break;
+    case 'BookRequest':
+      output.append('Solicitação de Reserva');
+      break;
+    case 'SelectedDates':
+      output.append('Datas Selecionadas');
+      break;
+    case 'Aguardando Pagamento':
+    case 'AguardandoPagamento':
+      output.append('Aguardando Pagamento');
+      break;
+    case 'Últimos Pedidos':
+      output.append('Últimos Pedidos');
+      break;
+    case 'Últimas Emissões':
+    case 'Ultimas Emissoes':
+      output.append('Últimas Emissões');
+      break;
+    case 'Últimas Reservas':
+    case 'Ultimas Reservas':
+      output.append('Últimas Reservas');
+      break;
+    case 'emitido':
+    case 'Emitido':
+      output.append('Emitido');
+      break;
+    case 'Anulado':
+    case 'Cancelado':
+      output.append('Anulado');
+      break;
+    case 'EmisionPendiente':
+      output.append('Emissão Pendente');
+      break;
+    case 'EmCancelamento':
+      output.append('Em Cancelamento');
+      break;
+    case 'Nova Query':
+      output.append('Nova Query');
+      break;
+    case 'Adulto':
+      output.append('Adulto');
+      break;
+    case 'Criança':
+      output.append('Criança');
+      break;
+    case 'Bebê':
+      output.append('Bebê');
+      break;
+    case 'Tax':
+      output.append('Tax');
+      break;
+    case 'Identidade':
+      output.append('Identidade');
+      break;
+    case 'Carteira de motorista':
+      output.append('Carteira de motorista');
+      break;
+    case 'CarPreferences':
+      output.append('Preferências de Carro');
+      break;
+    case 'FlightWillBeReservedOnAWaitList':
+      output.append('Existem vôos que serão reservados em lista de espera');
+      break;
+    case 'FaresCanChange':
+      output.append('As tarifas poderão ser alteradas neste processo. Deseja continuar?');
+      break;
+    case 'Order':
+      output.append('Código');
+      break;
+    case 'ToShare':
+      output.append('Compartilhar');
+      break;
+    case 'forMore':
+      output.append('por mais');
+      break;
+    case 'forLess':
+      output.append('por menos');
+      break;
+    case 'forFree':
+      output.append('grátis');
+      break;
+    case 'saving':
+      output.append('e economize');
+      break;
+    case 'samePrice':
+      output.append('mesmo preço');
+      break;
+    case 'Deposit':
+      output.append('Depósito');
+      break;
+    case 'DebitCard':
+      output.append('Cartão de débito');
+      break;
+    case 'AgencyIATA':
+      output.append('IATA da Agência');
+      break;
+    case 'AgencyName':
+      output.append('Nome da Agência');
+      break;
+    case 'UntilXPM':
+      output.append('Balcão');
+      break;
+    case 'DirectBill':
+      output.append('Pagamento Direto');
+      break;
+    case 'DefaultGuarantee':
+      output.append('Garantia Padrão');
+      break;
+    case 'AmountOfPeople':
+      output.append('Quantidade de pessoas');
+      break;
+    case 'at':
+      output.append('às');
+      break;
+    case 'DisabledOutstandingServiceItemMessage':
+      output.append('Pagamento desabilitado devido às condições da ordem de serviço');
+      break;
+    case 'Search':
+      output.append('Busca');
+      break;
+    case 'HotelDetails':
+      output.append('Detalhes do Hotel');
+      break;
+    case 'CheckOut':
+      output.append('Fechamento');
+      break;
+    case 'Confirmation':
+      output.append('Confirmação');
+      break;
+    case 'Svc City':
+    case 'SvcCity':
+    case 'svccity':
+      output.append('Cidade do Serviço');
+      break;
+    case 'AgencyContactPhone':
+      output.append('Telefone da Agência');
+      break;
+    case 'AgencyContactName':
+      output.append('Nome Contato da Agência');
+      break;
+    case 'CustomerContactPhone':
+      output.append('Telefone do Cliente');
+      break;
+    case 'CustomerContactName':
+      output.append('Nome do Cliente');
+      break;
+    case 'CustomerContactEmail':
+      output.append('Email do Cliente');
+      break;
+    case 'CustomerExternalId':
+      output.append('Código Customizado');
+      break;
+    case 'at':
+      output.append('às');
+      break;
+    case 'DisabledOutstandingServiceItemMessage':
+      output.append('Pagamento desabilitado devido às condições da ordem de serviço');
+      break;
+    case 'Search':
+      output.append('Busca');
+      break;
+    case 'HotelDetails':
+      output.append('Detalhes do Hotel');
+      break;
+    case 'HotelPreferences':
+      output.append('Preferências de Hotel');
+      break;
+    case 'CheckOut':
+      output.append('Fechamento');
+      break;
+    case 'Confirmation':
+      output.append('Confirmação');
+      break;
+    case 'Svc City':
+    case 'SvcCity':
+    case 'svccity':
+      output.append('Cidade do Serviço');
+      break;
+    case 'Remove':
+      output.append('Remover');
+      break;
+    case 'FlexibleSearch':
+      output.append('Buscas Flexíveis');
+      break;
+    case 'Foreign Identification':
+    case 'foreign identification':
+      output.append('Cédula Estrangeira');
+      break;
+    case 'IssueCountry':
+    case 'issuecountry':
+    case 'Issue Country':
+      output.append('País emissor');
+      break;
+    case 'Identification':
+    case 'identification':
+      output.append('Identificação');
+      break;
+    case 'Redress Number':
+    case 'redress number':
+    case 'RedressNumber':
+    case 'redressnumber':
+      output.append('Redress Number');
+      break;
+    case 'Nationality':
+    case 'nationality':
+      output.append('Nacionalidade');
+      break;
+    case 'Foreign Passport':
+    case 'foreign passport':
+      output.append('Passaporte estrangeiro');
+      break;
+    case 'Foreign Identity':
+    case 'Foreign Identification':
+    case 'foreign identity':
+      output.append('Identidade estrangeira');
+      break;
+    case 'Expiry Date':
+    case 'expiry date':
+      output.append('Data Expiração');
+      break;
+    case 'Senior':
+      output.append('Sênior');
+      break;
+    case 'AirLineCodeCommission':
+      output.append('Cód. Cia e Comissão');
+      break;
+    case 'AirlineFavorites':
+      output.append('Cias Aéreas Preferidas');
+      break;
+    case 'AirlineLeastFavorites':
+      output.append('Cias Aéreas Menos Preferidas');
+      break;
+    case 'Commission':
+      output.append('Comissão');
+      break;
+    case 'OptionalInformation':
+      output.append('Informação Opcional');
+      break;
+    case 'TicketNumberFreeText':
+      output.append('Núm. Bilhete e Texto Livre');
+      break;
+    case 'booked':
+      output.append('reservada');
+      break;
+    case 'precified':
+      output.append('tarifada');
+      break;
+    case 'requested':
+      output.append('solicitada');
+      break;
+    case 'NewProposal':
+      output.append('Novo orçamento');
+      break;
+    case 'Natural':
+      output.append('Física');
+      break;
+    case 'Legal':
+      output.append('Jurídica');
+      break;
+    case 'MercantilBank':
+    case 'mercantilbank':
+      output.append('Banco Mercantil');
+      break;
+    case 'CTA':
+      output.append('CTA');
+      break;
+    case 'Confirmação e Pagamento':
+      output.append('Confirmação e Pagamento');
+      break;
+    case 'Reservar offline':
+      output.append('Reservar offline');
+      break;
+    case 'Atual':
+      output.append('Atual');
+      break;
+    case 'NewServiceOrder':
+      output.append('Nova Ordem de Serviço');
+      break;
+    case 'ServiceOrder':
+      output.append('Ordem de Serviço');
+      break;
+    case 'Synthetic':
+      output.append('Sintético');
+      break;
+    case 'Analytical':
+      output.append('Analítico');
+      break;
+    case 'StartingAt':
+      output.append('À partir de');
+      break;
+    case 'FullName':
+      output.append('Nome Completo');
+      break;
+    case 'Visas':
+      output.append('Vistos');
+      break;
+    case 'VisaType':
+      output.append('Tipo');
+      break;
+    case 'ExpireDate':
+      output.append('Data de expiração');
+      break;
+    case 'Brand':
+      output.append('Marca');
+      break;
+    case 'Obs':
+      output.append('Obs');
+      break;
+    case 'Vaccines':
+      output.append('Vacinas');
+      break;
+    case 'CreditCards':
+      output.append('Cartões de Crédito');
+      break;
+    case 'NewPerson':
+      output.append('Nova pessoa');
+      break;
+    case 'PersonalData':
+      output.append('Dados Pessoais');
+      break;
+    case 'AdditionalDocuments':
+      output.append('Documentos Adicionais');
+      break;
+    case 'Approve':
+      output.append('Aprovar');
+      break;
+    case 'Balance':
+      output.append('Saldo');
+      break;
+    case 'SearchTotalizer':
+      output.append('Pesquisar Orçamento');
+      break;
+    case 'Show':
+      output.append('Exibir');
+      break;
+    case 'ExtraItemInformation':
+      output.append('Informação do item extra');
+      break;
+    case 'InsuranceDetails':
+      output.append('Detalhes do Seguro');
+      break;
+    case 'Product':
+      output.append('Produto');
+      break;
+    case 'Country':
+      output.append('País');
+      break;
+    case 'InsuranceProfit':
+      output.append('Lucro');
+      break;
+    case 'InsuranceValue':
+      output.append('Valor');
+      break;
+    case 'PayerAddress':
+      output.append('Endereço do pagador');
+      break;
+    case 'PayerData':
+      output.append('Dados do pagador (nome, cpf, etc)');
+      break;
+    case 'AdminnetUser':
+      output.append('usuário Adminnet');
+      break;
+    case 'BillNumber':
+      output.append('Número da Fatura');
+      break;
+    case 'BillType':
+      output.append('Tipo de Fatura');
+      break;
+    case 'DateOfBill':
+      output.append('Data da fatura');
+      break;
+    case 'IdBill':
+      output.append('Fatura ID');
+      break;
+    case 'IdBranchOffice':
+      output.append('ID Filial');
+      break;
+    case 'IdCoin':
+      output.append('Código de Moeda');
+      break;
+    case 'IdCustomer':
+      output.append('Cliente');
+      break;
+    case 'IdOriginalBill':
+      output.append('Bill Fee');
+      break;
+    case 'IdUnit':
+      output.append('Unidade');
+      break;
+    case 'StateBill':
+      output.append('Bill Estado');
+      break;
+    case 'MountPayCash':
+      output.append('Pagamento em dinheiro');
+      break;
+    case 'MountPayCreditCard':
+      output.append('Cartões de pagamento');
+      break;
+    case 'Printed':
+      output.append('Impresso');
+      break;
+    case 'AdminnetInfo':
+      output.append('informações Adminnet');
+      break;
+    case 'PayAndGo':
+    case 'payandgo':
+      output.append('PayAndGo');
+      break;
+    case 'Expired':
+      output.append('Expirado');
+      break;
+    case 'Authorized':
+      output.append('Autorizado');
+      break;
+    case 'Denied':
+      output.append('Negado');
+      break;
+    case 'Unknown':
+      output.append('Desconhecido');
+      break;
+    case 'ToInclude':
+      output.append('A incluir');
+      break;
+    case 'serviceOrderNotCreatedHeader':
+      output.append('SUAS RESERVAS FORAM EFETIVADAS!');
+      break;
+    case 'serviceOrderNotCreatedContent':
+      output.append('Porém, infelizmente, ocorreram erros durante a gravação da ORDEM DE SERVIÇO!<br />Sugerimos que você anote os LOCALIZADORES gerados para utilizar posteriormente, evitando assim multas desnecessárias por criação de reservas duplicadas.<br />Nossa equipe está sempre de olho nesse tipo de situação, porém, caso queira tentar novamente, clique no botão ENVIAR abaixo ou entre em contato com o SUPORTE.');
+      break;
+    case 'serviceItemGridTabPendingChangesMessage':
+      output.append('Existem alterações em aberto. Confirme ou cancele antes de salvar.');
+      break;
+    case 'Responsable':
+      output.append('Responsável');
+      break;
+    case 'PackageAirConfigurations':
+      output.append('Configurações de Aéreo');
+      break;
+    case 'PackageHotelConfigurations':
+      output.append('Configurações de Hotéis');
+      break;
+    case 'PackageServicesConfigurations':
+      output.append('Configurações de Serviços');
+      break;
+    case 'WriteOrSelect':
+      output.append('Digite ou selecione');
+      break;
+    case 'ServiceTypeName':
+      output.append('Tipo de Serviço<br />');
+      break;
+    case 'BlockView':
+      output.append('Bloquear<br />Visualização');
+      break;
+    case 'BlockEdit':
+      output.append('Bloquear<br />Edição');
+      break;
+    case 'BlockCreate':
+      output.append('Bloquear<br />Criação');
+      break;
+    case 'BlockOnlineView':
+      output.append('Bloquear<br />Modo Online');
+      break;
+    case 'BaggagesIncluded_Unknown':
+      output.append('Número de bagagens não informado pela cia. Verifique junto as regras tarifárias da mesma para mais detalhes.');
+      break;
+    case 'BaggagesIncluded_NoneAreIncluded':
+      output.append('Não inclui despacho de bagagens');
+      break;
+    case 'BaggagesIncluded_OneBaggage':
+      output.append('Inclui despacho de uma bagagem');
+      break;
+    case 'BaggagesIncluded_TwoBaggages':
+      output.append('Inclui despacho de duas bagagens');
+      break;
+    case 'BaggagesIncluded_ThreeBaggages':
+      output.append('Inclui despacho de três bagagens');
+      break;
+    case 'BaggagesIncluded':
+      output.append('Despacho de Bagagem');
+      break;
+    case 'AddRemoveBaggages_Unknown':
+      output.append('Número de bagagens não informado');
+      break;
+    case 'AddRemoveBaggages_NoneAreIncluded':
+      output.append('Adicione ');
+      break;
+    case 'AddRemoveBaggages_OneBaggage':
+      output.append('Remover bagagem para economizar ');
+      break;
+    case 'AddRemoveBaggages_TwoBaggages':
+      output.append('Remover bagagem para economizar ');
+      break;
+    case 'AddRemoveBaggages_ThreeBaggages':
+      output.append('Remover bagagem para economizar ');
+      break;
+    case 'CheckoutBaggagesOption_NoneAreIncluded':
+      output.append('Viaje sem bagagens ');
+      break;
+    case 'CheckoutBaggagesOption_OneBaggage':
+      output.append('Uma bagagem inclusa ');
+      break;
+    case 'CheckoutBaggagesOption_TwoBaggages':
+      output.append('Duas bagagens inclusas ');
+      break;
+    case 'CheckoutBaggagesOption_ThreeBaggages':
+      output.append('Três bagagens inclusas ');
+      break;
+    case 'Franquia':
+      output.append('Franquia');
+      break;
+    case 'Bagagem':
+      output.append('Bagagem');
+      break;
+    case 'baggage':
+      output.append('bagagem');
+      break;
+    case 'baggages':
+      output.append('bagagens');
+      break;
+    case 'AddFreeBaggage':
+      output.append('Adicione grátis a franquia de ');
+      break;
+    case 'OPTIONALHIRING':
+      output.append('CONTRATAÇÃO OPCIONAL');
+      break;
+    case 'Indifferent':
+      output.append('Indiferente');
+      break;
+    case 'WithBaggage':
+      output.append('Somente voos com bagagem');
+      break;
+    case 'WithoutBaggage':
+      output.append('Somente voos sem bagagem');
+      break;
+    case 'MySettings':
+      output.append('Minhas Settings');
+      break;
+    case 'service items':
+      output.append('itens de serviço');
+      break;
+    case 'service item':
+      output.append('item de serviço');
+      break;
+    case 'Number of Berths in Cabin':
+      output.append('Número de camas Pullman');
+      break;
+    case 'Number of Berths in use':
+      output.append('Número de camas Pullman em uso');
+      break;
+    case 'Number of Upper Berths available':
+      output.append('Número de camas Pullman superiores disponíveis');
+      break;
+    case 'Cabin Area':
+      output.append('Área da cabine');
+      break;
+    case 'Cabin Dimensions':
+      output.append('Dimensões da cabine');
+      break;
+    case 'Cabin Window Size':
+      output.append('Tamanho da janela da cabine');
+      break;
+    case 'Door Size':
+      output.append('Tamanho da porta');
+      break;
+    case 'FranchiseDiscount':
+      output.append('Desconto franquia');
+      break;
+    case 'franchisediscount':
+      output.append('Desconto Franquia');
+      break;
+    case 'Agent Receipt':
+      output.append('Cópia do Agente de Viagem');
+      break;
+    case 'Guest Receipt':
+      output.append('Cópia do Hóspede');
+      break;
+    case 'Aft':
+      output.append('Popa');
+      break;
+    case 'Forward':
+      output.append('Proa');
+      break;
+    case 'Midship':
+      output.append('Meio');
+      break;
+    case 'BestBuyAssessFarePNRChangeObs':
+      output.append('OBS: A confirmação dessa alteração poderá modificar a quantidade de bagagens em cada voo.');
+      break;
+    case 'AreYouSure':
+      output.append('Tem certeza?');
+      break;
+    case 'EssentialInformations':
+      output.append('Informações adicionais');
+      break;
+    case 'Keep context':
+      output.append('Manter contexto');
+      break;
+    case 'Change context':
+      output.append('Alterar contexto<span>Ao alterar todas as outras abas serão fechadas</span>');
+      break;
+    case 'Alert context':
+      output.append('O contexto da ordem de serviço aberta não corresponde ao contexto atual');
+      break;
+    case 'extra':
+      output.append('extra');
+      break;
+    case 'Extra':
+      output.append('Extra');
+      break;
+    case 'AssessFareNeeded':
+      output.append('É necessário tarifar o(s) item(s) antes de criar o orçamento. Deseja tarifar agora?');
+      break;
+    case 'AssessFareErrorAndNeeded':
+      output.append('Existem itens que não foram tarifados corretamente e não poderão ser enviados para o orçamento. Deseja limpar esses itens da bandeja?');
+      break;
+    case 'SalesReport':
+      output.append('Relatório de vendas');
+      break;
+    case 'Atention':
+      output.append('Atenção');
+      break;
+    case 'GeneralInfo':
+      output.append('Dados Gerais');
+      break;
+    case 'PackageComposition':
+      output.append('Composição do Pacote');
+      break;
+    case 'PackageCustom':
+      break;
+    case 'packagecustom':
+      output.append('Pacote Customizado');
+      break;
+    case 'GovernmentTaxes':
+      output.append('Impostos');
+      break;
+    case 'OriginalTax':
+      output.append('Taxa Original');
+      break;
+    case 'OriginalFareAmount':
+      output.append('Tarifa Original');
+      break;
+    case 'Fidelity':
+      output.append('Fidelidade');
+      break;
+    case 'AlreadyApprovedItems':
+      output.append('Itens já aprovados');
+      break;
+    case 'ServiceHours':
+      output.append('Horário de Funcionamento');
+      break;
+    default:
+      Resources.translateStatus({code: opt_data.code}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.checkoutTranslateBaggagesOptions = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.baggagesIncluded) {
+    case 'NoneAreIncluded':
+      Resources.translate({code: 'CheckoutBaggagesOption_NoneAreIncluded'}, output);
+      break;
+    case 'OneBaggage':
+      Resources.translate({code: 'CheckoutBaggagesOption_OneBaggage'}, output);
+      break;
+    case 'TwoBaggages':
+      Resources.translate({code: 'CheckoutBaggagesOption_TwoBaggages'}, output);
+      break;
+    case 'ThreeBaggages':
+      Resources.translate({code: 'CheckoutBaggagesOption_ThreeBaggages'}, output);
+      break;
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translateAirCabinType = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.cabintype) {
+    case 'FirstClass':
+    case 'firstClass':
+    case 'firstclass':
+    case '0':
+    case 0:
+      Resources.translate({code: 'FirstClass'}, output);
+      break;
+    case 'Economic':
+    case 'economic':
+    case '2':
+    case 2:
+      Resources.translate({code: 'Economic'}, output);
+      break;
+    case '1':
+    case 'Executive':
+    case 'executive':
+    case 1:
+    case 'Business':
+    case 'business':
+      Resources.translate({code: 'Business_Class'}, output);
+      break;
+    case 'PremiumEconomy':
+    case 'premiumeconomy':
+    case '3':
+    case 3:
+      Resources.translate({code: 'PremiumEconomy'}, output);
+      break;
+    default:
+      Resources.translate({code: 'Any'}, output);
+      output.append(' ');
+      Resources.translate({code: 'cabin'}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.passengerTitle = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.title == 0) ? 'Sr.' : (opt_data.title == 1) ? 'Sra.' : (opt_data.title == 2) ? 'Sr.' : (opt_data.title == 3) ? 'Srta.' : (opt_data.title == 4) ? '.' : '');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.gender = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.Gender == 1) ? 'Feminino' : 'Masculino');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.passengerType = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.PassengerType == 0) ? 'Adulto' : (opt_data.PassengerType == 1) ? 'Criança' : (opt_data.PassengerType == 2) ? 'Bebê' : (opt_data.PassengerType == 3) ? 'Sênior' : '');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.pricingStatus = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.Status == 0) ? 'Não cobrado' : (opt_data.Status == 1) ? 'Cobrado' : (opt_data.Status == 2) ? 'Isento' : (opt_data.Status == 3) ? 'Estornado' : '');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.linkType = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.Type == 0) ? 'Pai' : (opt_data.Type == 1) ? 'Filho' : (opt_data.Type == 2) ? 'Associação' : (opt_data.Type == 3) ? 'Gerado Por' : (opt_data.Type == 4) ? 'Gerou' : '');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.personLinkType = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t\t');
+  switch (opt_data.Type) {
+    case 0:
+      output.append('Pai / Mãe');
+      break;
+    case 1:
+      output.append('Filho (a)');
+      break;
+    case 2:
+      output.append('Amigo (a)');
+      break;
+    case 3:
+      output.append('Conjugê');
+      break;
+    case 4:
+      output.append('Enteado (a)');
+      break;
+    case 5:
+      output.append('Padrasto (a)');
+      break;
+    case 6:
+      output.append('Irmão (ã)');
+      break;
+    case 7:
+      output.append('Neto (a)');
+      break;
+    case 8:
+      output.append('Avô / Avó');
+      break;
+    case 9:
+      output.append('Tio (a)');
+      break;
+    case 10:
+      output.append('Sobrinho (a)');
+      break;
+    case 11:
+      output.append('Empregador');
+      break;
+    case 12:
+      output.append('Empregado');
+      break;
+    case 13:
+      output.append('Babá');
+      break;
+    case 14:
+      output.append('Sob cuidado');
+      break;
+    case 15:
+      output.append('Outro');
+      break;
+    case 16:
+      output.append('Namorado (a)');
+      break;
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.baggageAllowance = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.baggageAllowance == 0 || opt_data.baggageAllowance == 'Indifferent') ? 'Indiferente' : (opt_data.baggageAllowance == 1 || opt_data.baggageAllowance == 'WithBaggage') ? 'Somente voos com bagagem' : (opt_data.baggageAllowance == 2 || opt_data.baggageAllowance == 'WithoutBaggage') ? 'Somente voos sem bagagem' : '');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.cruiseCabinOccupancy = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.occupancy == 1) ? 'Single' : (opt_data.occupancy == 2) ? 'Dupla' : (opt_data.occupancy == 3) ? 'Tripla' : (opt_data.occupancy == 3) ? 'Quádrupla' : '');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.cruiseGroupDiningConfiguration = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append((opt_data.code == 'SeatApart') ? 'Separadas' : (opt_data.code == 'SeatTogether') ? 'Juntas' : (opt_data.code == 'RoundRobin') ? 'Aleatórias' : '-');
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translateStatus = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  switch (opt_data.code) {
+    case 'aberta':
+    case 'Aberta':
+      output.append('Em Aberto');
+      break;
+    case 'aguardandopostagem':
+    case 'AguardandoPostagem':
+      output.append('Aguardando Postagem');
+      break;
+    case 'analisecredito':
+    case 'AnaliseCredito':
+      output.append('Análise de Crédito');
+      break;
+    case 'aprovado':
+    case 'Aprovado':
+      output.append('Aprovado');
+      break;
+    case 'ativo':
+    case 'Ativo':
+      output.append('Ativo');
+      break;
+    case 'cancelado':
+    case 'Cancelado':
+      output.append('Cancelado');
+      break;
+    case 'confirmado':
+    case 'Confirmado':
+      output.append('Confirmado');
+      break;
+    case 'cotacaoefetuada':
+    case 'CotacaoEfetuada':
+      output.append('Cotação Efetuada');
+      break;
+    case 'cotacaorealizada':
+    case 'CotacaoRealizada':
+      output.append('Cotação Realizada');
+      break;
+    case 'cotacaoselecionada':
+    case 'CotacaoSelecionada':
+      output.append('Cotação Selecionada');
+      break;
+    case 'created':
+    case 'Created':
+      output.append('Criado');
+      break;
+    case 'creditoaprovado':
+    case 'CreditoAprovado':
+      output.append('Crédito Aprovado');
+      break;
+    case 'creditonegado':
+    case 'CreditoNegado':
+      output.append('Crédito Negado');
+      break;
+    case 'criado':
+    case 'Criado':
+      output.append('Criado');
+      break;
+    case 'emaprovacao':
+    case 'EmAprovacao':
+      output.append('Em Aprovação');
+      break;
+    case 'emaprovacaodemerito':
+    case 'EmAprovacaoDeMerito':
+      output.append('Em Aprovação de Mérito');
+      break;
+    case 'emcancelamento':
+    case 'EmCancelamento':
+      output.append('Em Cancelamento');
+      break;
+    case 'emcotacao':
+    case 'EmCotacao':
+      output.append('Em Cotação');
+      break;
+    case 'emconsulta':
+    case 'EmConsulta':
+      output.append('Em Consulta');
+      break;
+    case 'ememissao':
+    case 'EmEmissao':
+      output.append('Em Emissão');
+      break;
+    case 'emitido':
+    case 'Emitido':
+      output.append('Emitido');
+      break;
+    case 'Cancelled':
+    case 'cancelled':
+      output.append('Cancelado');
+      break;
+    case 'emitidopendentefee':
+    case 'EmitidoPendenteFee':
+      output.append('Emitido Pendente Cobrança Fee');
+      break;
+    case 'pendente':
+    case 'Pendente':
+      output.append('Pendente');
+      break;
+    case 'montandocotacao':
+    case 'MontandoCotacao':
+      output.append('Montando Cotação');
+      break;
+    case 'montandorequisicao':
+    case 'MontandoRequisicao':
+      output.append('Montando Requisição');
+      break;
+    case 'pedido':
+    case 'Pedido':
+      output.append('Pedido');
+      break;
+    case 'pedidoemissao':
+    case 'PedidoEmissao':
+      output.append('Pedido de Emissão');
+      break;
+    case 'EmissaoConcluida':
+    case 'emissaoconcluida':
+      output.append('Emissão Concluida');
+      break;
+    case 'AguardandoReembolso':
+    case 'aguardandoreembolso':
+      output.append('Aguardando Reembolso');
+      break;
+    case 'AguardandoConfirmacao':
+    case 'aguardandoconfirmacao':
+      output.append('Aguardando Confirmação');
+      break;
+    case 'Reembolsado':
+    case 'reembolsado':
+      output.append('Reembolsado');
+      break;
+    case 'SolicitandoReembolso ':
+    case 'solicitandoreembolso':
+      output.append('Solicitando Reembolso');
+      break;
+    case 'EmissaoManual ':
+    case 'emissaomanual':
+      output.append('Emissão Manual');
+      break;
+    case 'pedidoreserva':
+    case 'PedidoReserva':
+      output.append('Pedido de Reserva');
+      break;
+    case 'realizado':
+    case 'Realizado':
+      output.append('Realizado');
+      break;
+    case 'reserva':
+    case 'Reserva':
+      output.append('Reserva');
+      break;
+    case 'reservado':
+    case 'Reservado':
+      output.append('Reservado');
+      break;
+    case 'reprovado':
+    case 'Reprovado':
+      output.append('Reprovado');
+      break;
+    case 'reservasolicitada':
+    case 'ReservaSolicitada':
+      output.append('Reserva Solicitada');
+      break;
+    case 'reservavalidada':
+    case 'ReservaValidada':
+      output.append('Reserva Validada');
+      break;
+    case 'selecaoefetuada':
+    case 'SelecaoEfetuada':
+      output.append('Seleção Efetuada');
+      break;
+    case 'aguardandoreserva':
+    case 'AguardandoReserva':
+      output.append('Aguardando Reserva');
+      break;
+    case 'preparandoentrega':
+    case 'PreparandoEntrega':
+      output.append('Preparando Entrega');
+      break;
+    case 'ingressodespachado':
+    case 'IngressoDespachado':
+      output.append('Ingresso Despachado');
+      break;
+    case 'ingressoentregue':
+    case 'IngressoEntregue':
+      output.append('Ingresso Entregue');
+      break;
+    case 'reemitido':
+    case 'Reemitido':
+      output.append('Reemitido');
+      break;
+    case 'cancelamentonaopermitido':
+    case 'CancelamentoNaoPermitido':
+      output.append('Canelamento Não Permitido');
+      break;
+    case 'aguardandolancamento':
+    case 'AguardandoLancamento':
+      output.append('Aguardando Lançamento');
+      break;
+    case 'selecionarnovacotacao':
+    case 'SelecionarNovaCotacao':
+      output.append('Selecionar Nova Cotação');
+      break;
+    case 'Error':
+      output.append('Erro');
+      break;
+    case 'PnrPaymentStatus':
+    case 'pnrpaymentstatus':
+      output.append('Status do Pagamento do Pnr');
+      break;
+    case 'PnrPayment':
+    case 'pnrpayment':
+      output.append('Pagamento do Pnr');
+      break;
+    case 'PnrPayments':
+    case 'pnrpayments':
+      output.append('Pagamentos do Pnr');
+      break;
+    case 'SupplierStatement':
+    case 'supplierstatement':
+      output.append('Extrato do Fornecedor');
+      break;
+    case 'PaymentType':
+    case 'paymenttype':
+      output.append('Tipo do Pagamento');
+      break;
+    case 'EmAprovacaoManual':
+    case 'emaprovacaomanual':
+      output.append('Em Aprovação Manual');
+      break;
+    case 'SelectedDates':
+      output.append('Datas Selecionadas');
+      break;
+    case 'ReferenceDate':
+      output.append('Data de Referência');
+      break;
+    case 'DirectPayment':
+      break;
+    case 'directpayment':
+      output.append('Pagamento direto');
+      break;
+    case 'BankTransfer':
+      break;
+    case 'banktransfer':
+      output.append('Transferência bancária');
+      break;
+    case 'PointOfSale':
+      break;
+    case 'pointofsale':
+      output.append('Ponto de venda');
+      break;
+    case 'AirHotel':
+      break;
+    case 'airhotel':
+      output.append('Aéreo + Hotel');
+      break;
+    case 'Service':
+      break;
+    case 'service':
+      output.append('Serviço');
+      break;
+    case 'Stelo':
+      break;
+    case 'stelo':
+      output.append('Stelo');
+      break;
+    case 'Financial':
+      output.append('Financiamento');
+      break;
+    case 'financial':
+      output.append('Financiamento');
+      break;
+    case 'Upto':
+      output.append('Até');
+      break;
+    case 'upto':
+      output.append('até');
+      break;
+    case 'Hello':
+      output.append('Olá');
+      break;
+    case 'Stopovers':
+      output.append('Paradas');
+      break;
+    case 'ChangePassword':
+      output.append('Alterar Senha');
+      break;
+    case 'DiscountCoupon':
+      output.append('Cupom de desconto');
+      break;
+    case 'Today':
+      output.append('Hoje');
+      break;
+    case 'Yesterday':
+      output.append('Ontem');
+      break;
+    case 'Tomorrow':
+      output.append('Amanhã');
+      break;
+    case 'InvoicePaid':
+      output.append('Faturado');
+      break;
+    case 'CreditCardPaid':
+      output.append('Pago em Cartão de crédito');
+      break;
+    case '':
+      output.append('Credential doesnt allow issue');
+      break;
+    default:
+      Resources.translateServiceDefinitionType({code: opt_data.code}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translateServiceDefinitionType = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  switch (opt_data.code) {
+    case '46':
+    case '5406':
+      output.append('Ordem de Serviço');
+      break;
+    case '1888':
+      output.append('Pedido de Seguro');
+      break;
+    case '4825':
+    case '5545':
+      output.append('Reserva (Aéreo)');
+      break;
+    case '5342':
+      output.append('Emissão');
+      break;
+    case '5346':
+    case '5546':
+      output.append('Reserva (Hotel)');
+      break;
+    case '5377':
+      output.append('Reserva (Ingresso)');
+      break;
+    case '5547':
+      output.append('Pedido (Aéreo)');
+      break;
+    case '5548':
+      output.append('Pedido (Hotel)');
+      break;
+    case '5763':
+      output.append('Pedido (Carro)');
+      break;
+    case '5774':
+      output.append('Adiantamento');
+      break;
+    case '5786':
+      output.append('Reserva (Carro)');
+      break;
+    case '5816':
+      output.append('Reembolso');
+      break;
+    default:
+      Resources.pointOfEntranceTranslations({code: opt_data.code}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translateB2CServiceItemStatus = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  switch (opt_data.code) {
+    case 'Análise de Risco Manual':
+    case 'AnaliseRiscoManual':
+      output.append('Em Atendimento');
+      break;
+    case 'Aguardando Pagamento':
+    case 'AguardandoPagamento':
+      output.append('Em Atendimento');
+      break;
+    case 'Pago':
+      output.append('Em Atendimento');
+      break;
+    case 'EmCancelamento':
+    case 'Em Cancelamento':
+      output.append('Em Cancelamento');
+      break;
+    case 'EmAnaliseRisco':
+    case 'Em Análise de Risco':
+      output.append('Em Atendimento');
+      break;
+    case 'EmEmissao':
+    case 'Em Emissão':
+      output.append('Em Atendimento');
+      break;
+    case 'ReprovadoAnaliseRisco':
+    case 'Reprovado Análise Risco':
+      output.append('Em Atendimento');
+      break;
+    case 'EmitirVoucher':
+    case 'Emitir Voucher':
+      output.append('Em Atendimento');
+      break;
+    case 'ErroEmissao':
+    case 'Erro Emissão':
+      output.append('Em Atendimento');
+      break;
+    case 'Emissão Manual':
+    case 'EmissaoManual':
+      output.append('Em Atendimento');
+      break;
+    case 'Integrado':
+    case 'ErroIntegracao':
+    case 'EmIntegracao':
+    case 'Emitido2':
+    case 'EmIntegracaoCancelado':
+    case 'ErroIntegracaoCancelado':
+      output.append('Concluído');
+      break;
+    case 'Emitido':
+      output.append('Concluído');
+      break;
+    case 'Cancelado':
+      output.append('Cancelado');
+      break;
+    case 'AguardandoSolicitacao':
+      output.append('Em Atendimento');
+      break;
+    case 'PendenteInformacao':
+      output.append('Em Atendimento');
+      break;
+    case 'AguardandoConfirmacao':
+    case 'Aguardando Confirmação':
+      output.append('Em Atendimento');
+      break;
+    default:
+      output.append('Em Atendimento');
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translateAirPacCommandType = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.commandtype) {
+    case 'AirLineCodeCommission':
+    case 'airLineCodeCommission':
+    case 'airlinecodecommission':
+    case '0':
+    case 0:
+      Resources.translate({code: 'AirLineCodeCommission'}, output);
+      break;
+    case 'Commission':
+    case 'commission':
+    case '1':
+    case 1:
+      Resources.translate({code: 'Commission'}, output);
+      break;
+    case 'OptionalInformation':
+    case 'optionalInformation':
+    case 'optionalinformation':
+    case '2':
+    case 2:
+      Resources.translate({code: 'OptionalInformation'}, output);
+      break;
+    case 'TicketNumberFreeText':
+    case 'ticketNumberFreeText':
+    case 'ticketnumberfreetext':
+    case '3':
+    case 3:
+      Resources.translate({code: 'TicketNumberFreeText'}, output);
+      break;
+    default:
+      Resources.translate({code: 'Any'}, output);
+      output.append(' ');
+      Resources.translate({code: 'operation'}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translatePersonTypeMercantil = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.PersonType) {
+    case 'Natural':
+    case 'natural':
+    case '0':
+    case 0:
+      Resources.translate({code: 'Natural'}, output);
+      break;
+    case 'Legal':
+    case 'legal':
+    case '1':
+    case 1:
+      Resources.translate({code: 'Legal'}, output);
+      break;
+    case 'CTA':
+    case 'cta':
+    case '2':
+    case 2:
+      Resources.translate({code: 'CTA'}, output);
+      break;
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translatePointOfEntrance = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  Resources.translate({code: 'poe' + opt_data.pointOfEntrance}, output);
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.translateDemandedBy = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  Resources.translate({code: opt_data.demandedBy}, output);
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.pointOfEntranceTranslations = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.code) {
+    case 'poeChangeStatus':
+      output.append('Troca de Status');
+      break;
+    case 'poeSmartBookPNR':
+      output.append('Reserva');
+      break;
+    case 'poeRevalidatePNR':
+      output.append('Revalidação de PNR');
+      break;
+    case 'poePricePNR':
+      output.append('Precificação de PNR');
+      break;
+    case 'poePricePnr':
+      output.append('Tarifação da Reserva');
+      break;
+    case 'poeAddPnrInServiceOrder':
+      output.append('Inclusão de PNR');
+      break;
+    case 'poeProcessOrder':
+      output.append('Processamento de Ordem de Serviço');
+      break;
+    case 'poeCancelTickets':
+      output.append('Cancelamento de Bilhete(s)');
+      break;
+    case 'poeIssueTickets':
+      output.append('Emissão de Bilhete(s)');
+      break;
+    case 'poeRetrieve':
+      output.append('Retrieve');
+      break;
+    case 'poeCancelPNR':
+      output.append('Cancelamento de Reserva');
+      break;
+    case 'poeBookPNR':
+      output.append('Edição da Reserva');
+      break;
+    case 'poeIgnoreChanges':
+      output.append('Ignorar Alterações da Reserva');
+      break;
+    case 'poeRemoveResponsibility':
+      output.append('Remoção de Responsabilidade');
+      break;
+    case 'poeSetResponsibility':
+      output.append('Adição de Responsabilidade');
+      break;
+    case 'poeProcessServiceItem':
+      output.append('Gravação de Item de Serviço');
+      break;
+    case 'poeProcessServiceItems':
+      output.append('Gravação de Item de Serviço');
+      break;
+    case 'poeSplitPNR':
+      output.append('Split de PNR');
+      break;
+    case 'poeRetrieveByLoc':
+      output.append('Retrieve via Localizador');
+      break;
+    case 'poeCancelByLoc':
+      output.append('Cancelamento via Localizador');
+      break;
+    case 'poeCommitChanges':
+      output.append('Confirmar Troca de Voos');
+      break;
+    case 'poeIssueTicket':
+      output.append('Emissão Manual de Bilhetes');
+      break;
+    case 'poeSmartBookPNR':
+      output.append('Reserva');
+      break;
+    case 'poeRevalidatePNR':
+      output.append('Revalidação de PNR');
+      break;
+    case 'poePricePNR':
+      output.append('Precificação de PNR');
+      break;
+    case 'poePricePnr':
+      output.append('Tarifação da Reserva');
+      break;
+    case 'poeAddPnrInServiceOrder':
+      output.append('Inclusão de PNR');
+      break;
+    case 'poeProcessOrder':
+      output.append('Processamento de Ordem de Serviço');
+      break;
+    case 'poeCancelTickets':
+      output.append('Cancelamento de Bilhete(s)');
+      break;
+    case 'poeIssueTickets':
+      output.append('Emissão de Bilhete(s)');
+      break;
+    case 'poeRetrieve':
+      output.append('Retrieve');
+      break;
+    case 'poeCancelPNR':
+      output.append('Cancelamento de Reserva');
+      break;
+    case 'poeRemoveSegment':
+      output.append('Cancelamento de Segmentos');
+      break;
+    case 'poeBookPNR':
+      output.append('Edição da Reserva');
+      break;
+    case 'poeRemoveResponsibility':
+      output.append('Remoção de Responsabilidade');
+      break;
+    case 'poeSetResponsibility':
+      output.append('Adição de Responsabilidade');
+      break;
+    case 'poeProcessServiceItem':
+      output.append('Gravação de Item de Serviço');
+      break;
+    case 'poeSplitPNR':
+      output.append('Split de PNR');
+      break;
+    case 'poeRetrieveByLoc':
+      output.append('Retrieve via Localizador');
+      break;
+    case 'poeCancelByLoc':
+      output.append('Cancelamento via Localizador');
+      break;
+    case 'poeProcessExtension':
+      output.append('Processamento de Extensão');
+      break;
+    case 'poeCommitChanges':
+      output.append('Confirmar Troca de Voos');
+      break;
+    case 'poeIssueTicket':
+      output.append('Emissão de Bilhete(s)');
+      break;
+    case 'poeCancelTicket':
+      output.append('Cancelamento de Bilhete(s)');
+      break;
+    case 'poeBookSeat':
+      output.append('Reserva de Assento(s)');
+      break;
+    case 'poeSetHasBeenPaidOnceItems':
+      output.append('Inclusão de Pagamento no Caixa');
+      break;
+    case 'ExecutionTime.TravelEngineSeek':
+      output.append('Tempo total de pesquisa com os fornecedores');
+      break;
+    case 'ExecutionTime.TravelEngineInner':
+      output.append('TravelEngine (interno)');
+      break;
+    case 'ExecutionTime.OrchestrationOuter':
+      output.append('Orchestration (externo)');
+      break;
+    case 'ExecutionTime.TravelEngineOuter':
+      output.append('TravelEngine (externo)');
+      break;
+    case 'ExecutionTime.OrchestrationInner':
+      output.append('Orchestration (interno)');
+      break;
+    case 'ExecutionTime.ResolvePricing':
+      output.append('Aplicação do pricing');
+      break;
+    case 'ExecutionTime.ResolveCarBlackLists':
+      output.append('Black list de carros');
+      break;
+    case 'ExecutionTime.ResolveHotelRoomsSearchActions':
+      output.append('Remoção/ordenação de quartos');
+      break;
+    case 'ExecutionTime.ResolveSearchOrderPreferences':
+      output.append('Ordenação preferencial');
+      break;
+    case 'ExecutionTime.ResolvePaymentOptions':
+      output.append('Aplicação das opções de pagamento');
+      break;
+    case 'ExecutionTime.RemoveDuplication':
+      output.append('Remoção de duplicação');
+      break;
+    case 'ExecutionTime.ResolveExchangeRates':
+      output.append('Aplicação de câmbio');
+      break;
+    case 'ExecutionTime.FinalizingResponse':
+      output.append('Ajustando fim da pesquisa');
+      break;
+    case 'ExecutionTime.ResolveWhiteList':
+      output.append('White list');
+      break;
+    case 'ExecutionTime.ResolveBlackList':
+      output.append('Black list');
+      break;
+    case 'ExecutionTime.SearchDuration':
+      output.append('Tempo total de pesquisa');
+      break;
+    default:
+      Resources.demandedByTranslations({code: opt_data.code}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.demandedByTranslations = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.code) {
+    case 'Interface':
+      output.append('Interface');
+      break;
+    case 'WorkflowAction':
+      output.append('Ação do Robô');
+      break;
+    case 'ExternalTrigger':
+      output.append('Ação Automática');
+      break;
+    case 'FlowTrigger':
+      output.append('Fluxo Automático');
+      break;
+    case 'Retrieve':
+      output.append('Sistema');
+      break;
+    case 'UpdateExchangeRates':
+      output.append('Atualização Automática de Câmbios');
+      break;
+    default:
+      Resources.ruleEngine({code: opt_data.code}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.commissionRoleTranslate = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.role) {
+    case 'Manager':
+    case '1':
+    case 1:
+      output.append('Gestor - Empresa');
+      break;
+    case 'Responsible':
+    case '2':
+    case 2:
+      output.append('Responsável - Item de serviço');
+      break;
+    case 'Issuer':
+    case '3':
+    case 3:
+      output.append('Emissor');
+      break;
+    case 'CorporateClient':
+    case '4':
+    case 4:
+      output.append('Cliente Corporativo - Contexto');
+      break;
+    case 'Agency':
+    case '5':
+    case 5:
+      output.append('Agência - Contexto');
+      break;
+    case 'ConsolidatorOperator':
+    case '6':
+    case 6:
+      output.append('Consolidadora/Operadora - Contexto');
+      break;
+    default:
+      Resources.translate({code: opt_data.role}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.cruiseFareStatus = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.status) {
+    case 'Closed':
+    case '3':
+    case 3:
+      output.append('Indisponível');
+      break;
+    case 'WaitList':
+    case '1':
+    case 1:
+      output.append('Lista de espera');
+      break;
+    case 'Available':
+    case '0':
+    case 0:
+      output.append('Disponível');
+      break;
+    case 'Guaranteed':
+    case '2':
+    case 2:
+      output.append('Garantida');
+      break;
+    default:
+      output.append(soy.$$escapeHtml(opt_data.status));
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.measureTypes = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.status) {
+    case 'Feet':
+    case '0':
+    case 0:
+      output.append('Pés');
+      break;
+    case 'Knots':
+    case '1':
+    case 1:
+      output.append('Nós');
+      break;
+    case 'SquareFeet':
+    case '2':
+    case 2:
+      output.append('Pés quadrados');
+      break;
+    case 'Inches':
+    case '3':
+    case 3:
+      output.append('Polegadas');
+      break;
+    case 'Unit':
+    case '4':
+    case 4:
+      output.append('Unidades');
+      break;
+    case 'Tons':
+    case '5':
+    case 5:
+      output.append('Toneladas');
+      break;
+    case 'Meters':
+    case '6':
+    case 6:
+      output.append('Metros');
+      break;
+    case 'KilometersPerHour':
+    case '7':
+    case 7:
+      output.append('Km/h');
+      break;
+    default:
+      output.append(soy.$$escapeHtml(opt_data.status));
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.cruiseCabinPositionInShip = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.code) {
+    case 'Unknown':
+    case '0':
+    case 0:
+      output.append('Desconhecido');
+      break;
+    case 'Aft':
+    case '1':
+    case 1:
+      output.append('Aft');
+      break;
+    case 'Forward':
+    case '2':
+    case 2:
+      output.append('Forward');
+      break;
+    case 'Midship':
+    case '3':
+    case 3:
+      output.append('Midship');
+      break;
+    default:
+      output.append(soy.$$escapeHtml(opt_data.code));
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.cruiseCabinFilters = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.code) {
+    case 'Balcony':
+    case '1':
+    case 1:
+      output.append('Balcony');
+      break;
+    case 'Bath':
+    case '2':
+    case 2:
+      output.append('Bath');
+      break;
+    case 'BathAndShower':
+    case '3':
+    case 3:
+      output.append('Bath and Shower');
+      break;
+    case 'ConnectingRoom':
+    case '4':
+    case 4:
+      output.append('Connecting Room');
+      break;
+    case 'Convertible':
+    case '5':
+    case 5:
+      output.append('Convertible');
+      break;
+    case 'Cot':
+    case '6':
+    case 6:
+      output.append('Cot');
+      break;
+    case 'Crib':
+    case '7':
+    case 7:
+      output.append('Crib');
+      break;
+    case 'DeckFilter':
+    case '8':
+    case 8:
+      output.append('Deck Filter');
+      break;
+    case 'Disabled':
+    case '9':
+    case 9:
+      output.append('Disabled');
+      break;
+    case 'Inside':
+    case '10':
+    case 10:
+      output.append('Inside');
+      break;
+    case 'NearLift':
+    case '11':
+    case 11:
+      output.append('Near Lift');
+      break;
+    case 'NoBedBelection':
+    case '12':
+    case 12:
+      output.append('No Bed Belection');
+      break;
+    case 'Outside':
+    case '13':
+    case 13:
+      output.append('Outside');
+      break;
+    case 'Porthole':
+    case '14':
+    case 14:
+      output.append('Porthole');
+      break;
+    case 'QueenBed':
+    case '15':
+    case 15:
+      output.append('Queen Bed');
+      break;
+    case 'Refrigerator':
+    case '16':
+    case 16:
+      output.append('Refrigerator');
+      break;
+    case 'Rollaway':
+    case '17':
+    case 17:
+      output.append('Rollaway');
+      break;
+    case 'Shower':
+    case '18':
+    case 18:
+      output.append('Shower');
+      break;
+    case 'Sofa':
+    case '19':
+    case 19:
+      output.append('Sofa');
+      break;
+    case 'Window':
+    case '20':
+    case 20:
+      output.append('Window');
+      break;
+    case 'Bathtub':
+    case '21':
+    case 21:
+      output.append('Bathtub');
+      break;
+    case 'SeparateShower':
+    case '22':
+    case 22:
+      output.append('Separate Shower');
+      break;
+    case 'Whirlpool':
+    case '23':
+    case 23:
+      output.append('Whirlpool');
+      break;
+    case 'Jacuzzi':
+    case '24':
+    case 24:
+      output.append('Jacuzzi');
+      break;
+    case 'HotTub':
+    case '25':
+    case 25:
+      output.append('Hot Tub');
+      break;
+    case 'ConvertibleLowerBeds':
+    case '26':
+    case 26:
+      output.append('Convertible Lower Beds');
+      break;
+    case 'ConvertibleDoubleSofaBed':
+    case '27':
+    case 27:
+      output.append('Convertible Double Sofa Bed');
+      break;
+    case 'ConvertibleSingleSofaBed':
+    case '28':
+    case 28:
+      output.append('Convertible Single Sofa Bed');
+      break;
+    case 'DoubleBed':
+    case '29':
+    case 29:
+      output.append('Double Bed');
+      break;
+    case 'KingSizeBed':
+    case '30':
+    case 30:
+      output.append('King Size Bed');
+      break;
+    case 'MurphyBedUpper':
+    case '31':
+    case 31:
+      output.append('Murphy Bed Upper');
+      break;
+    case 'MurphyBedLower':
+    case '32':
+    case 32:
+      output.append('Murphy Bed Lower');
+      break;
+    case 'DoubleMurphyBedLower':
+    case '33':
+    case 33:
+      output.append('Double Murphy Bed Lower');
+      break;
+    case 'DoubleMurphyBedUpper':
+    case '34':
+    case 34:
+      output.append('Double Murphy Bed Upper');
+      break;
+    case 'PullmanBed':
+    case '35':
+    case 35:
+      output.append('Pullman Bed');
+      break;
+    case 'PulloutBed':
+    case '36':
+    case 36:
+      output.append('Pullout Bed');
+      break;
+    case 'RollawayCannotBeCombinedWithCrib':
+    case '37':
+    case 37:
+      output.append('Rollaway Cannot Be Combined With Crib');
+      break;
+    case 'StationaryLowerBed':
+    case '38':
+    case 38:
+      output.append('Stationary Lower Bed');
+      break;
+    case 'BedBoards':
+    case '39':
+    case 39:
+      output.append('Bed Boards');
+      break;
+    case 'LargePortholeWindow':
+    case '40':
+    case 40:
+      output.append('Large Porthole Window');
+      break;
+    case 'ObstructedView':
+    case '41':
+    case 41:
+      output.append('Obstructed to oView');
+      break;
+    case 'FloorToCeilingGlassDoors':
+    case '42':
+    case 42:
+      output.append('Floor To Ceiling Glass Doors');
+      break;
+    case 'SlidingGlassDoor':
+    case '43':
+    case 43:
+      output.append('Sliding Glass Door');
+      break;
+    case 'ButlerService':
+    case '44':
+    case 44:
+      output.append('Butler Service');
+      break;
+    case 'Concierge':
+    case '45':
+    case 45:
+      output.append('Concierge');
+      break;
+    case 'Bar':
+    case '46':
+    case 46:
+      output.append('Bar');
+      break;
+    case 'MiniBar':
+    case '47':
+    case 47:
+      output.append('Mini Bar');
+      break;
+    case 'BedExtensions':
+    case '48':
+    case 48:
+      output.append('Bed Extensions');
+      break;
+    case 'BedRails':
+    case '49':
+    case 49:
+      output.append('Bed Rails');
+      break;
+    case 'Duvet':
+    case '50':
+    case 50:
+      output.append('Duvet');
+      break;
+    case 'BayWindow':
+    case '51':
+    case 51:
+      output.append('Bay Window');
+      break;
+    case 'PrivateBalcony':
+    case '52':
+    case 52:
+      output.append('Private Balcony');
+      break;
+    case 'FloorToCeilingWindow':
+    case '53':
+    case 53:
+      output.append('Floor To Ceiling Window');
+      break;
+    case 'PictureWindow':
+    case '54':
+    case 54:
+      output.append('Picture Window');
+      break;
+    case 'BabyGrandPiano':
+    case '55':
+    case 55:
+      output.append('Baby Grand Piano');
+      break;
+    case 'ComputerJack':
+    case '56':
+    case 56:
+      output.append('Computer Jack');
+      break;
+    case 'Desk':
+    case '57':
+    case 57:
+      output.append('Desk');
+      break;
+    case 'Dresser':
+    case '58':
+    case 58:
+      output.append('Dresser');
+      break;
+    case 'Vanity':
+    case '59':
+    case 59:
+      output.append('Vanity');
+      break;
+    case 'HairDryer':
+    case '60':
+    case 60:
+      output.append('Hair Dryer');
+      break;
+    case 'CDLibrary':
+    case '61':
+    case 61:
+      output.append('CD Library');
+      break;
+    case 'DigitalVideoDiscLibrary':
+    case '62':
+    case 62:
+      output.append('Digital Video Disc Library');
+      break;
+    case 'DigitalVideoDiscPlayer':
+    case '63':
+    case 63:
+      output.append('Digital Video Disc Player');
+      break;
+    case 'LaserCDPlayer':
+    case '64':
+    case 64:
+      output.append('Laser CD Player');
+      break;
+    case 'Safe':
+    case '65':
+    case 65:
+      output.append('Safe');
+      break;
+    case 'StereoCDPlayer':
+    case '66':
+    case 66:
+      output.append('Stereo CD Player');
+      break;
+    case 'Telephone':
+    case '67':
+    case 67:
+      output.append('Telephone');
+      break;
+    case 'Television':
+    case '68':
+    case 68:
+      output.append('Television');
+      break;
+    case 'VCR':
+    case '69':
+    case 69:
+      output.append('VCR');
+      break;
+    case 'SittingArea':
+    case '70':
+    case 70:
+      output.append('Sitting Area');
+      break;
+    case 'DiningRoom':
+    case '71':
+    case 71:
+      output.append('Dining Room');
+      break;
+    case 'LivingRoom':
+    case '72':
+    case 72:
+      output.append('Living Room');
+      break;
+    case 'MasterBedroom':
+    case '73':
+    case 73:
+      output.append('Master Bedroom');
+      break;
+    case 'PrivateGarden':
+    case '74':
+    case 74:
+      output.append('Private Garden');
+      break;
+    case 'PrivateLounge':
+    case '75':
+    case 75:
+      output.append('Private Lounge');
+      break;
+    case 'SeparateBedroom':
+    case '76':
+    case 76:
+      output.append('Separate Bedroom');
+      break;
+    case 'SeparatedWithACurtain':
+    case '77':
+    case 77:
+      output.append('Separated With A Curtain');
+      break;
+    case 'SteamRoom':
+    case '78':
+    case 78:
+      output.append('Steam Room');
+      break;
+    case 'StudioBedroom':
+    case '79':
+    case 79:
+      output.append('Studio Bedroom');
+      break;
+    case 'WalkinCloset':
+    case '80':
+    case 80:
+      output.append('Walkin Closet');
+      break;
+    case 'NoCabinDescriptionSupported':
+    case '81':
+    case 81:
+      output.append('No Cabin Description Supported');
+      break;
+    default:
+      output.append(soy.$$escapeHtml(opt_data.code));
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.ruleEngine = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  switch (opt_data.code) {
+    case 'Add Line':
+      output.append('Adicionar Linha');
+      break;
+    case 'BusSourceType':
+      output.append('Fornecedor de ônibus');
+      break;
+    case 'BusTotalAmount':
+      output.append('Total do Ônibus');
+      break;
+    case 'Select a option':
+      output.append('Selecione uma opção');
+      break;
+    case 'Type cia codes separated by commas':
+      output.append('Digite os códigos das Companhias Aéreas, separados por vírgula (ex: JJ, G3, P3)');
+      break;
+    case 'Type classes separated by commas':
+      output.append('Digite as Classes de Serviço separadas por vírgula (ex: Y,W,X)');
+      break;
+    case 'Codes':
+      output.append('Códigos');
+      break;
+    case 'Delete':
+      output.append('Excluir');
+      break;
+    case 'ServiceItemCategory':
+      output.append('Categoria do Item de Serviço');
+      break;
+    case 'ContainedIn':
+      output.append('Contido em');
+      break;
+    case 'NotContainedIn':
+      output.append('Não contido em');
+      break;
+    case 'Or':
+      output.append('Ou');
+      break;
+    case 'If YES':
+      output.append('Se SIM');
+      break;
+    case 'ServiceItemMinimumStatusStage':
+      output.append('Estágio Mínimo do Status');
+      break;
+    case 'Like':
+      output.append('Contém');
+      break;
+    case 'NotLike':
+      output.append('Não contém');
+      break;
+    case 'LowerEqual':
+      output.append('Menor ou igual que');
+      break;
+    case 'MoreEqual':
+      output.append('Maior ou igual que');
+      break;
+    case 'More':
+      output.append('Maior que');
+      break;
+    case 'NotEqual':
+      output.append('diferente de');
+      break;
+    case 'And':
+      output.append('E');
+      break;
+    case 'ServiceItemMaximumStatusStage':
+      output.append('Estágio Máximo do Status');
+      break;
+    case 'Equal':
+      output.append('Igual a');
+      break;
+    case 'Results':
+      output.append('Resultados');
+      break;
+    case 'If NO':
+      output.append('Se NÃO');
+      break;
+    case 'Result':
+      output.append('Resultado');
+      break;
+    case 'ServiceItemStatus':
+      output.append('Status do Item de Serviço');
+      break;
+    case 'ServiceItemSubCategory':
+      output.append('Sub-categoria do Item de Serviço');
+      break;
+    case 'Results Edit':
+      output.append('Edição de Resultados');
+      break;
+    case 'Confirm':
+      output.append('Confirmar');
+      break;
+    case 'Cancel':
+      output.append('Cancelar');
+      break;
+    case 'Terms Edit':
+      output.append('Edição de Termos');
+      break;
+    case 'or':
+      output.append('ou');
+      break;
+    case 'Origins':
+      output.append('Origens');
+      break;
+    case 'DestinationUsingFareBreak':
+      output.append('Destino (considerando Quebra Tarifária)');
+      break;
+    case 'DestinationsUsingFareBreak':
+      output.append('Destinos (considerando Quebra Tarifária)');
+      break;
+    case 'ValidatingCiaDestination':
+      output.append('Destino Companhia Validadora');
+      break;
+    case 'ValidatingCiaOrigin':
+      output.append('Origem Companhia Validadora');
+      break;
+    case 'OriginAirport':
+      output.append('Aeroporto de Origem');
+      break;
+    case 'OriginAirports':
+      output.append('Aeroportos de Origem');
+      break;
+    case 'OriginBusStation':
+      output.append('Rodoviária de Origem');
+      break;
+    case 'OriginBusStations':
+      output.append('Rodoviárias de Origem');
+      break;
+    case 'DestinationAirport':
+      output.append('Aeroporto de Destino');
+      break;
+    case 'DestinationAirportUsingFareBreak':
+      output.append('Aeroportos de Destino (considerando Quebra Tarifária)');
+      break;
+    case 'DestinationAirports':
+      output.append('Aeroportos de Destino');
+      break;
+    case 'DestinationAirportsUsingFareBreak':
+      output.append('Aeroporto de Destino (considerando Quebra Tarifária)');
+      break;
+    case 'DestinationBusStation':
+      output.append('Rodoviária de Destino');
+      break;
+    case 'DestinationBusStations':
+      output.append('Rodoviárias de Destino');
+      break;
+    case 'Bit':
+      output.append('Bit');
+      break;
+    case 'Must consider same occurency in all fare breaks':
+      output.append('Deve considerar a mesma ocorrência em todas bases tarifárias');
+      break;
+    case 'Yes':
+      output.append('Sim');
+      break;
+    case 'No':
+      output.append('Não');
+      break;
+    case 'CodeShare':
+      output.append('CodeShare');
+      break;
+    case 'AirCompanyCode':
+      output.append('Código da Companhia Aérea');
+      break;
+    case 'ClassesOfService':
+      output.append('Classes de Serviço');
+      break;
+    case 'FlightNumbers':
+      output.append('Números do Voo');
+      break;
+    case 'ClassOfService':
+      output.append('Classe de Serviço');
+      break;
+    case 'OutboundDate':
+      output.append('Data de Saída');
+      break;
+    case 'InboundDate':
+      output.append('Data de Chegada');
+      break;
+    case 'ActualDateTime':
+      output.append('Data Atual');
+      break;
+    case 'Going':
+      output.append('Ida');
+      break;
+    case 'Return':
+      output.append('Volta');
+      break;
+    case 'AirCompaniesByJourney':
+      output.append('Companhia Aéreas da Viagem');
+      break;
+    case 'ClassesOfServiceByJourney':
+      output.append('Classes da Viagem');
+      break;
+    case 'TicketBRLValue':
+      output.append('Valor Bilhete BRL');
+      break;
+    case 'TicketUSDValue':
+      output.append('Valor Bilhete USD');
+      break;
+    case 'TaxesTotalValue':
+      output.append('Valor Total da Taxas');
+      break;
+    case 'FeeValue':
+      output.append('valor do Fee');
+      break;
+    case 'NacionalTrip':
+      output.append('Viagem Nacional');
+      break;
+    case 'HasInternationalLinkedItem':
+      output.append('Possui Item Internacional Associado');
+      break;
+    case 'IsAdvancePayment':
+      output.append('É Sinal');
+      break;
+    case 'NationalHotel':
+      output.append('Hotel Nacional');
+      break;
+    case 'HotelLocation':
+      output.append('Localidade do Hotel');
+      break;
+    case 'OneWay':
+      output.append('Somente Ida');
+      break;
+    case 'RoundTrip':
+      output.append('Ida e Volta');
+      break;
+    case 'TripType':
+      output.append('Tipo da Viagem');
+      break;
+    case 'Surface':
+      output.append('Surface');
+      break;
+    case 'Instalment':
+      output.append('Parcelamento');
+      break;
+    case 'Issue':
+      output.append('Emissão');
+      break;
+    case 'ExecutionContext':
+      output.append('Contexto de Execução');
+      break;
+    case 'HotelDisplayDailyFare':
+      output.append('Diária do Hotel');
+      break;
+    case 'HotelTotalAmount':
+      output.append('Total do Hotel');
+      break;
+    case 'FareBreaksQuantity':
+      output.append('Quantidade de Quebras Tarifárias');
+      break;
+    case 'TriangularRoute':
+      output.append('Rota Triangular');
+      break;
+    case 'NumberSections':
+      output.append('Número de Trechos');
+      break;
+    case 'SurfacesQuantity':
+      output.append('Quantida de Surfaces');
+      break;
+    case 'IATAS':
+      output.append('IATAS');
+      break;
+    case 'Type location IATAS separated by commas':
+      output.append('Digite as IATAS das localidades, separadas por vírgula (ex: SAO,RIO,MIA)');
+      break;
+    case 'HasAirData':
+      output.append('Tem Aéreo');
+      break;
+    case 'HasHotelData':
+      output.append('Tem Hotel');
+      break;
+    case 'HasServiceData':
+      output.append('Tem Serviço');
+      break;
+    case 'HasBusData':
+      output.append('Tem Ônibus');
+      break;
+    case 'HasCarData':
+      output.append('Tem Carro');
+      break;
+    case 'HasTourData':
+      output.append('Tem Circuito');
+      break;
+    case 'HasCruiseData':
+      output.append('Tem Cruzeiro');
+      break;
+    case 'HasInsuranceData':
+      output.append('Tem Seguro');
+      break;
+    case 'HotelSourceType':
+      output.append('Fornecedor de hotel');
+      break;
+    case 'AirSourceType':
+      output.append('Fornecedor de aéreo');
+      break;
+    case 'IsItinerarySale':
+      output.append('Venda de roteiro?');
+      break;
+    case 'ItineraryName':
+      output.append('Nome do roteiro');
+      break;
+    case 'InsuranceSourceType':
+      output.append('Fornecedor de seguro');
+      break;
+    case 'TourSourceType':
+      output.append('Fornecedor de circuito');
+      break;
+    case 'InsuranceCompanyName':
+      output.append('Corretora');
+      break;
+    case 'CruiseSourceType':
+      output.append('Fornecedor de cruzeiro');
+      break;
+    case 'SourceType':
+      output.append('Sistema');
+      break;
+    case 'OperatorFare':
+      output.append('Tarifa Operadora');
+      break;
+    case 'NumberOfPayments':
+      output.append('Quantidade de Pagamentos');
+      break;
+    case 'PaymentTypes':
+      output.append('Tipos de Pagamento');
+      break;
+    case 'PaymentsTotalValue':
+      output.append('Valor Total dos Pagamentos');
+      break;
+    case 'PaymentsIndividualValue':
+      output.append('Valor Individual dos Pagamentos');
+      break;
+    case 'CreditCardProviders':
+      output.append('Bandeira do Cartão de Crédito');
+      break;
+    case 'NumberOfInstallments':
+      output.append('Quantidade de Parcelas');
+      break;
+    case 'SupplierAccepted':
+      output.append('Pagamento Aceito Pelo Fornecedor');
+      break;
+    case 'IsOperatorFare':
+      output.append('É Tarifa Operadora');
+      break;
+    case 'IsInternational':
+      output.append('É Internacional');
+      break;
+    case 'PaymentFareBasis':
+      output.append('Base Tarifária');
+      break;
+    case 'ClientSupplier':
+      output.append('Cliente-Fornecedor');
+      break;
+    case 'Empty Condition':
+      output.append('Condição vazia');
+      break;
+    case 'Unknown Result':
+      output.append('Resultado desconhecido');
+      break;
+    case 'Unknown Result':
+      output.append('Resultado desconhecido');
+      break;
+    case 'LoginInformationName':
+      output.append('Nome da Credencial');
+      break;
+    case 'IsInsuranceOperatorFare':
+      output.append('Tarifa Operadora de Seguro');
+      break;
+    case 'HotelSupplierName':
+      output.append('Nome do Fornecedor de Hotel');
+      break;
+    default:
+      Resources.DashboardsFilters({code: opt_data.code}, output);
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.DashboardsFilters = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  switch (opt_data.code) {
+    case 'CorporateCostumer':
+      output.append('Cliente Corporativo');
+      break;
+    case 'Consolidator':
+      output.append('Consolidadora');
+      break;
+    case 'TravelAgency':
+      output.append('Agência');
+      break;
+    case 'ServiceOrderId':
+      output.append('Id da OS');
+      break;
+    case 'ServiceItemId':
+      output.append('Id do Item de Serviço');
+      break;
+    case 'StatusPnr':
+      output.append('Status no Fornecedor');
+      break;
+    case 'CreatedDate':
+      output.append('Data de Criação');
+      break;
+    case 'IssuedDate':
+      output.append('Data de Emissão');
+      break;
+    default:
+      output.append((Global && Global.IsDebugContext) ? '*** ' + soy.$$escapeHtml(opt_data.code) + ' ***' : soy.$$escapeHtml(opt_data.code));
+  }
+  if (!opt_sb) return output.toString();
+};
+
+
+Resources.cruiseSuperCategoryNames = function(opt_data, opt_sb) {
+  var output = opt_sb || new soy.StringBuilder();
+  output.append('\t');
+  switch (opt_data.code) {
+    case 'Inside':
+      output.append('Interna');
+      break;
+    case 'OceanView':
+      output.append('Externa');
+      break;
+    case 'Balcony':
+      output.append('Varanda');
+      break;
+    case 'Deluxe':
+      output.append('Suíte');
+      break;
+    default:
+      output.append(soy.$$escapeHtml(opt_data.code));
+  }
+  if (!opt_sb) return output.toString();
+};

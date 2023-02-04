@@ -1,0 +1,327 @@
+﻿if (typeof (TravelGo) == 'undefined')
+    TravelGo = {};
+
+if (typeof (Global) == 'undefined')
+    Global = {};
+
+Global.Options = {
+    messagesController: {
+        ShowOnlyFriendlyMessage: true
+    },
+    InterfaceEnvelopeStorageKey: "ienv_external_flow"
+};
+
+(function ($) {
+    $(document).ready(function () {
+        TravelGo.Functions = {
+            CheckGlobal: function() {
+                if (typeof (Global) == 'undefined') {
+                    Global = {};
+                }
+            },
+            ScrollTo: function (element) {
+                if (element.offset())
+                    $('body').animate({
+                        scrollTop: element.offset().top
+                    }, 500);
+            },
+            PriceGroups: {
+                onAfterLiveEvents: function (data) {
+                    $(data.settings.components.sortResults).on({
+                        mouseenter: function () {
+                            var ctrl = $(this);
+
+                            if (!ctrl.hasClass("sorted"))
+                                ctrl.addClass("sorted");
+                        },
+                        mouseleave: function () {
+                            var ctrl = $(this);
+
+                            if (!ctrl.attr("propertyName") || !(ctrl.attr("propertyName") == data.sortResult.ColumnName))
+                                ctrl.removeClass("sorted");
+                        }
+                    });
+                },
+                onBeforeSendEmail: function () {
+                    $(".modal.sendEmail").addClass("sendEmailLoading");
+                },
+            },
+            ExchangeRates:  {
+                exchangePrices: function (parent) {
+                    var selectedCurrency = $("#selCurrencies option:selected").val();
+
+                    var exchangeRate = 1;
+
+                    if (selectedCurrency == "original")
+                        selectedCurrency = "ARS";
+                    else {
+                        var exchangeRates = Global.SearchController.getExchangeRates();
+
+                        if (exchangeRates) {
+                            exchangeRate = exchangeRates.first(function (e) { return e.ExchangedCurrency == selectedCurrency });
+
+                            exchangeRate = exchangeRate ? exchangeRate.Value : 1;
+                        }
+                    }
+
+                    Global.selectedCurrency = selectedCurrency;
+                    Global.CurrentExchangeRate = exchangeRate;
+
+                    var prices = parent && parent.length ? $(".price", parent) : $(".price");
+
+                    for (var i = 0, len = prices.length; i < len; i++) {
+                        var ctrl = $(prices[i]);
+                        var price = ctrl.attr("originalPrice");
+                        if (price != undefined) {
+
+                            if (ctrl.attr("points") === "true") {
+                                ctrl.html(formatter.coins.getPoints().toString(price));
+                            }else
+                            {
+                                ctrl.html(formatter.currency(price * exchangeRate, true, 2, selectedCurrency));
+                            }
+
+                        }
+                    }
+                }
+            },
+            ContinueForm: {
+                SubmitForm: function () {
+                    var form = $('#continueForm');
+                    TravelGo.Functions.ContinueForm.SetFormAttributes();
+
+                    form.submit();
+                },
+                SubmitWindowLocation : function(){
+                    var form = $('#continueForm');
+                    window.location.assign(form.attr('action'));
+                },
+                SetFormAttributes : function(){
+                    ienv = Util.stringifyJSON(Global.InterfaceEnvelope);
+                    ienv = ienv.replaceAll("'", "");
+                    ienv = encodeURIComponent(ienv);
+
+                    form.find('#InterfaceEnvelope').val(ienv);
+                    form.find('#Culture').val(Global.Culture);
+                    form.find('#SearchType').val(Global.SearchType);
+                    form.find('#ExchangeRate').val(Global.ExchangeRate);
+                    form.find('#SelectedCurrency').val(Global.selectedCurrency);
+                    form.find('#QueryString').val(Global.QueryString);
+                },
+                SetAction: function (action) {
+                    var form = TravelGo.Functions.ContinueForm.GetForm();
+
+                    form.attr('action', action);
+
+                    return TravelGo.Functions.ContinueForm;
+                },
+                GetForm: function () {
+                    return $('#continueForm');
+                },
+                SetFormTarget: function (value) {
+                    var form = $('#continueForm');
+
+                    if (form)
+                        form.attr("target", value);
+
+                    return TravelGo.Functions.ContinueForm;
+                },
+                GetAction: function () {
+                    var form = TravelGo.Functions.ContinueForm.GetForm();
+                    return form.attr('action');
+                },
+                RedirectTo: function (action, targetType) {
+                    var oldAction = TravelGo.Functions.ContinueForm.GetAction();
+
+                    TravelGo.Functions.ContinueForm.SetAction(action)
+                        .SetFormTarget(targetType || '')
+                        .SubmitForm();
+
+                    TravelGo.Functions.ContinueForm.SetFormTarget('')
+                        .SetAction(oldAction);
+                }
+            },
+            Hotel: {
+                GetAdults: function (roomsRequest) {
+                    return roomsRequest.select(function (r) { return r.Adults; }).join(",");
+                },
+                GetChildren: function (roomsRequest) {
+                    return roomsRequest.select(function (r) { return r.ChildAges.length; }).join(",");
+                },
+                GetChildAges: function (roomsRequest) {
+                    return roomsRequest.select(function (r) { return r.ChildAges.join(","); }).join(";");
+                },
+                GetDatePattern: function (date) {
+                    return date.Day + '/' + date.Month + '/' + date.Year;
+                }
+            },
+            QueryString: {
+                requestQueryString: function (key) {
+                    var match = RegExp('[?&]' + key + '=([^&]*)').exec(window.location.search);
+
+                    var qryStrVal = match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+
+                    return qryStrVal;
+                }
+            },
+            InterfaceEnvelope: {
+                Initialize: function() {
+                    TravelGo.Functions.CheckGlobal();
+
+                    if (Global.InterfaceEnvelope == undefined) {
+                        Global.InterfaceEnvelope = {};
+                    }
+                },
+                CheckStorageKey: function (storageKey) {
+                    if (storageKey == undefined || typeof (storageKey) !== 'string' || storageKey.length == 0) {
+                        return Global != undefined && Global.Options != undefined && Global.Options.InterfaceEnvelopeStorageKey != undefined
+                            ? Global.Options.InterfaceEnvelopeStorageKey
+                            : 'ienv_external_flow';
+                    } else {
+                        return 'ienv_external_flow';
+            }
+                },
+                Set: function (data, storageKey) {
+                    TravelGo.Functions.InterfaceEnvelope.Initialize();
+
+                    storageKey = TravelGo.Functions.InterfaceEnvelope.CheckStorageKey(storageKey);
+
+                    if (Global.SessionStorage == undefined) {
+                        Global.SessionStorage = [];
+                    }
+
+                    Global.InterfaceEnvelope = data;
+                    Global.SessionStorage[storageKey] = data != undefined ? JSON.stringify(data) : undefined;
+                },
+                Merge: function (baseInterfaceEnvelope, dataToAddOrUpdate, storageKey) {
+                    if (dataToAddOrUpdate != undefined) {
+                        baseInterfaceEnvelope = $.extend(true, baseInterfaceEnvelope, dataToAddOrUpdate);
+                    }
+
+                    TravelGo.Functions.InterfaceEnvelope.Set(baseInterfaceEnvelope, storageKey);
+
+                    return baseInterfaceEnvelope;
+                },
+                GetFromStorage: function (storageKey) {
+                    storageKey = TravelGo.Functions.InterfaceEnvelope.CheckStorageKey(storageKey);
+
+                    if (Global != undefined && Global.SessionStorage != undefined) {
+                        return Global.SessionStorage[storageKey];
+                    }
+
+                    return undefined;
+                },
+                SetFromStorage: function (storageKey) {
+                    Initialize();
+
+                    Global.InterfaceEnvelope = TravelGo.Functions.InterfaceEnvelope.GetFromStorage(storageKey);
+                },
+                TrySetFromWindowHistory: function (storageKey) {
+                    if (window.history.state && window.history.state.length) {
+                        TravelGo.Functions.InterfaceEnvelope.Set(JSON2.parse(window.history.state), storageKey);
+                    }
+                },
+                TrySetFromSessionStorageOrGlobalStorage: function (storageKey, updateGlobalStorage) {
+                    if (updateGlobalStorage != undefined) {
+                        updateGlobalStorage = false;
+                    }
+
+                    storageKey = TravelGo.Functions.InterfaceEnvelope.CheckStorageKey(storageKey);
+
+                    // OBS: Safari (iOS) does not support localStorage or sessionStorage with private mode on
+                    if (sessionStorage != undefined) {
+                        try {
+                            var sessionInterfaceEnvelope = sessionStorage.getItem(storageKey);
+
+                            sessionStorage.removeItem(storageKey);
+
+                            if (sessionInterfaceEnvelope != undefined && Util.isString(sessionInterfaceEnvelope)) {
+                                if (updateGlobalStorage) {
+                                    TravelGo.Functions.InterfaceEnvelope.Set(JSON.parse(sessionInterfaceEnvelope), storageKey);
+                                } else {
+                                    TravelGo.Functions.InterfaceEnvelope.Initialize();
+
+                                    Global.InterfaceEnvelope = JSON.parse(sessionInterfaceEnvelope);
+                                }
+                            }
+                        } catch (error) {
+                            TravelGo.Functions.InterfaceEnvelope.SetFromStorage(storageKey);
+                        }
+                    } else {
+                        TravelGo.Functions.InterfaceEnvelope.SetFromStorage(storageKey);
+                    }
+                },
+                IsValidForPreOrder: function() {
+                    return Global != undefined
+                        && Global.InterfaceEnvelope != undefined 
+                        && ( Global.InterfaceEnvelope.SearchData != undefined 
+                        || Global.InterfaceEnvelope.SearchParameters != undefined)
+                        && (
+                            (
+                                (Global.InterfaceEnvelope.numberOfADTs > 0 || Global.InterfaceEnvelope.numberOfCHDs > 0)
+                                && Global.InterfaceEnvelope.flightGroups != undefined
+                            )
+                            || Global.InterfaceEnvelope.busTickets != null
+                            || Global.InterfaceEnvelope.hotel != null
+                            || Global.InterfaceEnvelope.ServicesBookData != null
+                            || Global.InterfaceEnvelope.services != null
+                            || Global.InterfaceEnvelope.cruiseDatas != null
+                        );
+                }
+            },
+            ComponentEvents: {
+                assignScrollToBottomEvent: function (holder, content, triggerFunction) {
+                    $(holder).on("scroll", function () {
+                        var scrollHeight = $(content).height();
+                        var scrollPosition = $(holder).height() + $(holder).scrollTop();
+                        if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+                            triggerFunction(holder, content);
+                        }
+                    });
+                }
+            }
+        };
+
+        var clientCookie = Util.getCookie('tg_client') ? unescape(Util.getCookie('tg_client')) : null;
+
+        var affiliateHash = document.location.search.substring(1).split('&').filter(function (el) {
+            return el.toLowerCase().indexOf('affiliateHash'.toLowerCase()) > -1;
+        });
+
+        var hash = affiliateHash.length > 0 ? affiliateHash[0] : '';
+
+        Global.Headers = {
+            b2c_u: Util.getCookie("b2c_user") || $('#tg_u').val(),
+            b2c_p: $('#tg_p').val(),
+            st: clientCookie ? JSON.parse(clientCookie).st : '',
+            affiliate_u: affiliateHash.length > 0 ? hash.substring(hash.indexOf('AffiliateHash=') + 14, hash.indexOf('xSEPx')) : Util.getCookie('AffiliateUser'),
+            affiliate_p: affiliateHash.length > 0 ? hash.split('xSEPx')[1] : Util.getCookie('AffiliatePassword')
+        };
+
+        if (affiliateHash.length > 0) {
+            Util.setCookie('AffiliateUser', Global.Headers.affiliate_u);
+            Util.setCookie('AffiliatePassword', Global.Headers.affiliate_p);
+        }
+
+        var form = $('#continueForm');
+
+        TravelGo.Functions.InterfaceEnvelope.Initialize();
+
+        if (form.length) {
+            try {
+                var interfaceEnvelope = JSON.parse(decodeURIComponent(form.find('#InterfaceEnvelope').val()).replaceAll('%20', ' '));
+
+                TravelGo.Functions.InterfaceEnvelope.Set(interfaceEnvelope, Global.Options.InterfaceEnvelopeStorageKey || "ienv_external_flow");
+            } catch (ex) { }
+
+            Global.Culture = form.find('#Culture').val() && form.find('#Culture').val().length ? form.find('#Culture').val() : Global.Culture;
+            Global.SearchType = form.find('#SearchType').val();
+            Global.ExchangeRate = form.find('#ExchangeRate').val();
+            Global.selectedCurrency = form.find('#SelectedCurrency').val();
+            Global.QueryString = form.find('#QueryString').val();
+        }
+
+        if (Global.Hooks && Global.Hooks.AuxiliaryLoaded)
+            Global.Hooks.AuxiliaryLoaded.notify();
+    });
+})(jQuery);

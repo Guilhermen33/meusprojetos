@@ -1,0 +1,89 @@
+﻿function AuthenticateModel(controller) {
+    var _this = this;
+    var _controller = controller;
+    var _serviceCaller = new ServiceCaller(Global.PathWebService);
+
+    this.login = function (request) {
+
+        if (request.userName)
+            request.Signature = request.userName;
+
+        if (request.password)
+            request.Password = request.password;
+
+        if (request.hasOwnProperty('authenticationType') && !$.isEmptyObject(request.authenticationType))
+            request.AuthenticationType = request.authenticationType;
+
+        var callback = function (response) {
+
+            if (response)
+                response.Request = request;
+
+            _loginCompleted(response);
+        };
+
+        _serviceCaller.invoke("SignIn", { req: request }, callback);
+    };
+
+    function _loginCompleted(response) {
+        _controller.onLoginCompleted(response);
+    };
+
+    this.logout = function (request) {
+        _serviceCaller.invoke("SignOut", { req: request || {} }, _logoutCompleted);
+    };
+
+    function _logoutCompleted(response) {
+        _controller.onLogoutCompleted(response);
+    };
+
+    this.forgottenPassword = function (request) {
+
+        var callback = function (response) {
+
+            if (response)
+                response.Request = request;
+
+            _forgottenPasswordCompleted(response);
+        };
+
+        _serviceCaller.invoke("ForgottenUserPassword", { req: request || {} }, callback);
+    };
+
+    function _forgottenPasswordCompleted(response) {
+        _controller.onForgottenPasswordCompleted(response);
+    };
+
+    this.changePassword = function (request) {
+
+        var callback = function (response) {
+
+            if (response)
+                response.Request = request;
+
+            _changePasswordCompleted(response);
+        };
+
+        _serviceCaller.invoke("ChangeUserPassword", { req: request }, _changePasswordCompleted);
+    };
+
+    function _changePasswordCompleted(response) {
+        _controller.onChangePasswordCompleted(response);
+    };
+
+    this.getUsersByUserResponsibleId = function (request) {
+        _serviceCaller.invoke("GetUsersByUserResponsibleId", request, _getUsersByUserResponsibleIdCompleted);
+    };
+
+    function _getUsersByUserResponsibleIdCompleted(response) {
+        _controller.onGetUsersByUserResponsibleIdCompleted(response);
+    }
+
+    this.getSecurityContext = function (request) {
+        _serviceCaller.invoke("GetSecurityContext",
+            { req: request },
+            function (response) {
+                _controller.onGetSecurityContext(response);
+            });
+    };
+};

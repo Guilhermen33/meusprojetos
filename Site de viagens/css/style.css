@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+}
+
+header{
+    width: 100vw;
+    height: 80px;
+    max-width: 1400px;
+    display: flex;
+    justify-content: space-around;
+    padding: 0px;
+    background-color: rgb(253, 253, 253);
+    margin: 0 auto;
+}
+
+header .logo{
+    display: flex;
+    color:#4062BB;
+    font-weight: bold;
+    align-items: center;
+    font-size: 100%;
+ 
+}
+
+header nav .menu {
+    display: flex;
+    list-style: none;
+    height: 100%;
+    align-items: center;
+    font-size: 95%;
+  
+}
+
+header nav .menu li{
+    color: #2450c0;
+    padding: 10px;
+    font-weight: bold;
+}
+
+header nav .menu li:hover{
+    background-color: rgba(209, 220, 237, 0.185);
+    border-radius: 50px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.262);
+}
+
+main .fundo-image{
+   background-color: black;
+   width: 100%;
+   height: 80vh;
+   background-image: url(../imagens/floripa.jpg);
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center center;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+main .agenda-vool{
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.719);
+    width: 50%;
+    height: 75%;
+    align-items: center;
+    flex-direction: column; 
+    border-radius: 10px;
+   border: 1px solid green; 
+   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+
+}
+main .agenda-vool .forma-de-locomocao img{
+    margin-top: 40px;
+   padding-right: 5px;
+
+}
+
+main .agenda-vool .titulo{
+    color: #2450c0;
+    padding: 5px;
+   
+}
+
+main .container{
+    display: flex;
+    flex-direction: column;
+}
+
+
+main .agenda-vool .form{
+    display: flex;
+    margin-top: 50px;
+    width: 100%;
+    justify-content: space-around;
+   
+}
+
+main .agenda-vool .form .input-local{
+    width: 22vw;
+    height: 5vh;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+main .container .data{
+    width: 22vw;
+    height: 5vh;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+main .container button{
+    color: #000000;
+    text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.336);
+    font-weight: bold;
+    font-size: 17px;
+    background-image: linear-gradient(to right,#1d71dff5 ,#1d7ba0,#4a8ee8f5);
+    padding: 10px 40px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.locais{
+    width: 100%;
+    height: 100%;
+   display: flex;
+    padding-right: 10px;
+    padding-top: 25px;
+ 
+}
+
+.locais .mini-container{
+    width: 100%;
+    height: 50vh;
+    background-color: #f4efef;
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+ .locais .img-locais{
+    max-width: 500px;
+    width: 100%;
+    padding-top: 10px;
+
+}
+
+.locais .mini-container{  
+  font-size: 17px;
+    
+}
+
+.locais .mini-container h3{
+    color: #2450c0;
+    font-size: 23px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.116);
+}
+
+ .container .input-local{
+   text-transform: capitalize;
+   
+}
+
+.saiba{
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+   
+   
+    gap: 15px;
+    background-color: rgb(173, 171, 168);
+    
+}
+
+.saiba h1{
+    font-size: 30px;
+  
+}
+
+.saiba .caixas-dicas{
+    display: flex;
+    width: 100%;
+    height: 90%;
+    justify-content: space-around;
+    
+   
+}
+
+.saiba .caixas-dicas .caixa-dicas-vool h3{
+    text-align: center;
+}
+
+
+.saiba .caixas-dicas .caixa-dicas-vool{
+    background-color: #ffffff9f;
+    padding: 20px;
+    width: 400px;
+    height: 90%;
+    text-align: justify;
+    line-height: 1.3em;
+    margin-top: 10px;
+}
+
